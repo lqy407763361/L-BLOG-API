@@ -24,7 +24,7 @@
     </dependencies>
 
     <modules>
-        <module>l-blog-controller</module>
+        <module>l-blog-api</module>
         <module>l-blog-service</module>
         <module>l-blog-dao</module>
     </modules>

@@ -9,6 +9,8 @@
         <version>1.0-SNAPSHOT</version>
     </parent>
 
+    <artifactId>l-blog-api</artifactId>
+
     <dependencies>
         <dependency>
             <groupId>org.example</groupId>
@@ -16,8 +18,6 @@
             <version>1.0-SNAPSHOT</version>
         </dependency>
     </dependencies>
-
-    <artifactId>l-blog-controller</artifactId>
 
     <properties>
         <maven.compiler.source>24</maven.compiler.source>
