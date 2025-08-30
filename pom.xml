@@ -39,6 +39,7 @@
         <module>l-blog-api</module>
         <module>l-blog-service</module>
         <module>l-blog-dao</module>
+        <module>l-blog-dto</module>
     </modules>
 
     <properties>
