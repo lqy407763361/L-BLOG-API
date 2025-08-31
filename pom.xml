@@ -40,6 +40,7 @@
         <module>l-blog-service</module>
         <module>l-blog-dao</module>
         <module>l-blog-dto</module>
+        <module>l-blog-domain</module>
     </modules>
 
     <properties>
