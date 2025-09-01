@@ -15,6 +15,14 @@ public class UserApi {
     @PostMapping("/login")
     public Object login(User user){
         userService.login(user);
+
+        return 1;
+    }
+
+    @PostMapping("/register")
+    public Object register(User user){
+        userService.register(user);
+
         return 1;
     }
 }
