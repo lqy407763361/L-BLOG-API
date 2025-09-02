@@ -20,8 +20,15 @@ public class UserApi {
     }
 
     @PostMapping("/register")
-    public Object register(User user){
+    public Object register(User user) {
         userService.register(user);
+
+        return 1;
+    }
+
+    @PostMapping("/loginOut")
+    public Integer loginOut(Integer userId){
+        userService.loginOut(userId);
 
         return 1;
     }
