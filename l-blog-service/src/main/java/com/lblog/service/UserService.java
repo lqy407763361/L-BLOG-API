@@ -1,9 +1,11 @@
 package com.lblog.service;
 
+import com.lblog.common.util.GetClientIpUtil;
 import com.lblog.dao.UserDao;
 import com.lblog.dao.UserLoginRecordDao;
 import com.lblog.domain.User;
 import com.mysql.cj.util.StringUtils;
+import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -16,11 +18,15 @@ public class UserService {
     @Autowired
     private UserLoginRecordDao userLoginRecordDao;
 
+    @Autowired
+    private HttpServletRequest request;
+
     //登录
     public void login(User user){
         String name = user.getName();
         String password = user.getPassword();
         Long add_time = System.currentTimeMillis();
+        String user_ip = GetClientIpUtil.GetClientIp(request);
 
         //判断账号是否符合条件
         if(StringUtils.isNullOrEmpty(name) || StringUtils.isNullOrEmpty(password)){
@@ -38,6 +44,7 @@ public class UserService {
         String name = user.getName();
         String password = user.getPassword();
         Long add_time = System.currentTimeMillis();
+        String user_ip = GetClientIpUtil.GetClientIp(request);
 
         //判断账号是否符合条件
         if(StringUtils.isNullOrEmpty(name) || StringUtils.isNullOrEmpty(password)){
@@ -56,11 +63,12 @@ public class UserService {
     }
 
     //退出登录
-    public void loginOut(Integer userId){
+    public Integer loginOut(Integer userId){
+        return 1;
     }
 
     //获取用户ID
-    public Integer getUserId(String name){
+    private Integer getUserId(String name){
         return userDao.getUserId(name);
     }
 }
