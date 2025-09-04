@@ -2,9 +2,6 @@ package com.lblog.common.util;
 
 import jakarta.servlet.http.HttpServletRequest;
 
-import java.net.InetAddress;
-import java.net.UnknownHostException;
-
 public class GetClientIpUtil {
     public static String GetClientIp(HttpServletRequest request){
         String ip = request.getHeader("X-Forwarded-For");

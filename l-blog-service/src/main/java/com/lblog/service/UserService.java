@@ -1,6 +1,7 @@
 package com.lblog.service;
 
 import com.lblog.common.util.GetClientIpUtil;
+import com.lblog.common.validation.FormValidation;
 import com.lblog.dao.UserDao;
 import com.lblog.dao.UserLoginRecordDao;
 import com.lblog.domain.User;
@@ -29,7 +30,7 @@ public class UserService {
         String user_ip = GetClientIpUtil.GetClientIp(request);
 
         //判断账号是否符合条件
-        if(StringUtils.isNullOrEmpty(name) || StringUtils.isNullOrEmpty(password)){
+        if(FormValidation.userNameValidation(name) || FormValidation.passwordValidation(password)){
         }
         Integer userId = this.getUserId(name);
         if(userId == null){
@@ -47,7 +48,7 @@ public class UserService {
         String user_ip = GetClientIpUtil.GetClientIp(request);
 
         //判断账号是否符合条件
-        if(StringUtils.isNullOrEmpty(name) || StringUtils.isNullOrEmpty(password)){
+        if(FormValidation.userNameValidation(name) || StringUtils.isNullOrEmpty(password)){
         }
         Integer userId = this.getUserId(name);
         if(userId != null){
@@ -70,5 +71,9 @@ public class UserService {
     //获取用户ID
     private Integer getUserId(String name){
         return userDao.getUserId(name);
+    }
+
+    public boolean test(String phone){
+        return FormValidation.phoneValidation(phone);
     }
 }

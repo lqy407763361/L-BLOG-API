@@ -32,4 +32,9 @@ public class UserApi {
 
         return 1;
     }
+
+    @GetMapping("/test")
+    public boolean test(String test){
+        return userService.test(test);
+    }
 }
