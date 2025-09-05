@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD MAPPER 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.lblog.dao.UserDao">
-    <select id="getUserId" parameterType="java.lang.String" resultType="java.lang.Integer">
+    <select id="getUserId" parameterType="java.lang.String" resultType="java.lang.Long">
         SELECT
             id
         FROM
@@ -28,7 +28,7 @@
             ) VALUES (
                 #{name},
                 #{password},
-                #{add_time}
+                #{addTime}
             )
     </insert>
 </mapper>

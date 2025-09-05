@@ -34,7 +34,7 @@ public class UserApi {
     }
 
     @GetMapping("/test")
-    public Integer test(String test){
+    public Long test(String test){
         return userService.test(test);
     }
 }

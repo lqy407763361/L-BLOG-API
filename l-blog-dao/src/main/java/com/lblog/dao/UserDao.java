@@ -5,7 +5,7 @@ import org.apache.ibatis.annotations.Mapper;
 
 @Mapper
 public interface UserDao {
-    public Integer getUserId(String name);
+    public Long getUserId(String name);
 
     public User getUserOne(String name);
 

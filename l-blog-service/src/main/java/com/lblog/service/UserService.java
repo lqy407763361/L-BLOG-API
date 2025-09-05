@@ -9,6 +9,7 @@ import com.lblog.domain.User;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 public class UserService {
@@ -30,7 +31,7 @@ public class UserService {
         String user_ip = GetClientIpUtil.GetClientIp(request);
 
         //判断用户是否存在
-        Integer userId = this.getUserId(name);
+        Long userId = this.getUserId(name);
         if(userId == null){
             throw new ReturnException("用户不存在！");
         }
@@ -49,11 +50,12 @@ public class UserService {
     }
 
     //注册
+    @Transactional
     public void register(User user){
         String name = user.getName();
         String password = user.getPassword();
-        Long add_time = System.currentTimeMillis();
-        String user_ip = GetClientIpUtil.GetClientIp(request);
+        Long addTime = System.currentTimeMillis();
+        String userIp = GetClientIpUtil.GetClientIp(request);
 
         //判断账号是否符合条件
         if(FormValidation.userNameValidation(name) && FormValidation.passwordValidation(password)){
@@ -61,24 +63,26 @@ public class UserService {
         }
 
         //添加操作 并且插入登录记录表
-        Integer userId = userDao.addUser(user);
-        if(userId>0){
-            try{
-                userLoginRecordDao.addUserLoginRecord(user);
-            }catch(Exception e){
-                throw new ReturnException("失败！");
+        try{
+            Integer returnRow = userDao.addUser(user);
+            if(returnRow<1){
+                throw new ReturnException("注册失败！");
             }
+            Long userId = user.getId();
+            userLoginRecordDao.addUserLoginRecord(user);
+        }catch(Exception e){
+            throw new ReturnException("注册失败！");
         }
     }
 
     //退出登录
-    public Integer loginOut(Integer userId){
+    public Integer loginOut(Long userId){
         return 1;
     }
 
     //获取用户ID
-    private Integer getUserId(String name){
-        Integer userId =  userDao.getUserId(name);
+    private Long getUserId(String name){
+        Long userId = userDao.getUserId(name);
         if(userId == null){
             throw new ReturnException("用户不存在！");
         }
@@ -92,8 +96,8 @@ public class UserService {
     }
 
     //临时测试
-    public Integer test(String test){
-        Integer userId =  userDao.getUserId(test);
+    public Long test(String test){
+        Long userId =  userDao.getUserId(test);
         if(userId == null){
             throw new ReturnException("用户不存在！");
         }
