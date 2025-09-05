@@ -9,11 +9,26 @@
         WHERE
             name = #{name}
     </select>
+    
+    <select id="getUserOne" parameterType="java.lang.String" resultType="com.lblog.domain.User">
+        SELECT
+            *
+        FROM
+            l_user
+        WHERE
+            name = #{name}
+    </select>
 
-    <insert id="addUser" parameterType="java.lang.String" useGeneratedKeys="true" keyProperty="id">
+    <insert id="addUser" parameterType="com.lblog.domain.User" useGeneratedKeys="true" keyProperty="id">
         INSERT INTO
-            l_user (name)
-        VALUES
-            #{name}
+            l_user (
+                name,
+                password,
+                add_time
+            ) VALUES (
+                #{name},
+                #{password},
+                #{add_time}
+            )
     </insert>
 </mapper>

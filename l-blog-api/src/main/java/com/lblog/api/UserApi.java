@@ -34,7 +34,7 @@ public class UserApi {
     }
 
     @GetMapping("/test")
-    public boolean test(String test){
+    public Integer test(String test){
         return userService.test(test);
     }
 }

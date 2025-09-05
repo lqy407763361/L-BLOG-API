@@ -1,10 +1,14 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD MAPPER 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.lblog.dao.UserLoginRecordDao">
-    <insert id="addUserLoginRecord" parameterType="java.lang.Integer" useGeneratedKeys="true" keyProperty="id">
+    <insert id="addUserLoginRecord" parameterType="com.lblog.domain.User" useGeneratedKeys="true" keyProperty="id">
         INSERT INTO
-            l_user_login_record (user_id)
-        VALUES
-            #{userId}
+            l_user_login_record (
+                user_id,
+                login_time
+            ) VALUES (
+                #{user_id},
+                #{add_time}
+            )
     </insert>
 </mapper>
