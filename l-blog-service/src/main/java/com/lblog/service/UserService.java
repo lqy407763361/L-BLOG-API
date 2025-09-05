@@ -65,7 +65,7 @@ public class UserService {
         //添加操作 并且插入登录记录表
         try{
             Integer returnRow = userDao.addUser(user);
-            if(returnRow<1){
+            if((returnRow==null) || (returnRow<1)){
                 throw new ReturnException("注册失败！");
             }
             Long userId = user.getId();
