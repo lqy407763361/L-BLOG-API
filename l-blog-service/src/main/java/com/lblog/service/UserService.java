@@ -66,7 +66,7 @@ public class UserService {
         String userIp = GetClientIpUtil.getClientIp(request);
 
         //判断账号是否符合条件
-        if(FormValidation.userNameValidation(name) && FormValidation.passwordValidation(password)){
+        if(!FormValidation.userNameValidation(name) && !FormValidation.passwordValidation(password)){
             throw new ReturnException("账号或密码格式错误！");
         }
 
