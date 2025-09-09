@@ -19,7 +19,7 @@ public class FormValidation {
         return matcher.matches();
     }
 
-    //校验用户名
+    //校验用户名格式
     public static boolean userNameValidation(String userName){
         if(StringUtils.isNullOrEmpty(userName)){
             return false;
@@ -32,7 +32,7 @@ public class FormValidation {
         return true;
     }
 
-    //校验密码
+    //校验密码格式
     public static boolean passwordValidation(String password){
         if(StringUtils.isNullOrEmpty(password)){
             return false;

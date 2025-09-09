@@ -2,14 +2,18 @@ package com.lblog.service;
 
 import com.lblog.common.exception.ReturnException;
 import com.lblog.common.util.GetClientIpUtil;
+import com.lblog.common.util.MD5Util;
 import com.lblog.common.validation.FormValidation;
 import com.lblog.dao.UserDao;
 import com.lblog.dao.UserLoginRecordDao;
 import com.lblog.domain.User;
+import com.lblog.domain.UserLoginRecord;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.time.Instant;
 
 @Service
 public class UserService {
@@ -27,8 +31,8 @@ public class UserService {
     public void login(User user){
         String name = user.getName().trim();
         String password = user.getPassword().trim();
-        Long add_time = System.currentTimeMillis();
-        String user_ip = GetClientIpUtil.GetClientIp(request);
+        String user_ip = GetClientIpUtil.getClientIp(request);
+        Long add_time = Instant.now().toEpochMilli();
 
         //判断用户是否存在
         Long userId = this.getUserId(name);
@@ -37,13 +41,17 @@ public class UserService {
         }
 
         //判断密码是否正确
-        if(!password.equals(this.getUserOne(name).getPassword())){
+        if(!MD5Util.getEncrypt(password).equals(this.getUserOne(name).getPassword())){
             throw new ReturnException("密码错误！");
         }
 
         //登录操作 并且插入登录记录表
         try{
-            userLoginRecordDao.addUserLoginRecord(user);
+            UserLoginRecord userLoginRecord = new UserLoginRecord();
+            userLoginRecord.setUser_id(userId);
+            userLoginRecord.setLogin_ip(user_ip);
+            userLoginRecord.setLogin_time(add_time);
+            userLoginRecordDao.addUserLoginRecord(userLoginRecord);
         }catch(Exception e){
             throw new ReturnException("登录失败！");
         }
@@ -52,10 +60,10 @@ public class UserService {
     //注册
     @Transactional
     public void register(User user){
-        String name = user.getName();
-        String password = user.getPassword();
-        Long addTime = System.currentTimeMillis();
-        String userIp = GetClientIpUtil.GetClientIp(request);
+        String name = user.getName().trim();
+        String password = user.getPassword().trim();
+        Long addTime = Instant.now().toEpochMilli();
+        String userIp = GetClientIpUtil.getClientIp(request);
 
         //判断账号是否符合条件
         if(FormValidation.userNameValidation(name) && FormValidation.passwordValidation(password)){
@@ -64,12 +72,21 @@ public class UserService {
 
         //添加操作 并且插入登录记录表
         try{
+            password = MD5Util.getEncrypt(password);
+            user.setName(name);
+            user.setPassword(password);
+            user.setAdd_time(addTime);
             Integer returnRow = userDao.addUser(user);
             if((returnRow==null) || (returnRow<1)){
                 throw new ReturnException("注册失败！");
             }
+
             Long userId = user.getId();
-            userLoginRecordDao.addUserLoginRecord(user);
+            UserLoginRecord userLoginRecord = new UserLoginRecord();
+            userLoginRecord.setUser_id(userId);
+            userLoginRecord.setLogin_ip(userIp);
+            userLoginRecord.setLogin_time(addTime);
+            userLoginRecordDao.addUserLoginRecord(userLoginRecord);
         }catch(Exception e){
             throw new ReturnException("注册失败！");
         }

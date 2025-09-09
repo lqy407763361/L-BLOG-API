@@ -4,7 +4,8 @@ import jakarta.servlet.http.HttpServletRequest;
 import org.apache.commons.lang3.StringUtils;
 
 public class GetClientIpUtil {
-    public static String GetClientIp(HttpServletRequest request){
+    //获取用户IP地址
+    public static String getClientIp(HttpServletRequest request){
         String ip = null;
         ip = request.getHeader("X-Forwarded-For");
         if(StringUtils.isEmpty(ip) || "unknown".equalsIgnoreCase(ip)){
