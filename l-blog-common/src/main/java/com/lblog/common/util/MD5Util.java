@@ -19,8 +19,10 @@ public class MD5Util {
     }
 
     //加盐后MD5加密
-    public static String getEncrypt(String str){
-        String salt = String.valueOf(Instant.now().toEpochMilli()) + RandomString(8);
+    public static String getEncrypt(String str, String salt){
+        if(StringUtils.isEmpty(salt)){
+            salt = String.valueOf(Instant.now().toEpochMilli()) + RandomString(8);
+        }
         String md5Str = DigestUtils.md5Hex(str+salt);
         StringUtils.substring(md5Str, 0, md5Str.length()-1);
 

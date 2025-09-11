@@ -41,7 +41,8 @@ public class UserService {
         }
 
         //判断密码是否正确
-        if(!MD5Util.getEncrypt(password).equals(this.getUserOne(name).getPassword())){
+        String salt = this.getUserOne(userId).getSalt();
+        if(!MD5Util.getEncrypt(password, salt).equals(this.getUserOne(userId).getPassword())){
             throw new ReturnException("密码错误！");
         }
 
@@ -72,7 +73,8 @@ public class UserService {
 
         //添加操作 并且插入登录记录表
         try{
-            password = MD5Util.getEncrypt(password);
+            String salt = "";
+            password = MD5Util.getEncrypt(password, salt);
             user.setName(name);
             user.setPassword(password);
             user.setAdd_time(addTime);
@@ -108,8 +110,8 @@ public class UserService {
     }
 
     //获取用户数据
-    private User getUserOne(String name){
-        return userDao.getUserOne(name);
+    private User getUserOne(Long userId){
+        return userDao.getUserOne(userId);
     }
 
     //临时测试

@@ -26,6 +26,6 @@ public class UserSupportService {
             throw new ReturnException("用户不存在！");
         }
         
-        return userDao.getUserOne(name);
+        return userDao.getUserOne(userId);
     }
 }
