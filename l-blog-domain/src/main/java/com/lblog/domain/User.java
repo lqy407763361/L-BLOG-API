@@ -2,9 +2,13 @@ package com.lblog.domain;
 
 public class User {
     private Long id;
+
     private String name;
+
     private String password;
+
     private String salt;
+
     private Long add_time;
 
     public Long getId() {

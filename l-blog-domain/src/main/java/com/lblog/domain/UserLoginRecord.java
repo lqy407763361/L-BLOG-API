@@ -2,8 +2,11 @@ package com.lblog.domain;
 
 public class UserLoginRecord {
     private Long id;
+
     private Long user_id;
+
     private String login_ip;
+
     private Long login_time;
 
     public Long getId() {
