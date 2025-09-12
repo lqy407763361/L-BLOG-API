@@ -1,7 +1,5 @@
 package com.lblog.common.util;
 
-import java.security.KeyPair;
-import java.security.KeyPairGenerator;
 import java.security.NoSuchAlgorithmException;
 import java.util.HashMap;
 import java.util.Map;
@@ -17,9 +15,6 @@ public class RSAUtil {
     //获取密钥对
     public static Map<String, String> getKeyPair(){
         try {
-            KeyPairGenerator keyPairGenerator = KeyPairGenerator.getInstance(ALGORITHM);
-            keyPairGenerator.initialize(KEY_SIZE);
-
             Map<String, String> keyMap = new HashMap<>();
             return keyMap;
         } catch (NoSuchAlgorithmException e) {
