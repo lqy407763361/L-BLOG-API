@@ -1,15 +1,25 @@
 package com.lblog.domain;
 
+import jakarta.persistence.*;
+
+@Entity
+@Table(name = "l_user")
 public class User {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @Column(name = "name")
     private String name;
 
+    @Column(name = "password")
     private String password;
 
+    @Column(name = "salt")
     private String salt;
 
-    private Long add_time;
+    @Column(name = "add_time")
+    private Long addTime;
 
     public Long getId() {
         return id;
@@ -43,11 +53,11 @@ public class User {
         this.salt = salt;
     }
 
-    public Long getAdd_time() {
-        return add_time;
+    public Long getAddTime() {
+        return addTime;
     }
 
-    public void setAdd_time(Long add_time) {
-        this.add_time = add_time;
+    public void setAddTime(Long addTime) {
+        this.addTime = addTime;
     }
 }

@@ -1,13 +1,22 @@
 package com.lblog.domain;
 
+import jakarta.persistence.*;
+
+@Entity
+@Table(name = "l_user_login_record")
 public class UserLoginRecord {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private Long user_id;
+    @Column(name = "user_id")
+    private Long userId;
 
-    private String login_ip;
+    @Column(name = "login_ip")
+    private String loginIp;
 
-    private Long login_time;
+    @Column(name = "login_time")
+    private Long loginTime;
 
     public Long getId() {
         return id;
@@ -17,27 +26,27 @@ public class UserLoginRecord {
         this.id = id;
     }
 
-    public Long getUser_id() {
-        return user_id;
+    public Long getUserId() {
+        return userId;
     }
 
-    public void setUser_id(Long user_id) {
-        this.user_id = user_id;
+    public void setUserId(Long userId) {
+        this.userId = userId;
     }
 
-    public String getLogin_ip() {
-        return login_ip;
+    public String getLoginIp() {
+        return loginIp;
     }
 
-    public void setLogin_ip(String login_ip) {
-        this.login_ip = login_ip;
+    public void setLoginIp(String loginIp) {
+        this.loginIp = loginIp;
     }
 
-    public Long getLogin_time() {
-        return login_time;
+    public Long getLoginTime() {
+        return loginTime;
     }
 
-    public void setLogin_time(Long login_time) {
-        this.login_time = login_time;
+    public void setLoginTime(Long loginTime) {
+        this.loginTime = loginTime;
     }
 }
