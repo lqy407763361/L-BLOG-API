@@ -10,7 +10,6 @@ import com.lblog.dao.UserLoginRecordDao;
 import com.lblog.dao.UserRsaKeyDao;
 import com.lblog.domain.User;
 import com.lblog.domain.UserLoginRecord;
-import com.lblog.domain.UserRsaKey;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -36,7 +35,7 @@ public class UserService {
     //登录
     public void login(User user){
         String name = user.getName().trim();
-        String basePassword = user.getPassword().trim();
+        String password = user.getPassword().trim();
         String userIp = GetClientIpUtil.getClientIp(request);
         Long addTime = Instant.now().toEpochMilli();
 
@@ -47,15 +46,15 @@ public class UserService {
         }
 
         //判断密码是否正确
-        String password;
+        String rawPassword = "";
         try {
             String privateKeyBase64 = userRsaKeyDao.getUserRsaKey(userId).getPrivateKey();
-            password = RSAUtil.decrypt(basePassword, privateKeyBase64);
+            rawPassword = RSAUtil.decrypt(password, privateKeyBase64);
         } catch (Exception e) {
             throw new ReturnException("密码解密失败！");
         }
         String salt = this.getUserOne(userId).getSalt();
-        if(!MD5Util.getEncrypt(password, salt).equals(this.getUserOne(userId).getPassword())){
+        if(!MD5Util.getEncrypt(rawPassword, salt).equals(this.getUserOne(userId).getPassword())){
             throw new ReturnException("密码错误！");
         }
 
@@ -86,13 +85,14 @@ public class UserService {
 
         //添加操作 并且插入登录记录表
         try{
-            String salt = "";
+            String salt = addTime + MD5Util.RandomString(8);
             password = MD5Util.getEncrypt(password, salt);
             user.setName(name);
             user.setPassword(password);
+            user.setSalt(salt);
             user.setAddTime(addTime);
             Integer returnRow = userDao.addUser(user);
-            if((returnRow==null) || (returnRow<1)){
+            if((returnRow==null) || (returnRow.equals(0))){
                 throw new ReturnException("注册失败！");
             }
 
@@ -112,6 +112,11 @@ public class UserService {
         return 1;
     }
 
+    //查询该用户公钥
+    public String getUserRsaPublicKey(Long userId){
+        return userRsaKeyDao.getUserRsaKey(userId).getPublicKey();
+    }
+
     //获取用户ID
     private Long getUserId(String name){
         Long userId = userDao.getUserId(name);
@@ -125,15 +130,5 @@ public class UserService {
     //获取用户数据
     private User getUserOne(Long userId){
         return userDao.getUserOne(userId);
-    }
-
-    //临时测试
-    public Long test(String test){
-        Long userId =  userDao.getUserId(test);
-        if(userId == null){
-            throw new ReturnException("用户不存在！");
-        }
-
-        return userId;
     }
 }

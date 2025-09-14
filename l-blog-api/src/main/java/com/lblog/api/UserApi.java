@@ -1,5 +1,6 @@
 package com.lblog.api;
 
+import com.lblog.common.util.JsonResponseUtil;
 import com.lblog.domain.User;
 import com.lblog.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,6 +13,13 @@ public class UserApi {
 
     @Autowired
     private UserService userService;
+
+    @GetMapping("/rsaPublicKey")
+    public JsonResponseUtil<String> getRsaPublicKey(Long userId){
+        String publicKey = userService.getUserRsaPublicKey(userId);
+
+        return JsonResponseUtil.success(publicKey);
+    }
 
     @PostMapping("/login")
     public Object login(User user){
@@ -31,10 +39,5 @@ public class UserApi {
     public Integer loginOut(Integer userId){
 
         return 1;
-    }
-
-    @GetMapping("/test")
-    public Long test(String test){
-        return userService.test(test);
     }
 }
