@@ -1,4 +1,5 @@
 package com.lblog.common.util;
+import com.lblog.common.exception.ReturnException;
 import org.apache.commons.codec.binary.Base64;
 
 import javax.crypto.Cipher;
@@ -19,7 +20,7 @@ public class RSAUtil {
     private static final String UNICODE = "UTF-8";
 
     //获取密钥对
-    public static Map<String, String> getKeyPair(){
+    public static Map<String, Object> getKeyPair(){
         try {
             KeyPairGenerator keyPairGenerator = KeyPairGenerator.getInstance(ALGORITHM);
             keyPairGenerator.initialize(KEY_SIZE);
@@ -30,13 +31,15 @@ public class RSAUtil {
             String publicKeyBase64 = Base64.encodeBase64String(publicKey.getEncoded());
             String privateKeyBase64 = Base64.encodeBase64String(privateKey.getEncoded());
 
-            Map<String, String> keyMap = new HashMap<>();
+            Map<String, Object> keyMap = new HashMap<>();
+            keyMap.put("publicKey", publicKey);
+            keyMap.put("privateKey", privateKey);
             keyMap.put("publicKeyBase64", publicKeyBase64);
             keyMap.put("privateKeyBase64", privateKeyBase64);
 
             return keyMap;
         } catch (NoSuchAlgorithmException e) {
-            throw new RuntimeException("生成密钥对失败！", e);
+            throw new ReturnException("生成密钥对失败！", e);
         }
     }
 
@@ -59,7 +62,7 @@ public class RSAUtil {
 
             return Base64.encodeBase64String(encryptedBytes);
         } catch (Exception e) {
-            throw new RuntimeException(e);
+            throw new ReturnException("加密失败！", e);
         }
     }
 
@@ -84,7 +87,7 @@ public class RSAUtil {
 
             return new String(data, UNICODE);
         } catch (Exception e) {
-            throw new RuntimeException(e);
+            throw new ReturnException("解密失败！", e);
         }
     }
 }
