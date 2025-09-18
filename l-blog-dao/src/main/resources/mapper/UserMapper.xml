@@ -9,15 +9,6 @@
         WHERE
             name = #{name}
     </select>
-    
-    <select id="getUserOne" parameterType="java.lang.String" resultType="com.lblog.domain.User">
-        SELECT
-            *
-        FROM
-            l_user
-        WHERE
-            name = #{name}
-    </select>
 
     <insert id="addUser" parameterType="com.lblog.domain.User" useGeneratedKeys="true" keyProperty="id">
         INSERT INTO
@@ -31,4 +22,33 @@
                 #{addTime}
             )
     </insert>
+    
+    <update id="editUser" parameterType="com.lblog.domain.User">
+        UPDATE
+            l_user
+        <set>
+            <if test="status != null and status != 0">
+                status = #{status}
+            </if>
+            edit_time = #{editTime}
+        </set>
+        WHERE
+            user_id = #{userId}
+    </update>
+
+    <select id="getUserDetail" parameterType="java.lang.String" resultType="com.lblog.domain.User">
+        SELECT
+            *
+        FROM
+            l_user
+        WHERE
+            name = #{name}
+    </select>
+    
+    <select id="getUserList" parameterType="" resultType="com.lblog.domain.User">
+        SELECT
+            *
+        FROM
+            l_user
+    </select>
 </mapper>

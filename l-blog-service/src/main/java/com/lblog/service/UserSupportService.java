@@ -20,12 +20,12 @@ public class UserSupportService {
     }
 
     //获取单个用户数据
-    public User getUserOne(String name){
+    public User getUserDetail(String name){
         Long userId = userDao.getUserId(name);
         if(userId == null){
             throw new ReturnException("用户不存在！");
         }
         
-        return userDao.getUserOne(userId);
+        return userDao.getUserDetail(userId);
     }
 }

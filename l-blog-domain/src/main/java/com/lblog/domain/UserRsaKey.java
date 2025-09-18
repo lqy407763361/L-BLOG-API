@@ -2,6 +2,9 @@ package com.lblog.domain;
 
 import jakarta.persistence.*;
 
+import java.security.PrivateKey;
+import java.security.PublicKey;
+
 @Entity
 @Table(name = "l_user_rsa_key")
 public class UserRsaKey {
@@ -13,10 +16,16 @@ public class UserRsaKey {
     private Long userId;
 
     @Column(name = "public_key")
-    private String publicKey;
+    private PublicKey publicKey;
 
     @Column(name = "private_key")
-    private String privateKey;
+    private PrivateKey privateKey;
+
+    @Column(name = "public_key_base64")
+    private String publicKeyBase64;
+
+    @Column(name = "private_key_base64")
+    private String privateKeyBase64;
 
     @Column(name = "add_time")
     private Long addTime;
@@ -37,20 +46,36 @@ public class UserRsaKey {
         this.userId = userId;
     }
 
-    public String getPublicKey() {
+    public PublicKey getPublicKey() {
         return publicKey;
     }
 
-    public void setPublicKey(String publicKey) {
+    public void setPublicKey(PublicKey publicKey) {
         this.publicKey = publicKey;
     }
 
-    public String getPrivateKey() {
+    public PrivateKey getPrivateKey() {
         return privateKey;
     }
 
-    public void setPrivateKey(String privateKey) {
+    public void setPrivateKey(PrivateKey privateKey) {
         this.privateKey = privateKey;
+    }
+
+    public String getPublicKeyBase64() {
+        return publicKeyBase64;
+    }
+
+    public void setPublicKeyBase64(String publicKeyBase64) {
+        this.publicKeyBase64 = publicKeyBase64;
+    }
+
+    public String getPrivateKeyBase64() {
+        return privateKeyBase64;
+    }
+
+    public void setPrivateKeyBase64(String privateKeyBase64) {
+        this.privateKeyBase64 = privateKeyBase64;
     }
 
     public Long getAddTime() {
