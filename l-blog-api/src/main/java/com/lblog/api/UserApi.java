@@ -1,6 +1,7 @@
 package com.lblog.api;
 
 import com.lblog.common.util.JsonResponseUtil;
+import com.lblog.common.util.RSAUtil;
 import com.lblog.domain.User;
 import com.lblog.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -8,6 +9,9 @@ import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RestController;
+
+import java.security.PrivateKey;
+import java.util.Map;
 
 @RestController
 public class UserApi {
@@ -62,5 +66,15 @@ public class UserApi {
         User userList = userService.getUserList();
 
         return JsonResponseUtil.success(userList);
+    }
+
+    @PostMapping("/test")
+    public String test() {
+        PrivateKey testRes = userService.test();
+        StringBuilder result = new StringBuilder();
+        result.append("=== 私钥信息 ===\n");
+        result.append(testRes);
+
+        return result.toString();
     }
 }

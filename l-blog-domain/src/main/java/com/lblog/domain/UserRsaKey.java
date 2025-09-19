@@ -2,9 +2,6 @@ package com.lblog.domain;
 
 import jakarta.persistence.*;
 
-import java.security.PrivateKey;
-import java.security.PublicKey;
-
 @Entity
 @Table(name = "l_user_rsa_key")
 public class UserRsaKey {
@@ -14,12 +11,6 @@ public class UserRsaKey {
 
     @Column(name = "user_id")
     private Long userId;
-
-    @Column(name = "public_key")
-    private PublicKey publicKey;
-
-    @Column(name = "private_key")
-    private PrivateKey privateKey;
 
     @Column(name = "public_key_base64")
     private String publicKeyBase64;
@@ -44,22 +35,6 @@ public class UserRsaKey {
 
     public void setUserId(Long userId) {
         this.userId = userId;
-    }
-
-    public PublicKey getPublicKey() {
-        return publicKey;
-    }
-
-    public void setPublicKey(PublicKey publicKey) {
-        this.publicKey = publicKey;
-    }
-
-    public PrivateKey getPrivateKey() {
-        return privateKey;
-    }
-
-    public void setPrivateKey(PrivateKey privateKey) {
-        this.privateKey = privateKey;
     }
 
     public String getPublicKeyBase64() {

@@ -45,7 +45,7 @@
             name = #{name}
     </select>
     
-    <select id="getUserList" parameterType="" resultType="com.lblog.domain.User">
+    <select id="getUserList" parameterType="java.util.Map" resultType="com.lblog.domain.User">
         SELECT
             *
         FROM

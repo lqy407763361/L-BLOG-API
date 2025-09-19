@@ -20,7 +20,7 @@ public class RSAUtil {
     private static final String UNICODE = "UTF-8";
 
     //获取密钥对
-    public static Map<String, Object> getKeyPair(){
+    public static Map<String, String> getKeyPair(){
         try {
             KeyPairGenerator keyPairGenerator = KeyPairGenerator.getInstance(ALGORITHM);
             keyPairGenerator.initialize(KEY_SIZE);
@@ -31,9 +31,7 @@ public class RSAUtil {
             String publicKeyBase64 = Base64.encodeBase64String(publicKey.getEncoded());
             String privateKeyBase64 = Base64.encodeBase64String(privateKey.getEncoded());
 
-            Map<String, Object> keyMap = new HashMap<>();
-            keyMap.put("publicKey", publicKey);
-            keyMap.put("privateKey", privateKey);
+            Map<String, String> keyMap = new HashMap<>();
             keyMap.put("publicKeyBase64", publicKeyBase64);
             keyMap.put("privateKeyBase64", privateKeyBase64);
 
@@ -62,7 +60,7 @@ public class RSAUtil {
 
             return Base64.encodeBase64String(encryptedBytes);
         } catch (Exception e) {
-            throw new ReturnException("加密失败！", e);
+            throw new ReturnException("公钥加密失败！", e);
         }
     }
 
@@ -87,7 +85,41 @@ public class RSAUtil {
 
             return new String(data, UNICODE);
         } catch (Exception e) {
-            throw new ReturnException("解密失败！", e);
+            throw new ReturnException("私钥解密失败！", e);
+        }
+    }
+
+    /**
+     * 获取公钥对象
+     * @param publicKeyBase64 公钥Base64字符串
+     * @return PublicKey 公钥对象
+     * */
+    public static PublicKey getPublicKey(String publicKeyBase64){
+        try {
+            byte[] keyBytes = Base64.decodeBase64(publicKeyBase64);
+            X509EncodedKeySpec keySpec = new X509EncodedKeySpec(keyBytes);
+            KeyFactory keyFactory = KeyFactory.getInstance(ALGORITHM);
+
+            return keyFactory.generatePublic(keySpec);
+        } catch (Exception e) {
+            throw new ReturnException("公钥转换失败！", e);
+        }
+    }
+
+    /**
+     * 获取私钥对象
+     * @param privateKeyBase64 私钥Base64字符串
+     * @return PrivateKey 私钥对象
+     * */
+    public static PrivateKey getPrivateKey(String privateKeyBase64){
+        try {
+            byte[] keyBytes = Base64.decodeBase64(privateKeyBase64);
+            PKCS8EncodedKeySpec keySpec = new PKCS8EncodedKeySpec(keyBytes);
+            KeyFactory keyFactory = KeyFactory.getInstance(ALGORITHM);
+
+            return keyFactory.generatePrivate(keySpec);
+        } catch (Exception e) {
+            throw new ReturnException("私钥转换失败！", e);
         }
     }
 }
