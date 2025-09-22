@@ -20,7 +20,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.security.PrivateKey;
 import java.time.Instant;
-import java.util.Map;
 
 @Service
 public class UserService {
@@ -180,21 +179,18 @@ public class UserService {
         return userRsaKeyDao.getUserRsaKey(userId).getPublicKeyBase64();
     }
 
-    //获取用户详情
-    public User getUserDetail(Long userId){
-        return userDao.getUserDetail(userId);
-    }
-
     //获取用户列表
     public User getUserList(){
         return userDao.getUserList();
     }
 
-    //测试
-    public PrivateKey test(){
-        String privateKeyBase64 = "\"MIICdgIBADANBgkqhkiG9w0BAQEFAASCAmAwggJcAgEAAoGBALwnvQDK2/qOI1zMkggtUFydGbGmH+Ck8mdh9kavr3PLWxE3OlmAKmrNFvQ35+C0qTCIyQuQJoJgcbEYtX+auR+pnVUsLwwQy8aNWREr4uTf1w3/oBkFCRrTNwz84hEEx56t3FePQfmLlNzf+DKsvoEHGVSVrjK6QZTlofUBQnkDAgMBAAECgYAT8pKTFu6jbZZKLFX/D+7JIs6qitYuVs5sL3KQo+eR+yk4dgZ1nqTglcWtNpAavoyBXL8TvsCWaesjv17enGSry/c370cqqqiqmwSUHFmJizCR9C7FgMMcaE6h8/mfWytNhkfMxFBL4EP7hTfQ2dWfOOGJJPymdE7rYJnCimf/QQJBAO78JyjE2KVrrFuJr1qWcBFwQHt37yMZllEqJicayu14CqnUziRQ0lQG6lkSNCPrcKeQUX74GMXLuThua8I8bgkCQQDJjSPAiYVxcUycP7fahd1rbmyo0/J8ErLOk4Y0aZB9M0Fsnu6EQJWVlqaU7IzX4G/IlvBHR+GeyBuoS7z4e3GrAkBGD7w3MoZE8K0F5PZ4ezP9mMf+qml8A8tSniWzPyKQval6on2QnfUbVy+qzzBj+2j6Zs/NhlRU4GW7inui5O5pAkEAs+tJWgupUr5oPCbpMapEIS3e08r38GgktCGfMNR3hjwmEBfEJc0dev6Tz+dmRyNzxiVvcsIpFzvc7JxHoa1YpwJAb2TqGot3zheaonhPPTAVeK2YS6+GGmo8CoKPyLgRYJszj7GLyIww7Nwc91IQZ2bLwzjhyYaG41HjeJUWH80vkw==\"";
-        PrivateKey testRes = RSAUtil.getPrivateKey(privateKeyBase64);
+    //获取用户详情
+    public User getUserDetail(Long userId){
+        return userDao.getUserDetail(userId);
+    }
 
-        return testRes;
+    //测试
+    public Long test(){
+        return 1L;
     }
 }

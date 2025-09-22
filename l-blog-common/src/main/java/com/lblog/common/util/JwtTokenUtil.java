@@ -13,8 +13,8 @@ public class JwtTokenUtil {
     //签发人
     private static final String ISSUER = "L-BLOG";
 
-    //有效时间（秒）
-    private static final long VALID_TIME = 86400;
+    //有效时间（毫秒）
+    private static final long VALID_TIME = 86400000;
 
     /**
      * 生成token
@@ -28,7 +28,7 @@ public class JwtTokenUtil {
                 .subject(String.valueOf(userId))
                 .issuer(ISSUER)
                 .expiration(EXPRIATION)
-                .signWith(privateKey)
+                .signWith(privateKey, Jwts.SIG.RS256)
                 .compact();
     }
 

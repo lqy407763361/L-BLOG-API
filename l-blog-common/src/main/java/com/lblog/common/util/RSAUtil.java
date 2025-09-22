@@ -14,7 +14,8 @@ public class RSAUtil {
     private static final String ALGORITHM = "RSA";
 
     //密钥长度
-    private static final int KEY_SIZE = 1024;
+    //密钥长度必须大于等于2048位，以适配RS256算法和0.12.X以上版本JWT
+    private static final int KEY_SIZE = 2048;
 
     //字符串编码类型
     private static final String UNICODE = "UTF-8";
