@@ -4,10 +4,11 @@ import com.lblog.common.util.JsonResponseUtil;
 import com.lblog.domain.User;
 import com.lblog.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RestController;
+
+import java.util.Map;
 
 @RestController
 public class UserApi {
@@ -16,24 +17,31 @@ public class UserApi {
     private UserService userService;
 
     @PostMapping("/login")
-    public JsonResponseUtil<String> login(User user){
-        String privateKey = userService.login(user);
+    public JsonResponseUtil<Map<String, Object>> login(User user){
+        Map<String, Object> tokenMap = userService.login(user);
 
-        return JsonResponseUtil.success(privateKey);
+        return JsonResponseUtil.success(tokenMap);
     }
 
     @PostMapping("/register")
-    public JsonResponseUtil<String> register(User user) {
-        String privateKey = userService.register(user);
+    public JsonResponseUtil<Map<String, Object>> register(User user) {
+        Map<String, Object> tokenMap = userService.register(user);
 
-        return JsonResponseUtil.success(privateKey);
+        return JsonResponseUtil.success(tokenMap);
     }
 
-    @DeleteMapping("/loginOut")
-    public JsonResponseUtil<String> loginOut(Long userId){
-        userService.loginOut(userId);
+    @PostMapping("/loginOut")
+    public JsonResponseUtil<String> loginOut(Long userId, String refreshToken){
+        userService.loginOut(userId, refreshToken);
 
         return JsonResponseUtil.success();
+    }
+
+    @PostMapping("/refreshAccessToken")
+    public JsonResponseUtil<String> refreshAccessToken(Long userId, String refreshToken){
+        String accessToken = userService.refreshAccessToken(userId, refreshToken);
+
+        return JsonResponseUtil.success(accessToken);
     }
 
     @PostMapping("/editUser")

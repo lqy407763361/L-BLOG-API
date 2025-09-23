@@ -11,7 +11,7 @@ public interface UserDao {
 
     public Integer editUser(User user);
 
-    public User getUserDetail(Long userId);
-
     public User getUserList();
+
+    public User getUserDetail(Long userId);
 }

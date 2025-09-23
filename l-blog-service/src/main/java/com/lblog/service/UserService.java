@@ -9,17 +9,20 @@ import com.lblog.common.validation.FormValidation;
 import com.lblog.dao.UserDao;
 import com.lblog.dao.UserLoginRecordDao;
 import com.lblog.dao.UserRsaKeyDao;
-import com.lblog.dao.UserTokenDao;
+import com.lblog.dao.UserRefreshTokenDao;
 import com.lblog.domain.User;
 import com.lblog.domain.UserLoginRecord;
-import com.lblog.domain.UserToken;
+import com.lblog.domain.UserRefreshToken;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.security.PrivateKey;
+import java.security.PublicKey;
 import java.time.Instant;
+import java.util.HashMap;
+import java.util.Map;
 
 @Service
 public class UserService {
@@ -37,11 +40,11 @@ public class UserService {
     private UserRsaKeyDao userRsaKeyDao;
 
     @Autowired
-    private UserTokenDao userTokenDao;
+    private UserRefreshTokenDao userRefreshTokenDao;
 
     //登录
     @Transactional
-    public String login(User user){
+    public Map<String, Object> login(@org.jetbrains.annotations.NotNull User user){
         //判断用户是否存在
         Long userId = user.getId();
         if((userId == null) || (userId == 0)){
@@ -77,25 +80,27 @@ public class UserService {
         userLoginRecord.setLoginTime(addTime);
         userLoginRecordDao.addUserLoginRecord(userLoginRecord);
 
-        try{
-            //保存token并返回
-            String privateKeyBase64 = userRsaKeyDao.getUserRsaKey(userId).getPrivateKeyBase64();
-            PrivateKey privateKey = RSAUtil.getPrivateKey(privateKeyBase64);
-            String token = JwtTokenUtil.generateToken(userId, privateKey);
-            UserToken userToken = new UserToken();
-            userToken.setId(userId);
-            userToken.setToken(token);
-            userTokenDao.addUserToken(userToken);
+        //保存refreshToken并返回
+        String privateKeyBase64 = userRsaKeyDao.getUserRsaKey(userId).getPrivateKeyBase64();
+        PrivateKey privateKey = RSAUtil.getPrivateKey(privateKeyBase64);
+        String accessToken = JwtTokenUtil.generateAccessToken(userId, privateKey);
+        String refreshToken = JwtTokenUtil.generateRefreshToken(userId, privateKey);
+        UserRefreshToken userRefreshToken = new UserRefreshToken();
+        userRefreshToken.setUserId(userId);
+        userRefreshToken.setRefreshToken(refreshToken);
+        userRefreshToken.setIsRevoked(0);
+        userRefreshToken.setAddTime(addTime);
+        userRefreshTokenDao.addUserRefreshToken(userRefreshToken);
 
-            return token;
-        }catch(Exception e){
-            throw new ReturnException("登录失败！");
-        }
+        Map<String, Object> result = new HashMap<>();
+        result.put("accessToken", accessToken);
+        result.put("refreshToken", refreshToken);
+        return result;
     }
 
     //注册
     @Transactional
-    public String register(User user){
+    public Map<String, Object> register(User user){
         //判断用户是否存在
         String name = user.getName().trim();
         Long existUserId = userDao.getUserId(name);
@@ -123,7 +128,7 @@ public class UserService {
         user.setRegisterIp(userIp);
         user.setAddTime(addTime);
         Integer returnRow = userDao.addUser(user);
-        if((returnRow==null) || (returnRow.equals(0))){
+        if((returnRow == null) || (returnRow.equals(0))){
             throw new ReturnException("注册失败！");
         }
 
@@ -135,25 +140,53 @@ public class UserService {
         userLoginRecord.setLoginTime(addTime);
         userLoginRecordDao.addUserLoginRecord(userLoginRecord);
 
-        try{
-            //保存token并返回
-            String privateKeyBase64 = userRsaKeyDao.getUserRsaKey(userId).getPrivateKeyBase64();
-            PrivateKey privateKey = RSAUtil.getPrivateKey(privateKeyBase64);
-            String token = JwtTokenUtil.generateToken(userId, privateKey);
-            UserToken userToken = new UserToken();
-            userToken.setId(userId);
-            userToken.setToken(token);
-            userTokenDao.addUserToken(userToken);
+        //保存refreshToken并返回
+        String privateKeyBase64 = userRsaKeyDao.getUserRsaKey(userId).getPrivateKeyBase64();
+        PrivateKey privateKey = RSAUtil.getPrivateKey(privateKeyBase64);
+        String accessToken = JwtTokenUtil.generateAccessToken(userId, privateKey);
+        String refreshToken = JwtTokenUtil.generateRefreshToken(userId, privateKey);
+        UserRefreshToken userRefreshToken = new UserRefreshToken();
+        userRefreshToken.setUserId(userId);
+        userRefreshToken.setRefreshToken(refreshToken);
+        userRefreshToken.setIsRevoked(0);
+        userRefreshToken.setAddTime(addTime);
+        userRefreshTokenDao.addUserRefreshToken(userRefreshToken);
 
-            return token;
-        }catch(Exception e){
-            throw new ReturnException("注册失败！");
-        }
+        Map<String, Object> result = new HashMap<>();
+        result.put("accessToken", accessToken);
+        result.put("refreshToken", refreshToken);
+        return result;
     }
 
     //退出登录
-    public void loginOut(Long userId){
-        userTokenDao.deleteUserToken(userId);
+    public void loginOut(Long userId, String refreshToken){
+        Long editTime = Instant.now().toEpochMilli();
+        UserRefreshToken userRefreshToken = new UserRefreshToken();
+        userRefreshToken.setUserId(userId);
+        userRefreshToken.setRefreshToken(refreshToken);
+        userRefreshToken.setEditTime(editTime);
+        userRefreshTokenDao.deleteUserRefreshToken(userRefreshToken);
+    }
+
+    //刷新token
+    public String refreshAccessToken(Long userId, String refreshToken){
+        UserRefreshToken userRefreshToken = new UserRefreshToken();
+        userRefreshToken.setUserId(userId);
+        userRefreshToken.setRefreshToken(refreshToken);
+        Long refreshTokenId = userRefreshTokenDao.getUserRefreshTokenId(userRefreshToken);
+        if((refreshTokenId == null) || (refreshTokenId == 0L)){
+            throw new ReturnException("refreshToken不存在！");
+        }
+
+        //验证refreshToken合法性
+        String publicKeyBase64 = this.getUserRsaPublicKey(userId);
+        PublicKey publicKey = RSAUtil.getPublicKey(publicKeyBase64);
+        JwtTokenUtil.validateToken(refreshToken, publicKey);
+        String privateKeyBase64 = userRsaKeyDao.getUserRsaKey(userId).getPrivateKeyBase64();
+        PrivateKey privateKey = RSAUtil.getPrivateKey(privateKeyBase64);
+        String accessToken = JwtTokenUtil.generateAccessToken(userId, privateKey);
+
+        return accessToken;
     }
 
     //编辑用户
@@ -174,7 +207,7 @@ public class UserService {
         userDao.editUser(user);
     }
 
-    //查询该用户公钥
+    //查询用户公钥
     public String getUserRsaPublicKey(Long userId){
         return userRsaKeyDao.getUserRsaKey(userId).getPublicKeyBase64();
     }

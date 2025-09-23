@@ -36,19 +36,19 @@
             user_id = #{userId}
     </update>
 
+    <select id="getUserList" parameterType="java.util.Map" resultType="com.lblog.domain.User">
+        SELECT
+            *
+        FROM
+            l_user
+    </select>
+
     <select id="getUserDetail" parameterType="java.lang.String" resultType="com.lblog.domain.User">
         SELECT
             *
         FROM
             l_user
         WHERE
-            name = #{name}
-    </select>
-    
-    <select id="getUserList" parameterType="java.util.Map" resultType="com.lblog.domain.User">
-        SELECT
-            *
-        FROM
-            l_user
+            user_id = #{userId}
     </select>
 </mapper>

@@ -19,10 +19,10 @@ public class User {
     private String salt;
 
     @Column(name = "status")
-    private int status;
+    private Integer status;
 
     @Column(name = "register_type")
-    private int registerType;
+    private Integer registerType;
 
     @Column(name = "register_ip")
     private String registerIp;
@@ -65,19 +65,19 @@ public class User {
         this.salt = salt;
     }
 
-    public int getStatus() {
+    public Integer getStatus() {
         return status;
     }
 
-    public void setStatus(int status) {
+    public void setStatus(Integer status) {
         this.status = status;
     }
 
-    public int getRegisterType() {
+    public Integer getRegisterType() {
         return registerType;
     }
 
-    public void setRegisterType(int registerType) {
+    public void setRegisterType(Integer registerType) {
         this.registerType = registerType;
     }
 
