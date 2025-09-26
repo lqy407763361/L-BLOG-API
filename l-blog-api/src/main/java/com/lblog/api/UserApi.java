@@ -16,6 +16,7 @@ public class UserApi {
     @Autowired
     private UserService userService;
 
+    //登录
     @PostMapping("/login")
     public JsonResponseUtil<Map<String, Object>> login(User user){
         Map<String, Object> tokenMap = userService.login(user);
@@ -23,6 +24,7 @@ public class UserApi {
         return JsonResponseUtil.success(tokenMap);
     }
 
+    //注册
     @PostMapping("/register")
     public JsonResponseUtil<Map<String, Object>> register(User user) {
         Map<String, Object> tokenMap = userService.register(user);
@@ -30,6 +32,7 @@ public class UserApi {
         return JsonResponseUtil.success(tokenMap);
     }
 
+    //退出登录
     @PostMapping("/loginOut")
     public JsonResponseUtil<String> loginOut(Long userId, String refreshToken){
         userService.loginOut(userId, refreshToken);
@@ -37,6 +40,7 @@ public class UserApi {
         return JsonResponseUtil.success();
     }
 
+    //刷新accessToken
     @PostMapping("/refreshAccessToken")
     public JsonResponseUtil<String> refreshAccessToken(Long userId, String refreshToken){
         String accessToken = userService.refreshAccessToken(userId, refreshToken);
@@ -44,6 +48,7 @@ public class UserApi {
         return JsonResponseUtil.success(accessToken);
     }
 
+    //编辑
     @PostMapping("/editUser")
     public JsonResponseUtil<String> editUser(User user){
         userService.editUser(user);
@@ -51,25 +56,28 @@ public class UserApi {
         return JsonResponseUtil.success();
     }
 
-    @GetMapping("/rsaPublicKey")
+    //获取RSA公钥
+    @GetMapping("/getRsaPublicKey")
     public JsonResponseUtil<String> getRsaPublicKey(Long userId){
         String publicKeyBase64 = userService.getUserRsaPublicKey(userId);
 
         return JsonResponseUtil.success(publicKeyBase64);
     }
 
-    @GetMapping("/getUserDetail")
-    public JsonResponseUtil<User> getUserDetail(Long userId){
-        User userDetail = userService.getUserDetail(userId);
-
-        return JsonResponseUtil.success(userDetail);
-    }
-
+    //获取用户列表
     @GetMapping("getUserList")
     public JsonResponseUtil<User> getUserList(){
         User userList = userService.getUserList();
 
         return JsonResponseUtil.success(userList);
+    }
+
+    //获取用户详情
+    @GetMapping("/getUserDetail")
+    public JsonResponseUtil<User> getUserDetail(Long userId){
+        User userDetail = userService.getUserDetail(userId);
+
+        return JsonResponseUtil.success(userDetail);
     }
 
     @PostMapping("/test")

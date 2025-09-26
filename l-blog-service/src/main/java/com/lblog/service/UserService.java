@@ -14,6 +14,7 @@ import com.lblog.domain.User;
 import com.lblog.domain.UserLoginRecord;
 import com.lblog.domain.UserRefreshToken;
 import jakarta.servlet.http.HttpServletRequest;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -44,7 +45,7 @@ public class UserService {
 
     //登录
     @Transactional
-    public Map<String, Object> login(@org.jetbrains.annotations.NotNull User user){
+    public Map<String, Object> login(User user){
         //判断用户是否存在
         Long userId = user.getId();
         if((userId == null) || (userId == 0)){
@@ -80,7 +81,7 @@ public class UserService {
         userLoginRecord.setLoginTime(addTime);
         userLoginRecordDao.addUserLoginRecord(userLoginRecord);
 
-        //保存refreshToken并返回
+        //保存refreshToken并返回accessToken和refreshToken
         String privateKeyBase64 = userRsaKeyDao.getUserRsaKey(userId).getPrivateKeyBase64();
         PrivateKey privateKey = RSAUtil.getPrivateKey(privateKeyBase64);
         String accessToken = JwtTokenUtil.generateAccessToken(userId, privateKey);
@@ -140,7 +141,7 @@ public class UserService {
         userLoginRecord.setLoginTime(addTime);
         userLoginRecordDao.addUserLoginRecord(userLoginRecord);
 
-        //保存refreshToken并返回
+        //保存refreshToken并返回accessToken和refreshToken
         String privateKeyBase64 = userRsaKeyDao.getUserRsaKey(userId).getPrivateKeyBase64();
         PrivateKey privateKey = RSAUtil.getPrivateKey(privateKeyBase64);
         String accessToken = JwtTokenUtil.generateAccessToken(userId, privateKey);
@@ -160,16 +161,38 @@ public class UserService {
 
     //退出登录
     public void loginOut(Long userId, String refreshToken){
+        //判断用户ID
+        if((userId == null) || (userId == 0)){
+            throw new ReturnException("用户ID不能为空！");
+        }
+
+        //判断refreshToken
+        if(StringUtils.isBlank(refreshToken)){
+            throw new ReturnException("refreshToken不能为空！");
+        }
+
+        //判断refreshToken
         Long editTime = Instant.now().toEpochMilli();
         UserRefreshToken userRefreshToken = new UserRefreshToken();
         userRefreshToken.setUserId(userId);
         userRefreshToken.setRefreshToken(refreshToken);
         userRefreshToken.setEditTime(editTime);
+        Long refreshTokenId = userRefreshTokenDao.getUserRefreshTokenId(userRefreshToken);
+        if((refreshTokenId == null) || (refreshTokenId == 0L)){
+            throw new ReturnException("refreshToken不存在！");
+        }
+
         userRefreshTokenDao.deleteUserRefreshToken(userRefreshToken);
     }
 
     //刷新token
     public String refreshAccessToken(Long userId, String refreshToken){
+        //判断用户ID
+        if((userId == null) || (userId == 0)){
+            throw new ReturnException("用户ID不能为空！");
+        }
+
+        //判断refreshToken
         UserRefreshToken userRefreshToken = new UserRefreshToken();
         userRefreshToken.setUserId(userId);
         userRefreshToken.setRefreshToken(refreshToken);
@@ -209,6 +232,11 @@ public class UserService {
 
     //查询用户公钥
     public String getUserRsaPublicKey(Long userId){
+        //判断用户ID
+        if((userId == null) || (userId == 0)){
+            throw new ReturnException("用户ID不能为空！");
+        }
+
         return userRsaKeyDao.getUserRsaKey(userId).getPublicKeyBase64();
     }
 
@@ -219,6 +247,11 @@ public class UserService {
 
     //获取用户详情
     public User getUserDetail(Long userId){
+        //判断用户ID
+        if((userId == null) || (userId == 0)){
+            throw new ReturnException("用户ID不能为空！");
+        }
+
         return userDao.getUserDetail(userId);
     }
 
