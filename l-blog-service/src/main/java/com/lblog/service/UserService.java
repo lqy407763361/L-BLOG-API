@@ -1,7 +1,6 @@
 package com.lblog.service;
 
 import com.lblog.common.exception.ReturnException;
-import com.lblog.common.util.GetClientIpUtil;
 import com.lblog.common.util.JwtTokenUtil;
 import com.lblog.common.util.MD5Util;
 import com.lblog.common.util.RSAUtil;
@@ -13,7 +12,7 @@ import com.lblog.dao.UserRefreshTokenDao;
 import com.lblog.domain.User;
 import com.lblog.domain.UserLoginRecord;
 import com.lblog.domain.UserRefreshToken;
-import jakarta.servlet.http.HttpServletRequest;
+import com.lblog.dto.UserNameDto;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -29,9 +28,6 @@ import java.util.Map;
 public class UserService {
 
     @Autowired
-    private HttpServletRequest request;
-
-    @Autowired
     private UserDao userDao;
 
     @Autowired
@@ -45,7 +41,7 @@ public class UserService {
 
     //登录
     @Transactional
-    public Map<String, Object> login(User user){
+    public Map<String, Object> login(User user, String userIp){
         //判断用户是否存在
         Long userId = user.getId();
         if((userId == null) || (userId == 0)){
@@ -56,7 +52,7 @@ public class UserService {
         String rawPassword = "";
         String password = user.getPassword().trim();
         try {
-            String privateKeyBase64 = userRsaKeyDao.getUserRsaKey(userId).getPrivateKeyBase64();
+            String privateKeyBase64 = userRsaKeyDao.getUserRsaKeyByUserId(userId).getPrivateKeyBase64();
             rawPassword = RSAUtil.decrypt(password, privateKeyBase64);
         } catch (Exception e) {
             throw new ReturnException("密码解密失败！");
@@ -73,7 +69,6 @@ public class UserService {
         }
 
         //插入登录记录表
-        String userIp = GetClientIpUtil.getClientIp(request);
         Long addTime = Instant.now().toEpochMilli();
         UserLoginRecord userLoginRecord = new UserLoginRecord();
         userLoginRecord.setUserId(userId);
@@ -82,7 +77,7 @@ public class UserService {
         userLoginRecordDao.addUserLoginRecord(userLoginRecord);
 
         //保存refreshToken并返回accessToken和refreshToken
-        String privateKeyBase64 = userRsaKeyDao.getUserRsaKey(userId).getPrivateKeyBase64();
+        String privateKeyBase64 = userRsaKeyDao.getUserRsaKeyByUserId(userId).getPrivateKeyBase64();
         PrivateKey privateKey = RSAUtil.getPrivateKey(privateKeyBase64);
         String accessToken = JwtTokenUtil.generateAccessToken(userId, privateKey);
         String refreshToken = JwtTokenUtil.generateRefreshToken(userId, privateKey);
@@ -101,7 +96,7 @@ public class UserService {
 
     //注册
     @Transactional
-    public Map<String, Object> register(User user){
+    public Map<String, Object> register(User user, String userIp){
         //判断用户是否存在
         String name = user.getName().trim();
         Long existUserId = userDao.getUserId(name);
@@ -117,7 +112,6 @@ public class UserService {
 
         //添加操作
         Integer registerType = user.getRegisterType();
-        String userIp = GetClientIpUtil.getClientIp(request);
         Long addTime = Instant.now().toEpochMilli();
         String salt = addTime + MD5Util.RandomString(8);
         password = MD5Util.getEncrypt(password, salt);
@@ -142,7 +136,7 @@ public class UserService {
         userLoginRecordDao.addUserLoginRecord(userLoginRecord);
 
         //保存refreshToken并返回accessToken和refreshToken
-        String privateKeyBase64 = userRsaKeyDao.getUserRsaKey(userId).getPrivateKeyBase64();
+        String privateKeyBase64 = userRsaKeyDao.getUserRsaKeyByUserId(userId).getPrivateKeyBase64();
         PrivateKey privateKey = RSAUtil.getPrivateKey(privateKeyBase64);
         String accessToken = JwtTokenUtil.generateAccessToken(userId, privateKey);
         String refreshToken = JwtTokenUtil.generateRefreshToken(userId, privateKey);
@@ -160,6 +154,7 @@ public class UserService {
     }
 
     //退出登录
+    @Transactional
     public void loginOut(Long userId, String refreshToken){
         //判断用户ID
         if((userId == null) || (userId == 0)){
@@ -186,6 +181,7 @@ public class UserService {
     }
 
     //刷新token
+    @Transactional
     public String refreshAccessToken(Long userId, String refreshToken){
         //判断用户ID
         if((userId == null) || (userId == 0)){
@@ -202,10 +198,10 @@ public class UserService {
         }
 
         //验证refreshToken合法性
-        String publicKeyBase64 = this.getUserRsaPublicKey(userId);
+        String publicKeyBase64 = this.getRsaPublicKeyByUserId(userId);
         PublicKey publicKey = RSAUtil.getPublicKey(publicKeyBase64);
         JwtTokenUtil.validateToken(refreshToken, publicKey);
-        String privateKeyBase64 = userRsaKeyDao.getUserRsaKey(userId).getPrivateKeyBase64();
+        String privateKeyBase64 = userRsaKeyDao.getUserRsaKeyByUserId(userId).getPrivateKeyBase64();
         PrivateKey privateKey = RSAUtil.getPrivateKey(privateKeyBase64);
         String accessToken = JwtTokenUtil.generateAccessToken(userId, privateKey);
 
@@ -230,14 +226,18 @@ public class UserService {
         userDao.editUser(user);
     }
 
-    //查询用户公钥
-    public String getUserRsaPublicKey(Long userId){
-        //判断用户ID
-        if((userId == null) || (userId == 0)){
-            throw new ReturnException("用户ID不能为空！");
-        }
+    //根据userId查询用户公钥
+    public String getRsaPublicKeyByUserId(Long userId){
+        String publicKeyBase64 = userRsaKeyDao.getUserRsaKeyByUserId(userId).getPublicKeyBase64();
 
-        return userRsaKeyDao.getUserRsaKey(userId).getPublicKeyBase64();
+        return publicKeyBase64;
+    }
+
+    //根据rsaKeyId查询用户公钥
+    public String getRsaPublicKeyById(Long id){
+        String publicKeyBase64 = userRsaKeyDao.getUserRsaKeyById(id).getPublicKeyBase64();
+
+        return publicKeyBase64;
     }
 
     //获取用户列表
@@ -246,6 +246,7 @@ public class UserService {
     }
 
     //获取用户详情
+    @Transactional
     public User getUserDetail(Long userId){
         //判断用户ID
         if((userId == null) || (userId == 0)){
@@ -253,6 +254,18 @@ public class UserService {
         }
 
         return userDao.getUserDetail(userId);
+    }
+
+    //获取用户名称
+    @Transactional
+    public UserNameDto getUserName(Long userId){
+        //判断用户ID
+        if((userId == null) || (userId == 0)){
+            throw new ReturnException("用户ID不能为空！");
+        }
+
+        User user = userDao.getUserDetail(userId);
+        return UserNameDto.getUserName(user);
     }
 
     //测试
