@@ -36,19 +36,32 @@
             user_id = #{userId}
     </update>
 
-    <select id="getUserList" parameterType="java.util.Map" resultType="com.lblog.domain.User">
+    <select id="getUserList" resultType="com.lblog.domain.User">
         SELECT
             *
         FROM
             l_user
+        ORDER BY
+            id ASC
+        LIMIT
+            #{startNum}, #{size}
     </select>
 
-    <select id="getUserDetail" parameterType="java.lang.String" resultType="com.lblog.domain.User">
+    <select id="getUserDetail" parameterType="java.lang.Long" resultType="com.lblog.domain.User">
         SELECT
             *
         FROM
             l_user
         WHERE
             user_id = #{userId}
+    </select>
+    
+    <select id="getUserTotal" resultType="java.lang.Integer">
+        SELECT
+            COUNT(id)
+        FROM
+            l_user
+        WHERE
+            status = 1
     </select>
 </mapper>

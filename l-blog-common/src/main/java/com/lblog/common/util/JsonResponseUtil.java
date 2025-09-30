@@ -1,8 +1,10 @@
 package com.lblog.common.util;
 
-public class JsonResponseUtil <T>{
+public class JsonResponseUtil<T>{
     private Integer code;
+
     private String msg;
+
     private T data;
 
     public JsonResponseUtil(Integer code, String msg){

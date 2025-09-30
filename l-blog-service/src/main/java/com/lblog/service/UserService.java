@@ -3,6 +3,7 @@ package com.lblog.service;
 import com.lblog.common.exception.ReturnException;
 import com.lblog.common.util.JwtTokenUtil;
 import com.lblog.common.util.MD5Util;
+import com.lblog.common.util.PageResultUtil;
 import com.lblog.common.util.RSAUtil;
 import com.lblog.common.validation.FormValidation;
 import com.lblog.dao.UserDao;
@@ -22,6 +23,7 @@ import java.security.PrivateKey;
 import java.security.PublicKey;
 import java.time.Instant;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 @Service
@@ -43,7 +45,8 @@ public class UserService {
     @Transactional
     public Map<String, Object> login(User user, String userIp){
         //判断用户是否存在
-        Long userId = user.getId();
+        String name = user.getName();
+        Long userId = userDao.getUserId(name);
         if((userId == null) || (userId == 0)){
             throw new ReturnException("用户不存在！");
         }
@@ -76,7 +79,8 @@ public class UserService {
         userLoginRecord.setLoginTime(addTime);
         userLoginRecordDao.addUserLoginRecord(userLoginRecord);
 
-        //保存refreshToken并返回accessToken和refreshToken
+        //保存refreshToken，返回accessToken/refreshToken/rsaKeyId
+        Long rsaKeyId = userRsaKeyDao.getUserRsaKeyByUserId(userId).getId();
         String privateKeyBase64 = userRsaKeyDao.getUserRsaKeyByUserId(userId).getPrivateKeyBase64();
         PrivateKey privateKey = RSAUtil.getPrivateKey(privateKeyBase64);
         String accessToken = JwtTokenUtil.generateAccessToken(userId, privateKey);
@@ -89,6 +93,7 @@ public class UserService {
         userRefreshTokenDao.addUserRefreshToken(userRefreshToken);
 
         Map<String, Object> result = new HashMap<>();
+        result.put("rsaKeyId", rsaKeyId);
         result.put("accessToken", accessToken);
         result.put("refreshToken", refreshToken);
         return result;
@@ -135,7 +140,8 @@ public class UserService {
         userLoginRecord.setLoginTime(addTime);
         userLoginRecordDao.addUserLoginRecord(userLoginRecord);
 
-        //保存refreshToken并返回accessToken和refreshToken
+        //保存refreshToken，返回accessToken/refreshToken/rsaKeyId
+        Long rsaKeyId = userRsaKeyDao.getUserRsaKeyByUserId(userId).getId();
         String privateKeyBase64 = userRsaKeyDao.getUserRsaKeyByUserId(userId).getPrivateKeyBase64();
         PrivateKey privateKey = RSAUtil.getPrivateKey(privateKeyBase64);
         String accessToken = JwtTokenUtil.generateAccessToken(userId, privateKey);
@@ -148,6 +154,7 @@ public class UserService {
         userRefreshTokenDao.addUserRefreshToken(userRefreshToken);
 
         Map<String, Object> result = new HashMap<>();
+        result.put("rsaKeyId", rsaKeyId);
         result.put("accessToken", accessToken);
         result.put("refreshToken", refreshToken);
         return result;
@@ -241,8 +248,15 @@ public class UserService {
     }
 
     //获取用户列表
-    public User getUserList(){
-        return userDao.getUserList();
+    public PageResultUtil<User> getUserList(Integer startPage, Integer size){
+        //起始位置
+        Integer startNum = (startPage-1) * size;
+        //获取总数
+        Integer total = userDao.getUserTotal();
+        //查询列表
+        List<User> userList = userDao.getUserList(startNum, size);
+
+        return new PageResultUtil<>(startPage, size, total, userList);
     }
 
     //获取用户详情
@@ -256,6 +270,11 @@ public class UserService {
         return userDao.getUserDetail(userId);
     }
 
+    //获取用户数量
+    public Integer getUserTotal(){
+        return userDao.getUserTotal();
+    }
+
     //获取用户名称
     @Transactional
     public UserNameDto getUserName(Long userId){
@@ -266,10 +285,5 @@ public class UserService {
 
         User user = userDao.getUserDetail(userId);
         return UserNameDto.getUserName(user);
-    }
-
-    //测试
-    public Long test(){
-        return 1L;
     }
 }

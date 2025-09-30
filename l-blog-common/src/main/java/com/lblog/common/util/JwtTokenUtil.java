@@ -13,10 +13,10 @@ public class JwtTokenUtil {
     //签发人
     private static final String ISSUER = "L-BLOG";
 
-    //accessToken的有效时间（毫秒）
+    //accessToken的有效时间（4小时/毫秒）
     private static final Long VALID_TIME = 14400000L;
 
-    //refreshToken的有效时间（毫秒）
+    //refreshToken的有效时间（30天/毫秒）
     private static final Long REFRESH_VALID_TIME = 2592000000L;
 
     /**
@@ -53,16 +53,16 @@ public class JwtTokenUtil {
 
     /**
      * 校验token
-     * @param accessToken 生成的accessToken
+     * @param token 生成的accessToken/refreshToken
      * @param publicKey RSA公钥校验
      * @return userId 用户ID
      * */
-    public static Long validateToken(String accessToken, PublicKey publicKey){
+    public static Long validateToken(String token, PublicKey publicKey){
         try {
             Claims claims = Jwts.parser()
                     .verifyWith(publicKey)
                     .build()
-                    .parseSignedClaims(accessToken)
+                    .parseSignedClaims(token)
                     .getPayload();
             Long userId = Long.valueOf(claims.getSubject());
 

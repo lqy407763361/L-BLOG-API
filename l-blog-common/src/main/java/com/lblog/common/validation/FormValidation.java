@@ -1,6 +1,6 @@
 package com.lblog.common.validation;
 
-import com.mysql.cj.util.StringUtils;
+import org.apache.commons.lang3.StringUtils;
 
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -21,7 +21,7 @@ public class FormValidation {
 
     //校验用户名格式
     public static boolean userNameValidation(String userName){
-        if(StringUtils.isNullOrEmpty(userName)){
+        if(StringUtils.isBlank(userName)){
             return false;
         }
         Integer userNameLength = userName.length();
@@ -34,7 +34,7 @@ public class FormValidation {
 
     //校验密码格式
     public static boolean passwordValidation(String password){
-        if(StringUtils.isNullOrEmpty(password)){
+        if(StringUtils.isBlank(password)){
             return false;
         }
         Integer passwordLength = password.length();

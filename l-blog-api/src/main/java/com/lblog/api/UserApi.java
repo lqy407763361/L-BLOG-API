@@ -3,6 +3,7 @@ package com.lblog.api;
 import com.lblog.api.auth.UserIdentityAuth;
 import com.lblog.common.util.GetClientIpUtil;
 import com.lblog.common.util.JsonResponseUtil;
+import com.lblog.common.util.PageResultUtil;
 import com.lblog.domain.User;
 import com.lblog.dto.UserNameDto;
 import com.lblog.service.UserService;
@@ -10,6 +11,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.Map;
@@ -80,8 +82,9 @@ public class UserApi {
 
     //获取用户列表
     @GetMapping("getUserList")
-    public JsonResponseUtil<User> getUserList(){
-        User userList = userService.getUserList();
+    public JsonResponseUtil<PageResultUtil<User>> getUserList(@RequestParam(defaultValue = "1") Integer startPage,
+                                                              @RequestParam(defaultValue = "10") Integer size){
+        PageResultUtil<User> userList = userService.getUserList(startPage, size);
 
         return JsonResponseUtil.success(userList);
     }
@@ -95,6 +98,14 @@ public class UserApi {
         return JsonResponseUtil.success(userDetail);
     }
 
+    //获取用户数量
+    @GetMapping("/getUserTotal")
+    public JsonResponseUtil<Integer> getUserTotal(){
+        Integer total = userService.getUserTotal();
+
+        return JsonResponseUtil.success(total);
+    }
+
     //获取用户名称
     @GetMapping("/getUserName")
     public JsonResponseUtil<UserNameDto> getUserName(){
@@ -102,12 +113,5 @@ public class UserApi {
         UserNameDto userName = userService.getUserName(userId);
 
         return JsonResponseUtil.success(userName);
-    }
-
-    @PostMapping("/test")
-    public Long test() {
-        Long userId = userService.test();
-
-        return userId;
     }
 }
