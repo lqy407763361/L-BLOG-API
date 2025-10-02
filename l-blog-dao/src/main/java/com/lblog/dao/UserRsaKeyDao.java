@@ -5,7 +5,7 @@ import org.apache.ibatis.annotations.Mapper;
 
 @Mapper
 public interface UserRsaKeyDao {
-    public UserRsaKey getUserRsaKeyById(Long id);
+    UserRsaKey getUserRsaKeyById(Long id);
 
-    public UserRsaKey getUserRsaKeyByUserId(Long userId);
+    UserRsaKey getUserRsaKeyByUserId(Long userId);
 }

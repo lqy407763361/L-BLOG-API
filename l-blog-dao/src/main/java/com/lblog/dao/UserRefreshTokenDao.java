@@ -5,9 +5,9 @@ import org.apache.ibatis.annotations.Mapper;
 
 @Mapper
 public interface UserRefreshTokenDao {
-    public Integer addUserRefreshToken(UserRefreshToken userRefreshToken);
+    Integer addUserRefreshToken(UserRefreshToken userRefreshToken);
 
-    public Integer deleteUserRefreshToken(UserRefreshToken userRefreshToken);
+    Integer deleteUserRefreshToken(UserRefreshToken userRefreshToken);
 
-    public Long getUserRefreshTokenId(UserRefreshToken userRefreshToken);
+    Long getUserRefreshTokenId(UserRefreshToken userRefreshToken);
 }

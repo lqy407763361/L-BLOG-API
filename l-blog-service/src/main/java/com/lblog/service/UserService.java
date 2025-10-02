@@ -45,7 +45,7 @@ public class UserService {
     @Transactional
     public Map<String, Object> login(User user, String userIp){
         //判断用户是否存在
-        String name = user.getName();
+        String name = user.getName().trim();
         Long userId = userDao.getUserId(name);
         if((userId == null) || (userId == 0)){
             throw new ReturnException("用户不存在！");
@@ -102,17 +102,20 @@ public class UserService {
     //注册
     @Transactional
     public Map<String, Object> register(User user, String userIp){
-        //判断用户是否存在
+        //判断账号格式是否合法和是否已存在
         String name = user.getName().trim();
+        if(!FormValidation.userNameValidation(name)){
+            throw new ReturnException("账号格式错误！");
+        }
         Long existUserId = userDao.getUserId(name);
         if((existUserId != null) && (existUserId > 0)){
             throw new ReturnException("用户已存在！");
         }
 
-        //判断账号是否符合条件
+        //判断密码格式是否合法
         String password = user.getPassword().trim();
-        if(!FormValidation.userNameValidation(name) && !FormValidation.passwordValidation(password)){
-            throw new ReturnException("账号或密码格式错误！");
+        if(!FormValidation.passwordValidation(password)){
+            throw new ReturnException("密码格式错误！");
         }
 
         //添加操作
@@ -128,7 +131,7 @@ public class UserService {
         user.setRegisterIp(userIp);
         user.setAddTime(addTime);
         Integer returnRow = userDao.addUser(user);
-        if((returnRow == null) || (returnRow.equals(0))){
+        if((returnRow == null) || (returnRow == 0)){
             throw new ReturnException("注册失败！");
         }
 
@@ -220,8 +223,8 @@ public class UserService {
     public void editUser(User user){
         //判断用户是否存在
         Long userId = user.getId();
-        User userInfo = userDao.getUserDetail(userId);
-        if(userInfo == null){
+        User userDetail = userDao.getUserDetail(userId);
+        if(userDetail == null){
             throw new ReturnException("用户不存在！");
         }
 

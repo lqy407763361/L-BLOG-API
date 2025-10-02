@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD MAPPER 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.lblog.dao.ArticleCategoryDao">
+    <select id="getArticleCategoryId" parameterType="java.lang.String" resultType="java.lang.Long">
+        SELECT
+            id
+        FROM
+            l_article_category
+        WHERE
+            name = #{name}
+    </select>
+
+    <insert id="addArticleCategory" parameterType="com.lblog.domain.ArticleCategory" useGeneratedKeys="true" keyProperty="id">
+        INSERT INTO
+            l_article_category (
+                name,
+                description,
+                status,
+                sort_order,
+                add_time,
+                edit_time,
+            ) VALUES (
+                #{name},
+                #{description},
+                #{status},
+                #{sortOrder},
+                #{addTime},
+                #{editTime}
+            )
+    </insert>
+
+    <update id="editArticleCategory" parameterType="com.lblog.domain.ArticleCategory">
+        UPDATE
+            l_article_category
+        <set>
+            <if test="name != null">
+                name = #{name}
+            </if>
+            <if test="description != null">
+                description = #{description}
+            </if>
+            <if test="status != null and status != 0">
+                status = #{status}
+            </if>
+            <if test="status != null">
+                sort_order = #{sortOrder}
+            </if>
+            edit_time = #{editTime}
+        </set>
+        WHERE
+            id = #{articleCategoryId}
+    </update>
+
+    <delete id="deleteArticleCategory" parameterType="java.lang.Long">
+        DELETE FROM
+            l_article_category
+        WHERE
+            id = #{articleCategoryId}
+    </delete>
+
+    <select id="getArticleCategoryList" resultType="com.lblog.domain.ArticleCategory">
+        SELECT
+            *
+        FROM
+            l_article_category
+        ORDER BY
+            sort_order DESC, id ASC
+        LIMIT
+            #{startNum}, #{size}
+    </select>
+
+    <select id="getArticleCategoryDetail" parameterType="java.lang.Long" resultType="com.lblog.domain.ArticleCategory">
+        SELECT
+            *
+        FROM
+            l_article_category
+        WHERE
+            id = #{articleCategoryId}
+    </select>
+
+    <select id="getArticleCategoryTotal" resultType="java.lang.Integer">
+        SELECT
+            COUNT(id)
+        FROM
+            l_article_category
+        WHERE
+            status = 1
+    </select>
+</mapper>

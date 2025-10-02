@@ -8,16 +8,16 @@ import java.util.List;
 
 @Mapper
 public interface UserDao {
-    public Long getUserId(String name);
+    Long getUserId(String name);
 
-    public Integer addUser(User user);
+    Integer addUser(User user);
 
-    public Integer editUser(User user);
+    Integer editUser(User user);
 
-    public List<User> getUserList(@Param("startNum") Integer startNum,
+    List<User> getUserList(@Param("startNum") Integer startNum,
                                   @Param("size") Integer size);
 
-    public User getUserDetail(Long userId);
+    User getUserDetail(Long userId);
 
-    public Integer getUserTotal();
+    Integer getUserTotal();
 }

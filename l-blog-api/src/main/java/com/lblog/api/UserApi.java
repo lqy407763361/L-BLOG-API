@@ -66,6 +66,8 @@ public class UserApi {
     //编辑
     @PostMapping("/editUser")
     public JsonResponseUtil<String> editUser(User user){
+        Long userId = userIdentityAuth.getCurrentUserId();
+        user.setId(userId);
         userService.editUser(user);
 
         return JsonResponseUtil.success();
