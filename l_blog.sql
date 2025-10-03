@@ -11,7 +11,7 @@
  Target Server Version : 80011 (8.0.11)
  File Encoding         : 65001
 
- Date: 02/10/2025 16:03:35
+ Date: 03/10/2025 13:01:43
 */
 
 SET NAMES utf8mb4;
@@ -54,7 +54,11 @@ CREATE TABLE `l_article`  (
   `category_id` int(11) NOT NULL COMMENT '文章分类ID',
   `title` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL COMMENT '标题',
   `content` text CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL COMMENT '内容',
-  `add_time` int(11) NULL DEFAULT NULL,
+  `read_count` int(11) NULL DEFAULT NULL COMMENT '阅读量',
+  `status` int(11) NULL DEFAULT NULL COMMENT '状态，1=启用，2=禁用',
+  `sort_order` int(11) NULL DEFAULT NULL COMMENT '排序',
+  `add_time` int(11) NULL DEFAULT NULL COMMENT '添加时间',
+  `edit_name` int(11) NULL DEFAULT NULL COMMENT '编辑时间',
   PRIMARY KEY (`id`) USING BTREE
 ) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci ROW_FORMAT = DYNAMIC;
 

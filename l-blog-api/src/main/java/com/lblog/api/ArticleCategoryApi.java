@@ -5,6 +5,7 @@ import com.lblog.common.util.PageResultUtil;
 import com.lblog.domain.ArticleCategory;
 import com.lblog.service.ArticleCategoryService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -31,23 +32,23 @@ public class ArticleCategoryApi {
     }
 
     //删除文章分类
-    @PostMapping("/deleteArticleCategory")
+    @DeleteMapping("/deleteArticleCategory")
     public JsonResponseUtil<String> deleteArticleCategory(Long articleCategoryId){
         articleCategoryService.deleteArticleCategory(articleCategoryId);
 
         return JsonResponseUtil.success();
     }
 
-    //获取文章列表
+    //获取文章分类列表
     @GetMapping("/getArticleCategoryList")
-    public JsonResponseUtil<PageResultUtil<ArticleCategory>> getArticleCategoryList(@RequestParam(defaultValue = "1") Integer startNum,
+    public JsonResponseUtil<PageResultUtil<ArticleCategory>> getArticleCategoryList(@RequestParam(defaultValue = "1") Integer startPage,
                                                                                     @RequestParam(defaultValue = "10") Integer size){
-        PageResultUtil<ArticleCategory> articleCategoryList = articleCategoryService.getArticleCategoryList(startNum, size);
+        PageResultUtil<ArticleCategory> articleCategoryList = articleCategoryService.getArticleCategoryList(startPage, size);
 
         return JsonResponseUtil.success(articleCategoryList);
     }
 
-    //获取文章详情
+    //获取文章分类详情
     @GetMapping("/getArticleCategoryDetail")
     public JsonResponseUtil<ArticleCategory> getArticleCategoryDetail(Long articleCategoryId){
         ArticleCategory articleCategoryDetail = articleCategoryService.getArticleCategoryDetail(articleCategoryId);
@@ -55,7 +56,7 @@ public class ArticleCategoryApi {
         return JsonResponseUtil.success(articleCategoryDetail);
     }
 
-    //获取文章数量
+    //获取文章分类数量
     @GetMapping("getArticleCategoryTotal")
     public JsonResponseUtil<Integer> getArticleCategoryTotal(){
         Integer articleCategoryTotal = articleCategoryService.getArticleCategoryTotal();

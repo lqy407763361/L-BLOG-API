@@ -77,7 +77,7 @@ public class ArticleCategoryService {
         articleCategoryDao.deleteArticleCategory(articleCategoryId);
     }
 
-    //获取文章列表
+    //获取文章分类列表
     public PageResultUtil<ArticleCategory> getArticleCategoryList(Integer startPage, Integer size){
         //起始位置
         Integer startNum = (startPage-1) * size;
@@ -89,7 +89,7 @@ public class ArticleCategoryService {
         return new PageResultUtil<>(startPage, size, total, articleCategoryList);
     }
 
-    //获取文章详情
+    //获取文章分类详情
     @Transactional
     public ArticleCategory getArticleCategoryDetail(Long articleCategoryId){
         //判断分类ID
@@ -100,7 +100,7 @@ public class ArticleCategoryService {
         return articleCategoryDao.getArticleCategoryDetail(articleCategoryId);
     }
 
-    //获取用户数量
+    //获取文章分类数量
     public Integer getArticleCategoryTotal(){
         return articleCategoryDao.getArticleCategoryTotal();
     }

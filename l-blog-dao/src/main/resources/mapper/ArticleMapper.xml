@@ -1,0 +1,114 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD MAPPER 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.lblog.dao.ArticleDao">
+    <select id="getArticleId" parameterType="java.lang.String" resultType="java.lang.Long">
+        SELECT
+            id
+        FROM
+            l_article
+        WHERE
+            title = #{title}
+    </select>
+
+    <insert id="addArticle" parameterType="com.lblog.domain.Article" useGeneratedKeys="true" keyProperty="id">
+        INSERT INTO
+            l_article (
+                category_id,
+                title,
+                content,
+                read_count,
+                status,
+                sort_order,
+                add_time,
+                edit_time,
+            ) VALUES (
+                #{categoryId},
+                #{title},
+                #{content},
+                #{readCount},
+                #{status},
+                #{sortOrder},
+                #{addTime},
+                #{editTime}
+            )
+    </insert>
+
+    <update id="editArticle" parameterType="com.lblog.domain.Article">
+        UPDATE
+            l_article
+        <set>
+            <if test="categoryId != null">
+                category_id = #{categoryId}
+            </if>
+            <if test="title != null">
+                title = #{title}
+            </if>
+            <if test="content != null">
+                content = #{content}
+            </if>
+            <if test="readCount != null">
+                read_count = #{readCount}
+            </if>
+            <if test="status != null and status != 0">
+                status = #{status}
+            </if>
+            <if test="status != null">
+                sort_order = #{sortOrder}
+            </if>
+            edit_time = #{editTime}
+        </set>
+        WHERE
+            id = #{articleId}
+    </update>
+
+    <delete id="deleteArticle" parameterType="java.lang.Long">
+        DELETE FROM
+            l_article
+        WHERE
+            id = #{articleId}
+    </delete>
+
+    <select id="getArticleList" resultType="com.lblog.domain.Article">
+        SELECT
+            *
+        FROM
+            l_article
+        ORDER BY
+            sort_order DESC, id ASC
+        LIMIT
+            #{startNum}, #{size}
+    </select>
+
+    <select id="getArticleDetail" parameterType="java.lang.Long" resultType="com.lblog.domain.Article">
+        SELECT
+            *
+        FROM
+            l_article
+        WHERE
+            id = #{articleId}
+    </select>
+
+    <select id="getArticleTotal" resultType="java.lang.Integer">
+        SELECT
+            COUNT(id)
+        FROM
+            l_article
+        WHERE
+            status = 1
+    </select>
+
+    <update id="editArticleReadCount">
+        UPDATE
+            l_article
+        <set>
+            <if test="articleId != null">
+                id = #{articleId}
+            </if>
+            <if test="readCount != null">
+                read_count = #{readCount}
+            </if>
+        </set>
+        WHERE
+            id = #{articleId}
+    </update>
+</mapper>
