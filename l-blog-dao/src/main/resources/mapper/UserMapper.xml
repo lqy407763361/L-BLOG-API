@@ -41,6 +41,14 @@
             *
         FROM
             l_user
+        <where>
+            <if test="user.name != null and user.name != ''">
+                AND name = #{user.name}
+            </if>
+            <if test="user.status != null and user.status != 0">
+                AND status = #{user.status}
+            </if>
+        </where>
         ORDER BY
             id ASC
         LIMIT
@@ -56,12 +64,18 @@
             user_id = #{userId}
     </select>
     
-    <select id="getUserTotal" resultType="java.lang.Integer">
+    <select id="getUserTotal" parameterType="com.lblog.domain.User" resultType="java.lang.Integer">
         SELECT
             COUNT(id)
         FROM
             l_user
-        WHERE
-            status = 1
+        <where>
+            <if test="name != null and name != ''">
+                AND name = #{name}
+            </if>
+            <if test="status != null and status != 0">
+                AND status = #{status}
+            </if>
+        </where>
     </select>
 </mapper>

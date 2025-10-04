@@ -17,9 +17,10 @@ public interface ArticleCategoryDao {
     Integer deleteArticleCategory(Long articleCategoryId);
 
     List<ArticleCategory> getArticleCategoryList(@Param("startNum") Integer startNum,
-                                                 @Param("size") Integer size);
+                                                 @Param("size") Integer size,
+                                                 @Param("articleCategory") ArticleCategory articleCategory);
 
     ArticleCategory getArticleCategoryDetail(Long articleCategoryId);
 
-    Integer getArticleCategoryTotal();
+    Integer getArticleCategoryTotal(ArticleCategory articleCategory);
 }

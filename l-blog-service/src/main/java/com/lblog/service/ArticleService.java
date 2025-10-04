@@ -82,13 +82,13 @@ public class ArticleService {
     }
 
     //获取文章列表
-    public PageResultUtil<Article> getArticleList(Integer startPage, Integer size){
+    public PageResultUtil<Article> getArticleList(Integer startPage, Integer size, Article article){
         //起始位置
         Integer startNum = (startPage-1) * size;
         //获取总数
-        Integer total = articleDao.getArticleTotal();
+        Integer total = articleDao.getArticleTotal(article);
         //查询列表
-        List<Article> articleList = articleDao.getArticleList(startNum, size);
+        List<Article> articleList = articleDao.getArticleList(startNum, size, article);
 
         return new PageResultUtil<>(startPage, size, total, articleList);
     }
@@ -105,8 +105,8 @@ public class ArticleService {
     }
 
     //获取文章数量
-    public Integer getArticleTotal(){
-        return articleDao.getArticleTotal();
+    public Integer getArticleTotal(Article article){
+        return articleDao.getArticleTotal(article);
     }
 
     //编辑文章阅读量

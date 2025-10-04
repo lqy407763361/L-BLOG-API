@@ -73,6 +73,14 @@
             *
         FROM
             l_article
+        <where>
+            <if test="article.title != null and article.title != ''">
+                AND title = #{article.title}
+            </if>
+            <if test="article.status != null and article.status != 0">
+                AND status = #{article.status}
+            </if>
+        </where>
         ORDER BY
             sort_order DESC, id ASC
         LIMIT
@@ -88,13 +96,19 @@
             id = #{articleId}
     </select>
 
-    <select id="getArticleTotal" resultType="java.lang.Integer">
+    <select id="getArticleTotal" parameterType="com.lblog.domain.Article" resultType="java.lang.Integer">
         SELECT
             COUNT(id)
         FROM
             l_article
-        WHERE
-            status = 1
+        <where>
+            <if test="title != null and title != ''">
+                AND title = #{title}
+            </if>
+            <if test="status != null and status != 0">
+                AND status = #{status}
+            </if>
+        </where>
     </select>
 
     <update id="editArticleReadCount">

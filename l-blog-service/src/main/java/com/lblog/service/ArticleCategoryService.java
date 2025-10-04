@@ -3,6 +3,8 @@ package com.lblog.service;
 import com.lblog.common.exception.ReturnException;
 import com.lblog.common.util.PageResultUtil;
 import com.lblog.dao.ArticleCategoryDao;
+import com.lblog.dao.ArticleDao;
+import com.lblog.domain.Article;
 import com.lblog.domain.ArticleCategory;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,6 +19,9 @@ public class ArticleCategoryService {
 
     @Autowired
     private ArticleCategoryDao articleCategoryDao;
+
+    @Autowired
+    private ArticleDao articleDao;
 
     //添加文章分类
     @Transactional
@@ -69,22 +74,30 @@ public class ArticleCategoryService {
     //删除文章分类
     @Transactional
     public void deleteArticleCategory(Long articleCategoryId){
-        //判断分类ID
+        //判断文章分类ID
         if((articleCategoryId == null) || (articleCategoryId == 0)){
             throw new ReturnException("文章分类ID不能为空！");
+        }
+
+        //判断该分类下属是否存在文章
+        Article article = new Article();
+        article.setCategoryId(articleCategoryId);
+        Integer articleTotal = articleDao.getArticleTotal(article);
+        if((articleTotal != null) && (articleTotal > 0)){
+            throw new ReturnException("该分类下存在文章！");
         }
 
         articleCategoryDao.deleteArticleCategory(articleCategoryId);
     }
 
     //获取文章分类列表
-    public PageResultUtil<ArticleCategory> getArticleCategoryList(Integer startPage, Integer size){
+    public PageResultUtil<ArticleCategory> getArticleCategoryList(Integer startPage, Integer size, ArticleCategory articleCategory){
         //起始位置
         Integer startNum = (startPage-1) * size;
         //获取总数
-        Integer total = articleCategoryDao.getArticleCategoryTotal();
+        Integer total = articleCategoryDao.getArticleCategoryTotal(articleCategory);
         //查询列表
-        List<ArticleCategory> articleCategoryList = articleCategoryDao.getArticleCategoryList(startNum, size);
+        List<ArticleCategory> articleCategoryList = articleCategoryDao.getArticleCategoryList(startNum, size, articleCategory);
 
         return new PageResultUtil<>(startPage, size, total, articleCategoryList);
     }
@@ -101,7 +114,7 @@ public class ArticleCategoryService {
     }
 
     //获取文章分类数量
-    public Integer getArticleCategoryTotal(){
-        return articleCategoryDao.getArticleCategoryTotal();
+    public Integer getArticleCategoryTotal(ArticleCategory articleCategory){
+        return articleCategoryDao.getArticleCategoryTotal(articleCategory);
     }
 }

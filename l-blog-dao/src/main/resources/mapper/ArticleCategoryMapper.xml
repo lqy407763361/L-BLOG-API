@@ -33,16 +33,16 @@
         UPDATE
             l_article_category
         <set>
-            <if test="name != null">
+            <if test="name != null and name != ''">
                 name = #{name}
             </if>
-            <if test="description != null">
+            <if test="description != null and name != ''">
                 description = #{description}
             </if>
             <if test="status != null and status != 0">
                 status = #{status}
             </if>
-            <if test="status != null">
+            <if test="sortOrder != null">
                 sort_order = #{sortOrder}
             </if>
             edit_time = #{editTime}
@@ -63,6 +63,14 @@
             *
         FROM
             l_article_category
+        <where>
+            <if test="articleCategory.name != null and articleCategory.name != ''">
+                AND name = #{articleCategory.name}
+            </if>
+            <if test="articleCategory.status != null and articleCategory.status != 0">
+                AND status = #{articleCategory.status}
+            </if>
+        </where>
         ORDER BY
             sort_order DESC, id ASC
         LIMIT
@@ -78,12 +86,18 @@
             id = #{articleCategoryId}
     </select>
 
-    <select id="getArticleCategoryTotal" resultType="java.lang.Integer">
+    <select id="getArticleCategoryTotal" parameterType="com.lblog.domain.ArticleCategory" resultType="java.lang.Integer">
         SELECT
             COUNT(id)
         FROM
             l_article_category
-        WHERE
-            status = 1
+        <where>
+            <if test="name != null and name != ''">
+                AND name = #{name}
+            </if>
+            <if test="status != null and status != 0">
+                AND status = #{status}
+            </if>
+        </where>
     </select>
 </mapper>

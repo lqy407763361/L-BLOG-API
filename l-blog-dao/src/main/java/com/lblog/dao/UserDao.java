@@ -15,9 +15,10 @@ public interface UserDao {
     Integer editUser(User user);
 
     List<User> getUserList(@Param("startNum") Integer startNum,
-                                  @Param("size") Integer size);
+                           @Param("size") Integer size,
+                           @Param("user") User user);
 
     User getUserDetail(Long userId);
 
-    Integer getUserTotal();
+    Integer getUserTotal(User user);
 }

@@ -1,0 +1,113 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD MAPPER 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.lblog.dao.AdminGroupDao">
+    <select id="getAdminGroupId" parameterType="java.lang.String" resultType="java.lang.Long">
+        SELECT
+            id
+        FROM
+            l_admin_group
+        WHERE
+            name = #{name}
+    </select>
+
+    <insert id="addAdminGroup" parameterType="com.lblog.domain.AdminGroup" useGeneratedKeys="true" keyProperty="id">
+        INSERT INTO
+            l_admin_group (
+                name,
+                description,
+                status,
+                sort_order,
+                view_prower,
+                edit_prower,
+                add_time,
+                edit_time,
+            ) VALUES (
+                #{name},
+                #{description},
+                #{status},
+                #{sortOrder},
+                #{viewPrower},
+                #{editPrower},
+                #{addTime},
+                #{editTime}
+            )
+    </insert>
+
+    <update id="editAdminGroup" parameterType="com.lblog.domain.AdminGroup">
+        UPDATE
+            l_admin_group
+            <set>
+                <if test="name != null">
+                    name = #{name}
+                </if>
+                <if test="description != null">
+                    description = #{description}
+                </if>
+                <if test="status != null and status != 0">
+                    status = #{status}
+                </if>
+                <if test="sortOrder != null">
+                    sort_order = #{sortOrder}
+                </if>
+                <if test="status != null">
+                    view_power = #{viewPrower}
+                </if>
+                <if test="status != null">
+                    edit_power = #{editPrower}
+                </if>
+                edit_time = #{editTime}
+            </set>
+            WHERE
+                id = #{adminGroupId}
+    </update>
+
+    <delete id="deleteAdminGroup" parameterType="java.lang.Long">
+        DELETE FROM
+            l_admin_group
+        WHERE
+            id = #{adminGroupId}
+    </delete>
+
+    <select id="getAdminGroupList" resultType="com.lblog.domain.AdminGroup">
+        SELECT
+            *
+        FROM
+            l_admin_group
+        <where>
+            <if test="adminGroup.name != null and adminGroup.name != ''">
+                AND name = #{adminGroup.name}
+            </if>
+            <if test="adminGroup.status != null and adminGroup.status != 0">
+                AND status = #{adminGroup.status}
+            </if>
+        </where>
+        ORDER BY
+            sort_order DESC, id ASC
+        LIMIT
+            #{startNum}, #{size}
+    </select>
+
+    <select id="getAdminGroupDetail" parameterType="java.lang.Long" resultType="com.lblog.domain.AdminGroup">
+        SELECT
+            *
+        FROM
+            l_admin_group
+        WHERE
+            id = #{adminGroupId}
+    </select>
+
+    <select id="getAdminGroupTotal" parameterType="com.lblog.domain.AdminGroup" resultType="java.lang.Integer">
+        SELECT
+            COUNT(id)
+        FROM
+            l_admin_group
+        <where>
+            <if test="name != null and name != ''">
+                AND name = #{name}
+            </if>
+            <if test="status != null and status != 0">
+                AND status = #{status}
+            </if>
+        </where>
+    </select>
+</mapper>

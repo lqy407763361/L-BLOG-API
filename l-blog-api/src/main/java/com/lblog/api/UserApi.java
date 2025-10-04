@@ -85,8 +85,9 @@ public class UserApi {
     //获取用户列表
     @GetMapping("getUserList")
     public JsonResponseUtil<PageResultUtil<User>> getUserList(@RequestParam(defaultValue = "1") Integer startPage,
-                                                              @RequestParam(defaultValue = "10") Integer size){
-        PageResultUtil<User> userList = userService.getUserList(startPage, size);
+                                                              @RequestParam(defaultValue = "10") Integer size,
+                                                              User user){
+        PageResultUtil<User> userList = userService.getUserList(startPage, size, user);
 
         return JsonResponseUtil.success(userList);
     }
@@ -102,8 +103,8 @@ public class UserApi {
 
     //获取用户数量
     @GetMapping("/getUserTotal")
-    public JsonResponseUtil<Integer> getUserTotal(){
-        Integer total = userService.getUserTotal();
+    public JsonResponseUtil<Integer> getUserTotal(User user){
+        Integer total = userService.getUserTotal(user);
 
         return JsonResponseUtil.success(total);
     }

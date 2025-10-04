@@ -42,8 +42,9 @@ public class ArticleApi {
     //获取文章列表
     @GetMapping("/getArticleList")
     public JsonResponseUtil<PageResultUtil<Article>> getArticleList(@RequestParam(defaultValue = "1") Integer startPage,
-                                                           @RequestParam(defaultValue = "10") Integer size){
-        PageResultUtil<Article> articleList = articleService.getArticleList(startPage, size);
+                                                                    @RequestParam(defaultValue = "10") Integer size,
+                                                                    Article article){
+        PageResultUtil<Article> articleList = articleService.getArticleList(startPage, size, article);
 
         return JsonResponseUtil.success(articleList);
     }
@@ -58,8 +59,8 @@ public class ArticleApi {
 
     //获取文章数量
     @GetMapping("/getArticleTotal")
-    public JsonResponseUtil<Integer> getArticleTotal(){
-        Integer articleTotal = articleService.getArticleTotal();
+    public JsonResponseUtil<Integer> getArticleTotal(Article article){
+        Integer articleTotal = articleService.getArticleTotal(article);
 
         return JsonResponseUtil.success(articleTotal);
     }

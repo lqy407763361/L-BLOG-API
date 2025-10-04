@@ -11,7 +11,7 @@
  Target Server Version : 80011 (8.0.11)
  File Encoding         : 65001
 
- Date: 03/10/2025 13:01:43
+ Date: 04/10/2025 15:22:45
 */
 
 SET NAMES utf8mb4;
@@ -38,6 +38,9 @@ DROP TABLE IF EXISTS `l_admin_group`;
 CREATE TABLE `l_admin_group`  (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `name` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL COMMENT '群组名称',
+  `description` text CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL COMMENT '简介',
+  `status` int(11) NULL DEFAULT NULL COMMENT '状态，1=启用，2=禁用',
+  `sort_order` int(11) NULL DEFAULT NULL COMMENT '排序',
   `view_power` text CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL COMMENT '查看权限',
   `edit_power` text CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL COMMENT '编辑权限',
   `add_time` int(11) NULL DEFAULT NULL COMMENT '添加时间',
