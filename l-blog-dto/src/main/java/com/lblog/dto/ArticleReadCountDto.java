@@ -7,13 +7,15 @@ public class ArticleReadCountDto {
 
     private Integer readCount;
 
-    public ArticleReadCountDto(Long id, Integer readCount){
-        this.id = id;
-        this.readCount = readCount;
+    private ArticleReadCountDto(){
     }
 
-    public static ArticleReadCountDto getArticleReadCount(Article article){
-        return new ArticleReadCountDto(article.getId(), article.getReadCount());
+    public static ArticleReadCountDto articleReadCountDto(Article article){
+        ArticleReadCountDto articleReadCountDto = new ArticleReadCountDto();
+        articleReadCountDto.setId(article.getId());
+        articleReadCountDto.setReadCount(article.getReadCount());
+
+        return articleReadCountDto;
     }
 
     public Long getId() {

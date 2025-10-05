@@ -1,0 +1,124 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD MAPPER 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.lblog.dao.AdminDao">
+    <select id="getAdminId" parameterType="java.lang.String" resultType="java.lang.Long">
+        SELECT
+            id
+        FROM
+            l_admin
+        WHERE
+            account = #{account}
+    </select>
+
+    <insert id="addAdmin" parameterType="com.lblog.domain.Admin" useGeneratedKeys="true" keyProperty="id">
+        INSERT INTO
+            l_admin (
+                group_id,
+                account,
+                name,
+                password,
+                salt,
+                description,
+                status,
+                add_time
+            ) VALUES (
+                #{groupId},
+                #{account},
+                #{name},
+                #{password},
+                #{salt},
+                #{description},
+                #{status},
+                #{addTime}
+            )
+    </insert>
+
+    <update id="editAdmin" parameterType="com.lblog.domain.Admin">
+        UPDATE
+            l_admin
+            <set>
+                <if test="adminGroupId != null and status != 0">
+                    group_id = #{adminGroupId}
+                </if>
+                <if test="name != null">
+                    name = #{name}
+                </if>
+                <if test="password != null">
+                    password = #{password}
+                </if>
+                <if test="password != null">
+                    salt = #{salt}
+                </if>
+                <if test="description != null">
+                    description = #{description}
+                </if>
+                <if test="status != null and status != 0">
+                    status = #{status}
+                </if>
+                edit_time = #{editTime}
+            </set>
+            WHERE
+                id = #{adminId}
+    </update>
+
+    <delete id="deleteAdmin" parameterType="java.lang.Long">
+        DELETE FROM
+            l_admin
+        WHERE
+            id = #{adminId}
+    </delete>
+
+    <select id="getAdminList" resultType="com.lblog.dto.AdminDto">
+        SELECT
+            a.*,
+            ag.name group_name,
+            (SELECT login_time FROM l_admin_login_record WHERE admin_id = a.id ORDER BY login_time DESC LIMIT 1) last_login_time
+        FROM
+            l_admin a
+        LEFT JOIN
+            l_admin_group ag ON a.group_id = ag.id
+        <where>
+            <if test="admin.name != null and admin.name != ''">
+                AND a.name = #{admin.name}
+            </if>
+            <if test="admin.status != null and admin.status != 0">
+                AND a.status = #{admin.status}
+            </if>
+        </where>
+        ORDER BY
+            a.id DESC
+        LIMIT
+            #{startNum}, #{size}
+    </select>
+
+    <select id="getAdminDetail" parameterType="java.lang.Long" resultType="com.lblog.domain.Admin">
+        SELECT
+            a.*,
+            ag.name groupName,
+            (SELECT login_time FROM l_admin_login_record WHERE admin_id = a.id ORDER BY login_time DESC LIMIT 1) last_login_time
+        FROM
+            l_admin a
+        LEFT JOIN
+            l_admin_group ag ON a.group_id = ag.id
+        WHERE
+            a.id = #{adminId}
+    </select>
+
+    <select id="getAdminTotal" parameterType="com.lblog.domain.Admin" resultType="java.lang.Integer">
+        SELECT
+            COUNT(id)
+        FROM
+            l_admin
+        <where>
+            <if test="groupId != null and groupId != ''">
+                AND group_id = #{groupId}
+            </if>
+            <if test="name != null and name != ''">
+                AND name = #{name}
+            </if>
+            <if test="status != null and status != 0">
+                AND status = #{status}
+            </if>
+        </where>
+    </select>
+</mapper>

@@ -11,7 +11,7 @@
  Target Server Version : 80011 (8.0.11)
  File Encoding         : 65001
 
- Date: 04/10/2025 15:22:45
+ Date: 05/10/2025 17:38:30
 */
 
 SET NAMES utf8mb4;
@@ -24,12 +24,16 @@ DROP TABLE IF EXISTS `l_admin`;
 CREATE TABLE `l_admin`  (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `group_id` int(11) NOT NULL COMMENT '管理员群组ID',
+  `account` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL COMMENT '账号',
   `name` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL COMMENT '账号名称',
   `password` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL COMMENT '密码',
+  `salt` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL COMMENT '盐',
+  `description` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL COMMENT '简介',
+  `status` int(11) NULL DEFAULT NULL COMMENT '状态，1=启用，2=禁用',
   `add_time` int(11) NULL DEFAULT NULL COMMENT '创建时间',
   `edit_time` int(11) NULL DEFAULT NULL COMMENT '编辑时间',
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci ROW_FORMAT = DYNAMIC;
+) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
 -- Table structure for l_admin_group
@@ -45,6 +49,45 @@ CREATE TABLE `l_admin_group`  (
   `edit_power` text CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL COMMENT '编辑权限',
   `add_time` int(11) NULL DEFAULT NULL COMMENT '添加时间',
   `edit_time` int(11) NULL DEFAULT NULL COMMENT '编辑时间',
+  PRIMARY KEY (`id`) USING BTREE
+) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci ROW_FORMAT = DYNAMIC;
+
+-- ----------------------------
+-- Table structure for l_admin_login_record
+-- ----------------------------
+DROP TABLE IF EXISTS `l_admin_login_record`;
+CREATE TABLE `l_admin_login_record`  (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `admin_id` int(11) NOT NULL COMMENT '管理员表ID',
+  `login_ip` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL COMMENT '登录IP',
+  `login_time` int(11) NULL DEFAULT NULL COMMENT '登录时间',
+  PRIMARY KEY (`id`) USING BTREE
+) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci ROW_FORMAT = DYNAMIC;
+
+-- ----------------------------
+-- Table structure for l_admin_refresh_token
+-- ----------------------------
+DROP TABLE IF EXISTS `l_admin_refresh_token`;
+CREATE TABLE `l_admin_refresh_token`  (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `admin_id` int(11) NULL DEFAULT NULL COMMENT '管理员表ID',
+  `refresh_token` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL COMMENT '长期token',
+  `is_revoked` int(11) NULL DEFAULT NULL COMMENT '是否废弃，0=默认，1=废弃',
+  `add_time` int(11) NULL DEFAULT NULL COMMENT '添加时间',
+  `edit_time` int(11) NULL DEFAULT NULL COMMENT '编辑时间',
+  PRIMARY KEY (`id`) USING BTREE
+) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci ROW_FORMAT = DYNAMIC;
+
+-- ----------------------------
+-- Table structure for l_admin_rsa_key
+-- ----------------------------
+DROP TABLE IF EXISTS `l_admin_rsa_key`;
+CREATE TABLE `l_admin_rsa_key`  (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `admin_id` int(11) NOT NULL COMMENT '管理员表ID',
+  `public_key_base64` text CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL COMMENT '公钥Base64编码',
+  `private_key_base64` text CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL COMMENT '私钥Base64编码',
+  `add_time` int(11) NULL DEFAULT NULL COMMENT '添加时间',
   PRIMARY KEY (`id`) USING BTREE
 ) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci ROW_FORMAT = DYNAMIC;
 
@@ -63,7 +106,7 @@ CREATE TABLE `l_article`  (
   `add_time` int(11) NULL DEFAULT NULL COMMENT '添加时间',
   `edit_name` int(11) NULL DEFAULT NULL COMMENT '编辑时间',
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci ROW_FORMAT = DYNAMIC;
+) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
 -- Table structure for l_article_category
@@ -78,7 +121,7 @@ CREATE TABLE `l_article_category`  (
   `add_time` int(11) NULL DEFAULT NULL COMMENT '添加时间',
   `edit_time` int(11) NULL DEFAULT NULL COMMENT '编辑时间',
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci ROW_FORMAT = DYNAMIC;
+) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
 -- Table structure for l_user
@@ -95,7 +138,7 @@ CREATE TABLE `l_user`  (
   `add_time` int(11) NULL DEFAULT NULL COMMENT '添加时间',
   `edit_time` int(11) NULL DEFAULT NULL COMMENT '编辑时间',
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci ROW_FORMAT = DYNAMIC;
+) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
 -- Table structure for l_user_login_record
@@ -107,7 +150,21 @@ CREATE TABLE `l_user_login_record`  (
   `login_ip` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL COMMENT '登录IP',
   `login_time` int(11) NULL DEFAULT NULL COMMENT '登录时间',
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci ROW_FORMAT = DYNAMIC;
+) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci ROW_FORMAT = DYNAMIC;
+
+-- ----------------------------
+-- Table structure for l_user_refresh_token
+-- ----------------------------
+DROP TABLE IF EXISTS `l_user_refresh_token`;
+CREATE TABLE `l_user_refresh_token`  (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `user_id` int(11) NULL DEFAULT NULL COMMENT '用户表ID',
+  `refresh_token` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL COMMENT '长期token',
+  `is_revoked` int(11) NULL DEFAULT NULL COMMENT '是否废弃，0=默认，1=废弃',
+  `add_time` int(11) NULL DEFAULT NULL COMMENT '添加时间',
+  `edit_time` int(11) NULL DEFAULT NULL COMMENT '编辑时间',
+  PRIMARY KEY (`id`) USING BTREE
+) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
 -- Table structure for l_user_rsa_key
@@ -120,18 +177,6 @@ CREATE TABLE `l_user_rsa_key`  (
   `private_key_base64` text CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL COMMENT '私钥Base64编码',
   `add_time` int(11) NULL DEFAULT NULL COMMENT '添加时间',
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci ROW_FORMAT = DYNAMIC;
-
--- ----------------------------
--- Table structure for l_user_token
--- ----------------------------
-DROP TABLE IF EXISTS `l_user_token`;
-CREATE TABLE `l_user_token`  (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
-  `user_id` int(11) NULL DEFAULT NULL COMMENT '用户表ID',
-  `token` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL COMMENT 'token',
-  `add_time` int(11) NULL DEFAULT NULL COMMENT '添加时间',
-  PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci ROW_FORMAT = DYNAMIC;
+) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci ROW_FORMAT = DYNAMIC;
 
 SET FOREIGN_KEY_CHECKS = 1;

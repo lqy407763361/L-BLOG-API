@@ -5,7 +5,6 @@ import com.lblog.common.util.GetClientIpUtil;
 import com.lblog.common.util.JsonResponseUtil;
 import com.lblog.common.util.PageResultUtil;
 import com.lblog.domain.User;
-import com.lblog.dto.UserNameDto;
 import com.lblog.service.UserService;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -74,10 +73,10 @@ public class UserApi {
     }
 
     //获取RSA公钥
-    @GetMapping("/getRsaPublicKey")
-    public JsonResponseUtil<String> getRsaPublicKey(){
+    @GetMapping("/getUserRsaPublicKey")
+    public JsonResponseUtil<String> getUserRsaPublicKey(){
         Long userId = userIdentityAuth.getCurrentUserId();
-        String publicKeyBase64 = userService.getRsaPublicKeyByUserId(userId);
+        String publicKeyBase64 = userService.getUserRsaKeyByUserId(userId).get("publicKeyBase64");
 
         return JsonResponseUtil.success(publicKeyBase64);
     }
@@ -111,9 +110,9 @@ public class UserApi {
 
     //获取用户名称
     @GetMapping("/getUserName")
-    public JsonResponseUtil<UserNameDto> getUserName(){
+    public JsonResponseUtil<String> getUserName(){
         Long userId = userIdentityAuth.getCurrentUserId();
-        UserNameDto userName = userService.getUserName(userId);
+        String userName = userService.getUserDetail(userId).getName();
 
         return JsonResponseUtil.success(userName);
     }

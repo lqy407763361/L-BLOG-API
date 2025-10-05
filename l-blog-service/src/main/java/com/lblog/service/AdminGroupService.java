@@ -2,7 +2,9 @@ package com.lblog.service;
 
 import com.lblog.common.exception.ReturnException;
 import com.lblog.common.util.PageResultUtil;
+import com.lblog.dao.AdminDao;
 import com.lblog.dao.AdminGroupDao;
+import com.lblog.domain.Admin;
 import com.lblog.domain.AdminGroup;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,8 +20,8 @@ public class AdminGroupService {
     @Autowired
     private AdminGroupDao adminGroupDao;
 
-//    @Autowired
-//    private Admin admin;
+    @Autowired
+    private AdminDao adminDao;
 
     //添加管理员群组
     @Transactional
@@ -86,12 +88,12 @@ public class AdminGroupService {
         }
 
         //判断该群组下属是否存在管理员
-//        Admin admin = new Admin();
-//        admin.setGroupId(adminGroupId);
-//        Integer articleTotal = articleDao.getAdminTotal(admin);
-//        if((articleTotal != null) && (articleTotal > 0)){
-//            throw new ReturnException("该群组下存在管理员！");
-//        }
+        Admin admin = new Admin();
+        admin.setGroupId(adminGroupId);
+        Integer adminTotal = adminDao.getAdminTotal(admin);
+        if((adminTotal != null) && (adminTotal > 0)){
+            throw new ReturnException("该群组下存在管理员！");
+        }
 
         adminGroupDao.deleteAdminGroup(adminGroupId);
     }

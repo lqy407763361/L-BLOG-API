@@ -15,10 +15,18 @@
             l_user (
                 name,
                 password,
+                salt,
+                status,
+                register_type,
+                register_ip,
                 add_time
             ) VALUES (
                 #{name},
                 #{password},
+                #{salt},
+                #{status},
+                #{registerType},
+                #{registerIp},
                 #{addTime}
             )
     </insert>
@@ -33,7 +41,7 @@
             edit_time = #{editTime}
         </set>
         WHERE
-            user_id = #{userId}
+            id = #{userId}
     </update>
 
     <select id="getUserList" resultType="com.lblog.domain.User">
@@ -50,7 +58,7 @@
             </if>
         </where>
         ORDER BY
-            id ASC
+            id DESC
         LIMIT
             #{startNum}, #{size}
     </select>
@@ -61,7 +69,7 @@
         FROM
             l_user
         WHERE
-            user_id = #{userId}
+            id = #{userId}
     </select>
     
     <select id="getUserTotal" parameterType="com.lblog.domain.User" resultType="java.lang.Integer">

@@ -17,8 +17,8 @@
                 description,
                 status,
                 sort_order,
-                view_prower,
-                edit_prower,
+                view_power,
+                edit_power,
                 add_time,
                 edit_time,
             ) VALUES (
@@ -26,8 +26,8 @@
                 #{description},
                 #{status},
                 #{sortOrder},
-                #{viewPrower},
-                #{editPrower},
+                #{viewPower},
+                #{editPower},
                 #{addTime},
                 #{editTime}
             )
@@ -50,10 +50,10 @@
                     sort_order = #{sortOrder}
                 </if>
                 <if test="status != null">
-                    view_power = #{viewPrower}
+                    view_power = #{viewPower}
                 </if>
                 <if test="status != null">
-                    edit_power = #{editPrower}
+                    edit_power = #{editPower}
                 </if>
                 edit_time = #{editTime}
             </set>
@@ -82,7 +82,7 @@
             </if>
         </where>
         ORDER BY
-            sort_order DESC, id ASC
+            sort_order DESC, id DESC
         LIMIT
             #{startNum}, #{size}
     </select>

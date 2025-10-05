@@ -8,4 +8,6 @@ public interface UserRsaKeyDao {
     UserRsaKey getUserRsaKeyById(Long id);
 
     UserRsaKey getUserRsaKeyByUserId(Long userId);
+
+    Integer addUserRsaKey(UserRsaKey userRsaKey);
 }

@@ -3,7 +3,7 @@ package com.lblog.api.auth;
 import com.lblog.common.exception.ReturnException;
 import com.lblog.common.util.JwtTokenUtil;
 import com.lblog.common.util.RSAUtil;
-import com.lblog.service.UserService;
+import com.lblog.service.AdminService;
 import jakarta.servlet.http.HttpServletRequest;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,12 +12,12 @@ import org.springframework.web.context.request.ServletRequestAttributes;
 
 import java.security.PublicKey;
 
-public class UserIdentityAuth {
+public class AdminIdentityAuth {
 
     @Autowired
-    private UserService userService;
+    private AdminService adminService;
 
-    public Long getCurrentUserId(){
+    public Long getCurrentAdminId(){
         ServletRequestAttributes servletRequestAttributes = (ServletRequestAttributes) RequestContextHolder.getRequestAttributes();
         HttpServletRequest httpServletRequest = servletRequestAttributes.getRequest();
 
@@ -32,13 +32,13 @@ public class UserIdentityAuth {
         }
 
         //根据accessToken获取userId和公钥字符串
-        String publicKeyBase64 = userService.getUserRsaKeyById(rsaKeyId).get("publicKeyBase64");
+        String publicKeyBase64 = adminService.getAdminRsaKeyById(rsaKeyId).get("publicKeyBase64");
         PublicKey publicKey = RSAUtil.getPublicKey(publicKeyBase64);
-        Long userId = JwtTokenUtil.validateToken(accessToken, publicKey);
-        if(userId < 1){
+        Long adminId = JwtTokenUtil.validateToken(accessToken, publicKey);
+        if(adminId < 1){
             throw new ReturnException("非法用户！");
         }
 
-        return userId;
+        return adminId;
     }
 }

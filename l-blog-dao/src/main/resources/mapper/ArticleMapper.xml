@@ -82,7 +82,7 @@
             </if>
         </where>
         ORDER BY
-            sort_order DESC, id ASC
+            sort_order DESC, id DESC
         LIMIT
             #{startNum}, #{size}
     </select>
