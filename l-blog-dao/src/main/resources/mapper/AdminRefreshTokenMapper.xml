@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD MAPPER 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.lblog.dao.AdminRefreshTokenDao">
+    <insert id="addAdminRefreshToken" parameterType="com.lblog.domain.AdminRefreshToken" useGeneratedKeys="true" keyProperty="id">
+        INSERT INTO
+            l_admin_refresh_token (
+            admin_id,
+            refresh_token,
+            is_revoked
+            add_time
+        ) VALUES (
+            #{adminId},
+            #{refreshToken},
+            #{isRevoked},
+            #{addTime}
+        )
+    </insert>
+
+    <update id="deleteAdminRefreshToken" parameterType="com.lblog.domain.AdminRefreshToken">
+        UPDATE
+            l_admin_refresh_token
+        <set>
+            is_revoked = 1
+            edit_time = #{editTime}
+        </set>
+        WHERE
+            admin_id = #{adminId} AND refresh_token = #{refreshToken}
+    </update>
+
+    <select id="getAdminRefreshTokenId" parameterType="com.lblog.domain.AdminRefreshToken" resultType="java.lang.Long">
+        SELECT
+            id
+        FROM
+            l_admin_refresh_token
+        WHERE
+            admin_id = #{adminId} AND refresh_token = #{refreshToken} AND is_revoked = 0
+    </select>
+</mapper>

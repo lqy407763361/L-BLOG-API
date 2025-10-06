@@ -36,36 +36,36 @@
     <update id="editAdmin" parameterType="com.lblog.domain.Admin">
         UPDATE
             l_admin
-            <set>
-                <if test="adminGroupId != null and status != 0">
-                    group_id = #{adminGroupId}
-                </if>
-                <if test="name != null">
-                    name = #{name}
-                </if>
-                <if test="password != null">
-                    password = #{password}
-                </if>
-                <if test="password != null">
-                    salt = #{salt}
-                </if>
-                <if test="description != null">
-                    description = #{description}
-                </if>
-                <if test="status != null and status != 0">
-                    status = #{status}
-                </if>
-                edit_time = #{editTime}
-            </set>
-            WHERE
-                id = #{adminId}
+        <set>
+            <if test="adminGroupId != null and status != 0">
+                group_id = #{adminGroupId}
+            </if>
+            <if test="name != null">
+                name = #{name}
+            </if>
+            <if test="password != null">
+                password = #{password}
+            </if>
+            <if test="password != null">
+                salt = #{salt}
+            </if>
+            <if test="description != null">
+                description = #{description}
+            </if>
+            <if test="status != null and status != 0">
+                status = #{status}
+            </if>
+            edit_time = #{editTime}
+        </set>
+        WHERE
+            id = #{id}
     </update>
 
     <delete id="deleteAdmin" parameterType="java.lang.Long">
         DELETE FROM
             l_admin
         WHERE
-            id = #{adminId}
+            id = #{id}
     </delete>
 
     <select id="getAdminList" resultType="com.lblog.dto.AdminDto">
@@ -101,7 +101,7 @@
         LEFT JOIN
             l_admin_group ag ON a.group_id = ag.id
         WHERE
-            a.id = #{adminId}
+            a.id = #{id}
     </select>
 
     <select id="getAdminTotal" parameterType="com.lblog.domain.Admin" resultType="java.lang.Integer">

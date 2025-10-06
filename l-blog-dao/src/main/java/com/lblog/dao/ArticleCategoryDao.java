@@ -14,13 +14,13 @@ public interface ArticleCategoryDao {
 
     Integer editArticleCategory(ArticleCategory articleCategory);
 
-    Integer deleteArticleCategory(Long articleCategoryId);
+    Integer deleteArticleCategory(@Param("id") Long articleCategoryId);
 
     List<ArticleCategory> getArticleCategoryList(@Param("startNum") Integer startNum,
                                                  @Param("size") Integer size,
                                                  @Param("articleCategory") ArticleCategory articleCategory);
 
-    ArticleCategory getArticleCategoryDetail(Long articleCategoryId);
+    ArticleCategory getArticleCategoryDetail(@Param("id") Long articleCategoryId);
 
     Integer getArticleCategoryTotal(ArticleCategory articleCategory);
 }

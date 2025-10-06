@@ -11,11 +11,23 @@
  Target Server Version : 80011 (8.0.11)
  File Encoding         : 65001
 
- Date: 05/10/2025 17:38:30
+ Date: 06/10/2025 12:16:39
 */
 
 SET NAMES utf8mb4;
 SET FOREIGN_KEY_CHECKS = 0;
+
+-- ----------------------------
+-- Table structure for l_about
+-- ----------------------------
+DROP TABLE IF EXISTS `l_about`;
+CREATE TABLE `l_about`  (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `content` text CHARACTER SET utf8mb4 COLLATE utf8mb4_bin NULL COMMENT '内容',
+  `status` int(11) NULL DEFAULT NULL COMMENT '状态，1=启用，2=禁用',
+  `edit_time` int(11) NULL DEFAULT NULL COMMENT '编辑时间',
+  PRIMARY KEY (`id`) USING BTREE
+) ENGINE = InnoDB AUTO_INCREMENT = 2 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_bin ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Table structure for l_admin
@@ -62,7 +74,7 @@ CREATE TABLE `l_admin_login_record`  (
   `login_ip` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL COMMENT '登录IP',
   `login_time` int(11) NULL DEFAULT NULL COMMENT '登录时间',
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci ROW_FORMAT = DYNAMIC;
+) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
 -- Table structure for l_admin_refresh_token
@@ -89,7 +101,7 @@ CREATE TABLE `l_admin_rsa_key`  (
   `private_key_base64` text CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL COMMENT '私钥Base64编码',
   `add_time` int(11) NULL DEFAULT NULL COMMENT '添加时间',
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci ROW_FORMAT = DYNAMIC;
+) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
 -- Table structure for l_article

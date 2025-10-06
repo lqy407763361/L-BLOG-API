@@ -14,13 +14,13 @@ public interface AdminGroupDao {
 
     Integer editAdminGroup(AdminGroup adminGroup);
 
-    Integer deleteAdminGroup(Long adminGroupId);
+    Integer deleteAdminGroup(@Param("id") Long adminGroupId);
 
     List<AdminGroup> getAdminGroupList(@Param("startNum") Integer startNum,
                                        @Param("size") Integer size,
                                        @Param("adminGroup") AdminGroup adminGroup);
 
-    AdminGroup getAdminGroupDetail(Long adminGroupId);
+    AdminGroup getAdminGroupDetail(@Param("id") Long adminGroupId);
 
     Integer getAdminGroupTotal(AdminGroup adminGroup);
 }

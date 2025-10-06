@@ -58,14 +58,14 @@
             edit_time = #{editTime}
         </set>
         WHERE
-            id = #{articleId}
+            id = #{id}
     </update>
 
     <delete id="deleteArticle" parameterType="java.lang.Long">
         DELETE FROM
             l_article
         WHERE
-            id = #{articleId}
+            id = #{id}
     </delete>
 
     <select id="getArticleList" resultType="com.lblog.domain.Article">
@@ -93,7 +93,7 @@
         FROM
             l_article
         WHERE
-            id = #{articleId}
+            id = #{id}
     </select>
 
     <select id="getArticleTotal" parameterType="com.lblog.domain.Article" resultType="java.lang.Integer">
@@ -115,14 +115,14 @@
         UPDATE
             l_article
         <set>
-            <if test="articleId != null">
-                id = #{articleId}
+            <if test="id != null">
+                id = #{id}
             </if>
             <if test="readCount != null">
                 read_count = #{readCount}
             </if>
         </set>
         WHERE
-            id = #{articleId}
+            id = #{id}
     </update>
 </mapper>

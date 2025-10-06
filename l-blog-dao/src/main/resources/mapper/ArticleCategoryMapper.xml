@@ -13,20 +13,20 @@
     <insert id="addArticleCategory" parameterType="com.lblog.domain.ArticleCategory" useGeneratedKeys="true" keyProperty="id">
         INSERT INTO
             l_article_category (
-                name,
-                description,
-                status,
-                sort_order,
-                add_time,
-                edit_time,
-            ) VALUES (
-                #{name},
-                #{description},
-                #{status},
-                #{sortOrder},
-                #{addTime},
-                #{editTime}
-            )
+            name,
+            description,
+            status,
+            sort_order,
+            add_time,
+            edit_time,
+        ) VALUES (
+            #{name},
+            #{description},
+            #{status},
+            #{sortOrder},
+            #{addTime},
+            #{editTime}
+        )
     </insert>
 
     <update id="editArticleCategory" parameterType="com.lblog.domain.ArticleCategory">
@@ -48,14 +48,14 @@
             edit_time = #{editTime}
         </set>
         WHERE
-            id = #{articleCategoryId}
+            id = #{id}
     </update>
 
     <delete id="deleteArticleCategory" parameterType="java.lang.Long">
         DELETE FROM
             l_article_category
         WHERE
-            id = #{articleCategoryId}
+            id = #{id}
     </delete>
 
     <select id="getArticleCategoryList" resultType="com.lblog.domain.ArticleCategory">
@@ -83,7 +83,7 @@
         FROM
             l_article_category
         WHERE
-            id = #{articleCategoryId}
+            id = #{id}
     </select>
 
     <select id="getArticleCategoryTotal" parameterType="com.lblog.domain.ArticleCategory" resultType="java.lang.Integer">

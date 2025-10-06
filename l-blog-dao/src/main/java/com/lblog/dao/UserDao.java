@@ -18,7 +18,7 @@ public interface UserDao {
                            @Param("size") Integer size,
                            @Param("user") User user);
 
-    User getUserDetail(Long userId);
+    User getUserDetail(@Param("id") Long userId);
 
     Integer getUserTotal(User user);
 }

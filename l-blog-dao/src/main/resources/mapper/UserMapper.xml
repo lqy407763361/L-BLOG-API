@@ -41,7 +41,7 @@
             edit_time = #{editTime}
         </set>
         WHERE
-            id = #{userId}
+            id = #{id}
     </update>
 
     <select id="getUserList" resultType="com.lblog.domain.User">
@@ -69,7 +69,7 @@
         FROM
             l_user
         WHERE
-            id = #{userId}
+            id = #{id}
     </select>
     
     <select id="getUserTotal" parameterType="com.lblog.domain.User" resultType="java.lang.Integer">

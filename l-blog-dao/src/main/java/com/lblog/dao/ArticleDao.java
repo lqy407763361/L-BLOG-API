@@ -14,16 +14,16 @@ public interface ArticleDao {
 
     Integer editArticle(Article article);
 
-    Integer deleteArticle(Long articleId);
+    Integer deleteArticle(@Param("id") Long articleId);
 
     List<Article> getArticleList(@Param("startNum") Integer startNum,
                                  @Param("size") Integer size,
                                  @Param("article") Article article);
 
-    Article getArticleDetail(Long articleId);
+    Article getArticleDetail(@Param("id") Long articleId);
 
     Integer getArticleTotal(Article article);
 
-    Integer editArticleReadCount(@Param("articleId") Long articleId,
+    Integer editArticleReadCount(@Param("id") Long articleId,
                                  @Param("readCount") Integer readCount);
 }

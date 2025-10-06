@@ -6,10 +6,12 @@
             l_user_refresh_token (
                 user_id,
                 refresh_token,
+                is_revoked,
                 add_time
             ) VALUES (
                 #{userId},
                 #{refreshToken},
+                #{isRevoked},
                 #{addTime}
             )
     </insert>
