@@ -70,38 +70,41 @@
 
     <select id="getAdminList" resultType="com.lblog.dto.AdminDto">
         SELECT
-            a.*,
-            ag.name group_name,
+            la.*,
+            lag.name group_name,
             (SELECT login_time FROM l_admin_login_record WHERE admin_id = a.id ORDER BY login_time DESC LIMIT 1) last_login_time
         FROM
-            l_admin a
+            l_admin la
         LEFT JOIN
-            l_admin_group ag ON a.group_id = ag.id
+            l_admin_group lag ON la.group_id = lag.id
         <where>
+            <if test="groupId != null and groupId != ''">
+                AND la.group_id = #{admin.groupId}
+            </if>
             <if test="admin.name != null and admin.name != ''">
-                AND a.name = #{admin.name}
+                AND la.name LIKE CONCAT('%', #{admin.name}, '%')
             </if>
             <if test="admin.status != null and admin.status != 0">
-                AND a.status = #{admin.status}
+                AND la.status = #{admin.status}
             </if>
         </where>
         ORDER BY
-            a.id DESC
+            la.id DESC
         LIMIT
             #{startNum}, #{size}
     </select>
 
     <select id="getAdminDetail" parameterType="java.lang.Long" resultType="com.lblog.domain.Admin">
         SELECT
-            a.*,
-            ag.name groupName,
-            (SELECT login_time FROM l_admin_login_record WHERE admin_id = a.id ORDER BY login_time DESC LIMIT 1) last_login_time
+            la.*,
+            lag.name groupName,
+            (SELECT login_time FROM l_admin_login_record WHERE admin_id = la.id ORDER BY login_time DESC LIMIT 1) last_login_time
         FROM
-            l_admin a
+            l_admin la
         LEFT JOIN
-            l_admin_group ag ON a.group_id = ag.id
+            l_admin_group lag ON la.group_id = lag.id
         WHERE
-            a.id = #{id}
+            la.id = #{id}
     </select>
 
     <select id="getAdminTotal" parameterType="com.lblog.domain.Admin" resultType="java.lang.Integer">
@@ -114,7 +117,7 @@
                 AND group_id = #{groupId}
             </if>
             <if test="name != null and name != ''">
-                AND name = #{name}
+                AND name LIKE CONCAT('%', #{name}, '%')
             </if>
             <if test="status != null and status != 0">
                 AND status = #{status}

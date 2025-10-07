@@ -65,7 +65,7 @@
             l_article_category
         <where>
             <if test="articleCategory.name != null and articleCategory.name != ''">
-                AND name = #{articleCategory.name}
+                AND name LIKE CONCAT('%', #{articleCategory.name}, '%')
             </if>
             <if test="articleCategory.status != null and articleCategory.status != 0">
                 AND status = #{articleCategory.status}
@@ -93,7 +93,7 @@
             l_article_category
         <where>
             <if test="name != null and name != ''">
-                AND name = #{name}
+                AND name LIKE CONCAT('%', #{name}, '%')
             </if>
             <if test="status != null and status != 0">
                 AND status = #{status}

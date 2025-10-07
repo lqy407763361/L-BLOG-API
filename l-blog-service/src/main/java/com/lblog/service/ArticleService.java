@@ -73,9 +73,9 @@ public class ArticleService {
     //删除文章
     @Transactional
     public void deleteArticle(Long articleId){
-        //判断分类ID
+        //判断文章ID
         if((articleId == null) || (articleId == 0)){
-            throw new ReturnException("文章分类ID不能为空！");
+            throw new ReturnException("文章ID不能为空！");
         }
 
         articleDao.deleteArticle(articleId);
@@ -96,9 +96,9 @@ public class ArticleService {
     //获取文章详情
     @Transactional
     public Article getArticleDetail(Long articleId){
-        //判断分类ID
+        //判断文章ID
         if((articleId == null) || (articleId == 0)){
-            throw new ReturnException("文章分类ID不能为空！");
+            throw new ReturnException("文章ID不能为空！");
         }
 
         return articleDao.getArticleDetail(articleId);

@@ -11,7 +11,7 @@
  Target Server Version : 80011 (8.0.11)
  File Encoding         : 65001
 
- Date: 06/10/2025 12:16:39
+ Date: 07/10/2025 12:54:42
 */
 
 SET NAMES utf8mb4;
@@ -134,6 +134,21 @@ CREATE TABLE `l_article_category`  (
   `edit_time` int(11) NULL DEFAULT NULL COMMENT '编辑时间',
   PRIMARY KEY (`id`) USING BTREE
 ) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci ROW_FORMAT = DYNAMIC;
+
+-- ----------------------------
+-- Table structure for l_message
+-- ----------------------------
+DROP TABLE IF EXISTS `l_message`;
+CREATE TABLE `l_message`  (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `user_id` int(11) NOT NULL COMMENT '发送人ID',
+  `title` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_bin NULL DEFAULT NULL COMMENT '标题',
+  `content` text CHARACTER SET utf8mb4 COLLATE utf8mb4_bin NULL COMMENT '内容',
+  `is_read` int(11) NULL DEFAULT NULL COMMENT '是否阅读，1=已读，0=未读',
+  `add_time` int(11) NULL DEFAULT NULL COMMENT '添加时间',
+  `edit_time` int(11) NULL DEFAULT NULL COMMENT '编辑时间',
+  PRIMARY KEY (`id`) USING BTREE
+) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_bin ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Table structure for l_user

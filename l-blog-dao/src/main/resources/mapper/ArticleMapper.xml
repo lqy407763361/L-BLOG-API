@@ -52,7 +52,7 @@
             <if test="status != null and status != 0">
                 status = #{status}
             </if>
-            <if test="status != null">
+            <if test="sortOrder != null">
                 sort_order = #{sortOrder}
             </if>
             edit_time = #{editTime}
@@ -75,7 +75,7 @@
             l_article
         <where>
             <if test="article.title != null and article.title != ''">
-                AND title = #{article.title}
+                AND title LIKE CONCAT('%', #{article.title}, '%')
             </if>
             <if test="article.status != null and article.status != 0">
                 AND status = #{article.status}
@@ -103,7 +103,7 @@
             l_article
         <where>
             <if test="title != null and title != ''">
-                AND title = #{title}
+                AND title LIKE CONCAT('%', #{title}, '%')
             </if>
             <if test="status != null and status != 0">
                 AND status = #{status}
@@ -115,9 +115,6 @@
         UPDATE
             l_article
         <set>
-            <if test="id != null">
-                id = #{id}
-            </if>
             <if test="readCount != null">
                 read_count = #{readCount}
             </if>

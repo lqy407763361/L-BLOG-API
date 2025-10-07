@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD MAPPER 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.lblog.dao.MessageDao">
+    <insert id="addMessage" parameterType="com.lblog.domain.Message" useGeneratedKeys="true" keyProperty="id">
+        INSERT INTO
+            l_message (
+                title,
+                user_name
+                content,
+                is_read,
+                add_time,
+                edit_time,
+            ) VALUES (
+                #{title},
+                #{userName},
+                #{content},
+                #{isRead},
+                #{addTime},
+                #{editTime}
+        )
+    </insert>
+
+    <update id="editMessage" parameterType="com.lblog.domain.Message">
+        UPDATE
+            l_message
+        <set>
+            <if test="isRead != null and isRead != 0">
+                is_read = #{isRead}
+            </if>
+            edit_time = #{editTime}
+        </set>
+        WHERE
+            id = #{id}
+    </update>
+
+    <delete id="deleteMessage" parameterType="java.lang.Long">
+        DELETE FROM
+            l_message
+        WHERE
+            id = #{id}
+    </delete>
+
+    <select id="getMessageList" resultType="com.lblog.domain.Message">
+        SELECT
+            lm.*,
+            lu.name
+        FROM
+            l_message lm
+        LEFT JOIN
+            l_user lu ON lm.user_id = lu.id
+        <where>
+            <if test="message.title != null and message.title != ''">
+                AND lm.title LIKE CONCAT('%', #{message.title}, '%')
+            </if>
+            <if test="message.userName != null and message.userName != ''">
+                AND lu.user_name LIKE CONCAT('%', #{message.userName}, '%')
+            </if>
+            <if test="message.isRead != null and message.isRead != 0">
+                AND lm.is_read = #{message.isRead}
+            </if>
+        </where>
+        ORDER BY
+            lm.id DESC
+        LIMIT
+            #{startNum}, #{size}
+    </select>
+
+    <select id="getMessageDetail" parameterType="java.lang.Long" resultType="com.lblog.domain.Message">
+        SELECT
+            *
+        FROM
+            l_message
+        WHERE
+            id = #{id} AND is_read = 0
+    </select>
+
+    <select id="getMessageTotal" parameterType="com.lblog.domain.Message" resultType="java.lang.Integer">
+        SELECT
+            COUNT(lm.id)
+        FROM
+            l_message lm
+        LEFT JOIN
+            l_user lu ON lm.user_id = lu.id
+        <where>
+            <if test="title != null and title != ''">
+                AND lm.title LIKE CONCAT('%', #{title}, '%')
+            </if>
+            <if test="userName != null and userName != ''">
+                AND lu.user_name LIKE CONCAT('%', #{userName}, '%')
+            </if>
+            <if test="isRead != null and isRead != 0">
+                AND lm.is_read = #{isRead}
+            </if>
+        </where>
+    </select>
+</mapper>

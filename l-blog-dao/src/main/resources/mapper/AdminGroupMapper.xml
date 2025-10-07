@@ -75,7 +75,7 @@
             l_admin_group
         <where>
             <if test="adminGroup.name != null and adminGroup.name != ''">
-                AND name = #{adminGroup.name}
+                AND name LIKE CONCAT('%', #{adminGroup.name}, '%')
             </if>
             <if test="adminGroup.status != null and adminGroup.status != 0">
                 AND status = #{adminGroup.status}
@@ -103,7 +103,7 @@
             l_admin_group
         <where>
             <if test="name != null and name != ''">
-                AND name = #{name}
+                AND name LIKE CONCAT('%', #{name}, '%')
             </if>
             <if test="status != null and status != 0">
                 AND status = #{status}
