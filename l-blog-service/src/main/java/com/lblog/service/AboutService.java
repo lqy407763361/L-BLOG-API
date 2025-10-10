@@ -32,7 +32,7 @@ public class AboutService {
         }
     }
 
-    //获取管理员详情
+    //获取单页详情
     public About getAboutDetail(){
 
         return aboutDao.getAboutDetail(ABOUT_ID);

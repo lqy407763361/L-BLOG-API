@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD MAPPER 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.lblog.dao.SiteConfigDao">
+    <update id="editSiteConfig" parameterType="com.lblog.domain.SiteConfig">
+        UPDATE
+            l_site_config
+        <set>
+            <if test="metaTitle != null">
+                meta_title = #{metaTitle}
+            </if>
+            <if test="metaDescription != null">
+                meta_description = #{metaDescription}
+            </if>
+            <if test="metaKeywords != null">
+                meta_keywords = #{metaKeywords}
+            </if>
+            <if test="siteTitle != null">
+                site_title = #{siteTitle}
+            </if>
+            <if test="siteListLimit != null and siteListLimit != 0">
+                site_list_limit = #{siteListLimit}
+            </if>
+            <if test="adminListLimit != null and adminListLimit != 0">
+                admin_list_limit = #{adminListLimit}
+            </if>
+            <if test="logoImageUrl != null">
+                logo_image_url = #{logoImageUrl}
+            </if>
+            <if test="siteConfig != null">
+                site_config = #{siteConfig}
+            </if>
+            <if test="systemMaintenance != null">
+                system_maintenance = #{systemMaintenance}
+            </if>
+            <if test="siteLoginMaxNumber != null and siteLoginMaxNumber != 0">
+                site_login_max_number = #{siteLoginMaxNumber}
+            </if>
+            <if test="adminLoginMaxNumber != null and adminLoginMaxNumber != 0">
+                admin_login_max_number = #{adminLoginMaxNumber}
+            </if>
+            <if test="siteSessionExpire != null and siteSessionExpire != 0">
+                site_session_expire = #{siteSessionExpire}
+            </if>
+            <if test="adminSessionExpire != null and adminSessionExpire != 0">
+                admin_session_expire = #{adminSessionExpire}
+            </if>
+            edit_time = #{editTime}
+        </set>
+        WHERE
+            id = #{id}
+    </update>
+
+    <select id="getSiteConfig" parameterType="java.lang.Long" resultType="com.lblog.domain.SiteConfig">
+        SELECT
+            *
+        FROM
+            l_site_config
+        WHERE
+            id = #{id}
+    </select>
+</mapper>

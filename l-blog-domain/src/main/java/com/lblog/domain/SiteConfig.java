@@ -48,6 +48,9 @@ public class SiteConfig {
     @Column(name = "admin_session_expire")
     private Long adminSessionExpire;
 
+    @Column(name = "edit_time")
+    private Long editTime;
+
     public Long getId() {
         return id;
     }
@@ -158,5 +161,13 @@ public class SiteConfig {
 
     public void setAdminSessionExpire(Long adminSessionExpire) {
         this.adminSessionExpire = adminSessionExpire;
+    }
+
+    public Long getEditTime() {
+        return editTime;
+    }
+
+    public void setEditTime(Long editTime) {
+        this.editTime = editTime;
     }
 }
