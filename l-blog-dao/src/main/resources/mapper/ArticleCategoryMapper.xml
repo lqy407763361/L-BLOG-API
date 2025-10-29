@@ -18,7 +18,7 @@
             status,
             sort_order,
             add_time,
-            edit_time,
+            edit_time
         ) VALUES (
             #{name},
             #{description},
@@ -34,16 +34,16 @@
             l_article_category
         <set>
             <if test="name != null and name != ''">
-                name = #{name}
+                name = #{name},
             </if>
             <if test="description != null and name != ''">
-                description = #{description}
+                description = #{description},
             </if>
             <if test="status != null and status != 0">
-                status = #{status}
+                status = #{status},
             </if>
             <if test="sortOrder != null">
-                sort_order = #{sortOrder}
+                sort_order = #{sortOrder},
             </if>
             edit_time = #{editTime}
         </set>

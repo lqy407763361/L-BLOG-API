@@ -6,10 +6,10 @@
             l_about
         <set>
             <if test="content != null">
-                content = #{content}
+                content = #{content},
             </if>
             <if test="status != null and status != 0">
-                status = #{status}
+                status = #{status},
             </if>
             edit_time = #{editTime}
         </set>

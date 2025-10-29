@@ -20,7 +20,7 @@
                 status,
                 sort_order,
                 add_time,
-                edit_time,
+                edit_time
             ) VALUES (
                 #{categoryId},
                 #{title},
@@ -38,22 +38,22 @@
             l_article
         <set>
             <if test="categoryId != null">
-                category_id = #{categoryId}
+                category_id = #{categoryId},
             </if>
             <if test="title != null">
-                title = #{title}
+                title = #{title},
             </if>
             <if test="content != null">
-                content = #{content}
+                content = #{content},
             </if>
             <if test="readCount != null">
-                read_count = #{readCount}
+                read_count = #{readCount},
             </if>
             <if test="status != null and status != 0">
-                status = #{status}
+                status = #{status},
             </if>
             <if test="sortOrder != null">
-                sort_order = #{sortOrder}
+                sort_order = #{sortOrder},
             </if>
             edit_time = #{editTime}
         </set>

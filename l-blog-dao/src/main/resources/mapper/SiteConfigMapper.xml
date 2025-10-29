@@ -6,43 +6,43 @@
             l_site_config
         <set>
             <if test="metaTitle != null">
-                meta_title = #{metaTitle}
+                meta_title = #{metaTitle},
             </if>
             <if test="metaDescription != null">
-                meta_description = #{metaDescription}
+                meta_description = #{metaDescription},
             </if>
             <if test="metaKeywords != null">
-                meta_keywords = #{metaKeywords}
+                meta_keywords = #{metaKeywords},
             </if>
             <if test="siteTitle != null">
-                site_title = #{siteTitle}
+                site_title = #{siteTitle},
             </if>
             <if test="siteListLimit != null and siteListLimit != 0">
-                site_list_limit = #{siteListLimit}
+                site_list_limit = #{siteListLimit},
             </if>
             <if test="adminListLimit != null and adminListLimit != 0">
-                admin_list_limit = #{adminListLimit}
+                admin_list_limit = #{adminListLimit},
             </if>
             <if test="logoImageUrl != null">
-                logo_image_url = #{logoImageUrl}
+                logo_image_url = #{logoImageUrl},
             </if>
             <if test="siteConfig != null">
-                site_config = #{siteConfig}
+                site_config = #{siteConfig},
             </if>
             <if test="systemMaintenance != null">
-                system_maintenance = #{systemMaintenance}
+                system_maintenance = #{systemMaintenance},
             </if>
             <if test="siteLoginMaxNumber != null and siteLoginMaxNumber != 0">
-                site_login_max_number = #{siteLoginMaxNumber}
+                site_login_max_number = #{siteLoginMaxNumber},
             </if>
             <if test="adminLoginMaxNumber != null and adminLoginMaxNumber != 0">
-                admin_login_max_number = #{adminLoginMaxNumber}
+                admin_login_max_number = #{adminLoginMaxNumber},
             </if>
             <if test="siteSessionExpire != null and siteSessionExpire != 0">
-                site_session_expire = #{siteSessionExpire}
+                site_session_expire = #{siteSessionExpire},
             </if>
             <if test="adminSessionExpire != null and adminSessionExpire != 0">
-                admin_session_expire = #{adminSessionExpire}
+                admin_session_expire = #{adminSessionExpire},
             </if>
             edit_time = #{editTime}
         </set>

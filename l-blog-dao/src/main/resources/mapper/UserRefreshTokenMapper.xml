@@ -20,7 +20,7 @@
         UPDATE
             l_user_refresh_token
         <set>
-            is_revoked = 1
+            is_revoked = 1,
             edit_time = #{editTime}
         </set>
         WHERE
@@ -33,6 +33,6 @@
         FROM
             l_user_refresh_token
         WHERE
-            user_id = #{userId} AND refresh_token = #{refreshToken} AND is_revoked = 1
+            user_id = #{userId} AND refresh_token = #{refreshToken} AND is_revoked = 0
     </select>
 </mapper>

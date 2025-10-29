@@ -73,13 +73,13 @@ public class MessageService {
     }
 
     //获取消息列表
-    public PageResultUtil<Message> getMessageList(Integer startPage, Integer size, Message message){
+    public PageResultUtil<Message> getMessageList(Integer startPage, Integer size, Message message, String userName){
         //起始位置
         Integer startNum = (startPage-1) * size;
         //获取总数
-        Integer total = messageDao.getMessageTotal(message);
+        Integer total = messageDao.getMessageTotal(message, userName);
         //查询列表
-        List<Message> messageList = messageDao.getMessageList(startNum, size, message);
+        List<Message> messageList = messageDao.getMessageList(startNum, size, message, userName);
 
         return new PageResultUtil<>(startPage, size, total, messageList);
     }
@@ -96,7 +96,7 @@ public class MessageService {
     }
 
     //获取消息数量
-    public Integer getMessageTotal(Message message){
-        return messageDao.getMessageTotal(message);
+    public Integer getMessageTotal(Message message, String userName){
+        return messageDao.getMessageTotal(message, userName);
     }
 }

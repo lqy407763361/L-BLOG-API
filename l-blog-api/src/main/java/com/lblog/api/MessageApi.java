@@ -46,8 +46,9 @@ public class MessageApi {
     @GetMapping("/getMessageList")
     public JsonResponseUtil<PageResultUtil<Message>> getMessageList(@RequestParam(defaultValue = "1") Integer startPage,
                                                                     @RequestParam(defaultValue = "10") Integer size,
-                                                                    Message message){
-        PageResultUtil<Message> messageList = messageService.getMessageList(startPage, size, message);
+                                                                    Message message,
+                                                                    String userName){
+        PageResultUtil<Message> messageList = messageService.getMessageList(startPage, size, message, userName);
 
         return JsonResponseUtil.success(messageList);
     }
@@ -62,8 +63,8 @@ public class MessageApi {
 
     //获取消息数量
     @GetMapping("/getMessageTotal")
-    public JsonResponseUtil<Integer> getMessageTotal(Message message){
-        Integer messageTotal = messageService.getMessageTotal(message);
+    public JsonResponseUtil<Integer> getMessageTotal(Message message, String userName){
+        Integer messageTotal = messageService.getMessageTotal(message, userName);
 
         return JsonResponseUtil.success(messageTotal);
     }

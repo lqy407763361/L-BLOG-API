@@ -16,9 +16,11 @@ public interface MessageDao {
 
     List<Message> getMessageList(@Param("startNum") Integer startNum,
                                  @Param("size") Integer size,
-                                 @Param("Message") Message Message);
+                                 @Param("message") Message message,
+                                 @Param("userName") String userName);
 
     Message getMessageDetail(@Param("id") Long messageId);
 
-    Integer getMessageTotal(Message Message);
+    Integer getMessageTotal(@Param("message") Message message,
+                            @Param("userName") String userName);
 }

@@ -36,7 +36,7 @@
             l_user
         <set>
             <if test="status != null and status != 0">
-                status = #{status}
+                status = #{status},
             </if>
             edit_time = #{editTime}
         </set>

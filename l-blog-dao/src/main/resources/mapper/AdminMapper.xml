@@ -37,23 +37,23 @@
         UPDATE
             l_admin
         <set>
-            <if test="adminGroupId != null and status != 0">
-                group_id = #{adminGroupId}
+            <if test="groupId != null and groupId != 0">
+                group_id = #{groupId},
             </if>
             <if test="name != null">
-                name = #{name}
+                name = #{name},
             </if>
             <if test="password != null">
-                password = #{password}
+                password = #{password},
             </if>
-            <if test="password != null">
-                salt = #{salt}
+            <if test="salt != null">
+                salt = #{salt},
             </if>
             <if test="description != null">
-                description = #{description}
+                description = #{description},
             </if>
             <if test="status != null and status != 0">
-                status = #{status}
+                status = #{status},
             </if>
             edit_time = #{editTime}
         </set>
@@ -71,14 +71,14 @@
     <select id="getAdminList" resultType="com.lblog.dto.AdminDto">
         SELECT
             la.*,
-            lag.name group_name,
-            (SELECT login_time FROM l_admin_login_record WHERE admin_id = a.id ORDER BY login_time DESC LIMIT 1) last_login_time
+            lagroup.name group_name,
+            (SELECT login_time FROM l_admin_login_record WHERE admin_id = la.id ORDER BY login_time DESC LIMIT 1) last_login_time
         FROM
             l_admin la
         LEFT JOIN
-            l_admin_group lag ON la.group_id = lag.id
+            l_admin_group lagroup ON la.group_id = lagroup.id
         <where>
-            <if test="groupId != null and groupId != ''">
+            <if test="admin.groupId != null and admin.groupId != ''">
                 AND la.group_id = #{admin.groupId}
             </if>
             <if test="admin.name != null and admin.name != ''">
@@ -97,12 +97,12 @@
     <select id="getAdminDetail" parameterType="java.lang.Long" resultType="com.lblog.domain.Admin">
         SELECT
             la.*,
-            lag.name groupName,
+            lagroup.name groupName,
             (SELECT login_time FROM l_admin_login_record WHERE admin_id = la.id ORDER BY login_time DESC LIMIT 1) last_login_time
         FROM
             l_admin la
         LEFT JOIN
-            l_admin_group lag ON la.group_id = lag.id
+            l_admin_group lagroup ON la.group_id = lagroup.id
         WHERE
             la.id = #{id}
     </select>
