@@ -23,7 +23,9 @@ public interface AdminDao {
                              @Param("admin") Admin admin,
                              @Param("adminGroup") AdminGroup adminGroup);
 
-    AdminDto getAdminDetail(@Param("id") Long adminId);
+    Admin getAdminDetail(@Param("id") Long adminId);
+
+    AdminDto getAdminDetailDto(@Param("id") Long adminId);
 
     Integer getAdminTotal(Admin admin);
 }

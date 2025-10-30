@@ -11,6 +11,7 @@ import com.lblog.dao.AdminLoginRecordDao;
 import com.lblog.dao.AdminRefreshTokenDao;
 import com.lblog.dao.AdminRsaKeyDao;
 import com.lblog.domain.*;
+import com.lblog.dto.AdminDto;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -286,18 +287,21 @@ public class AdminService {
     }
 
     //获取管理员列表
-    public PageResultUtil<Admin> getAdminList(Integer startPage, Integer size, Admin admin, AdminGroup adminGroup){
+    public PageResultUtil<AdminDto> getAdminList(Integer startPage, Integer size, Admin admin, AdminGroup adminGroup){
         //起始位置
         Integer startNum = (startPage-1) * size;
         //获取总数
         Integer total = adminDao.getAdminTotal(admin);
         //查询列表
-        List<Admin> adminList = adminDao.getAdminList(startNum, size, admin, adminGroup);
+        List<AdminDto> adminList = adminDao.getAdminList(startNum, size, admin, adminGroup);
 
         return new PageResultUtil<>(startPage, size, total, adminList);
     }
 
-    //获取管理员详情
+    /**
+     * 获取管理员详情
+     * 用于内部查询，编辑
+     * */
     @Transactional
     public Admin getAdminDetail(Long adminId){
         //判断用户ID
@@ -306,6 +310,20 @@ public class AdminService {
         }
 
         return adminDao.getAdminDetail(adminId);
+    }
+
+    /**
+     * 获取管理员详情
+     * 重新组装展示字段，脱敏处理
+     * */
+    @Transactional
+    public AdminDto getAdminDetailDto(Long adminId){
+        //判断用户ID
+        if((adminId == null) || (adminId == 0)){
+            throw new ReturnException("管理员ID不能为空！");
+        }
+
+        return adminDao.getAdminDetailDto(adminId);
     }
 
     //获取管理员数量

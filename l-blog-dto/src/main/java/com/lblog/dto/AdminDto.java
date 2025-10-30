@@ -22,12 +22,23 @@ public class AdminDto {
     //联表查询字段
     private String groupName;
 
+    private Long prevLoginIp;
+
+    private Long prevLoginTime;
+
+    private Long lastLoginIp;
+
     private Long lastLoginTime;
 
     public AdminDto(){
     }
 
-    public static AdminDto adminDto(Admin admin, String groupName, Long lastLoginTime){
+    public static AdminDto adminDto(Admin admin,
+                                    String groupName,
+                                    Long prevLoginIp,
+                                    Long prevLoginTime,
+                                    Long lastLoginIp,
+                                    Long lastLoginTime){
         AdminDto adminDto = new AdminDto();
         adminDto.setId(admin.getId());
         adminDto.setGroupId(admin.getGroupId());
@@ -38,6 +49,9 @@ public class AdminDto {
         adminDto.setAddTime(admin.getAddTime());
         adminDto.setEditTime(admin.getEditTime());
         adminDto.setGroupName(groupName);
+        adminDto.setPrevLoginIp(prevLoginIp);
+        adminDto.setPrevLoginTime(prevLoginTime);
+        adminDto.setLastLoginIp(lastLoginIp);
         adminDto.setLastLoginTime(lastLoginTime);
 
         return adminDto;
@@ -113,6 +127,30 @@ public class AdminDto {
 
     public void setGroupName(String groupName) {
         this.groupName = groupName;
+    }
+
+    public Long getPrevLoginIp() {
+        return prevLoginIp;
+    }
+
+    public void setPrevLoginIp(Long prevLoginIp) {
+        this.prevLoginIp = prevLoginIp;
+    }
+
+    public Long getPrevLoginTime() {
+        return prevLoginTime;
+    }
+
+    public void setPrevLoginTime(Long prevLoginTime) {
+        this.prevLoginTime = prevLoginTime;
+    }
+
+    public Long getLastLoginIp() {
+        return lastLoginIp;
+    }
+
+    public void setLastLoginIp(Long lastLoginIp) {
+        this.lastLoginIp = lastLoginIp;
     }
 
     public Long getLastLoginTime() {

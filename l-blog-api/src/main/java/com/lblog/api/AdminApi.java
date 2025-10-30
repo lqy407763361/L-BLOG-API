@@ -6,6 +6,7 @@ import com.lblog.common.util.JsonResponseUtil;
 import com.lblog.common.util.PageResultUtil;
 import com.lblog.domain.Admin;
 import com.lblog.domain.AdminGroup;
+import com.lblog.dto.AdminDto;
 import com.lblog.service.AdminService;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -88,21 +89,21 @@ public class AdminApi {
 
     //获取管理员列表
     @GetMapping("getAdminList")
-    public JsonResponseUtil<PageResultUtil<Admin>> getAdminList(@RequestParam(defaultValue = "1") Integer startPage,
+    public JsonResponseUtil<PageResultUtil<AdminDto>> getAdminList(@RequestParam(defaultValue = "1") Integer startPage,
                                                                 @RequestParam(defaultValue = "10") Integer size,
                                                                 Admin admin,
                                                                 AdminGroup adminGroup){
-        PageResultUtil<Admin> adminList = adminService.getAdminList(startPage, size, admin, adminGroup);
+        PageResultUtil<AdminDto> adminList = adminService.getAdminList(startPage, size, admin, adminGroup);
 
         return JsonResponseUtil.success(adminList);
     }
 
     //获取管理员详情
     @GetMapping("/getAdminDetail")
-    public JsonResponseUtil<Admin> getAdminDetail(){
+    public JsonResponseUtil<AdminDto> getAdminDetailDto(){
 //        Long adminId = adminIdentityAuth.getCurrentAdminId();
         Long adminId = 1L;
-        Admin adminDetail = adminService.getAdminDetail(adminId);
+        AdminDto adminDetail = adminService.getAdminDetailDto(adminId);
 
         return JsonResponseUtil.success(adminDetail);
     }

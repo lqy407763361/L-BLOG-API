@@ -71,8 +71,8 @@
     <select id="getAdminList" resultType="com.lblog.dto.AdminDto">
         SELECT
             la.*,
-            lagroup.name group_name,
-            (SELECT login_time FROM l_admin_login_record WHERE admin_id = la.id ORDER BY login_time DESC LIMIT 1) last_login_time
+            lagroup.name groupName,
+            (SELECT login_time FROM l_admin_login_record WHERE admin_id = la.id ORDER BY login_time DESC LIMIT 1) lastLoginTime
         FROM
             l_admin la
         LEFT JOIN
@@ -94,15 +94,37 @@
             #{startNum}, #{size}
     </select>
 
-    <select id="getAdminDetail" parameterType="java.lang.Long" resultType="com.lblog.dto.AdminDto">
+    <select id="getAdminDetail" parameterType="java.lang.Long" resultType="com.lblog.domain.Admin">
+        SELECT
+            *
+        FROM
+            l_admin
+        WHERE
+            id = #{id}
+    </select>
+
+    <select id="getAdminDetailDto" parameterType="java.lang.Long" resultType="com.lblog.dto.AdminDto">
         SELECT
             la.*,
             lagroup.name groupName,
-            (SELECT login_time FROM l_admin_login_record WHERE admin_id = la.id ORDER BY login_time DESC LIMIT 1) lastLoginTime
+            latest.login_ip as lastLoginIp,
+            latest.login_time as lastLoginTime,
+            second_last.login_ip as prevLoginIp,
+            second_last.login_time as prevLoginTime
         FROM
             l_admin la
         LEFT JOIN
             l_admin_group lagroup ON la.group_id = lagroup.id
+        LEFT JOIN
+            ( SELECT
+                admin_id, login_ip, login_time, ROW_NUMBER() OVER (PARTITION BY admin_id ORDER BY login_time DESC) as rn
+            FROM
+                l_admin_login_record ) latest ON la.id = latest.admin_id AND latest.rn = 1
+        LEFT JOIN
+            ( SELECT
+                admin_id, login_ip, login_time, ROW_NUMBER() OVER (PARTITION BY admin_id ORDER BY login_time DESC) as rn
+            FROM
+                l_admin_login_record ) second_last ON la.id = second_last.admin_id AND second_last.rn = 2
         WHERE
             la.id = #{id}
     </select>
