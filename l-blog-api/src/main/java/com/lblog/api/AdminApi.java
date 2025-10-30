@@ -100,6 +100,7 @@ public class AdminApi {
     //获取管理员详情
     @GetMapping("/getAdminDetail")
     public JsonResponseUtil<Admin> getAdminDetail(){
+//        Long adminId = adminIdentityAuth.getCurrentAdminId();
         Long adminId = 1L;
         Admin adminDetail = adminService.getAdminDetail(adminId);
 

@@ -94,11 +94,11 @@
             #{startNum}, #{size}
     </select>
 
-    <select id="getAdminDetail" parameterType="java.lang.Long" resultType="com.lblog.domain.Admin">
+    <select id="getAdminDetail" parameterType="java.lang.Long" resultType="com.lblog.dto.AdminDto">
         SELECT
             la.*,
             lagroup.name groupName,
-            (SELECT login_time FROM l_admin_login_record WHERE admin_id = la.id ORDER BY login_time DESC LIMIT 1) last_login_time
+            (SELECT login_time FROM l_admin_login_record WHERE admin_id = la.id ORDER BY login_time DESC LIMIT 1) lastLoginTime
         FROM
             l_admin la
         LEFT JOIN
