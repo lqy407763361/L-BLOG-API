@@ -22,11 +22,11 @@ public class AdminDto {
     //联表查询字段
     private String groupName;
 
-    private Long prevLoginIp;
+    private String prevLoginIp;
 
     private Long prevLoginTime;
 
-    private Long lastLoginIp;
+    private String lastLoginIp;
 
     private Long lastLoginTime;
 
@@ -35,9 +35,9 @@ public class AdminDto {
 
     public static AdminDto adminDto(Admin admin,
                                     String groupName,
-                                    Long prevLoginIp,
+                                    String prevLoginIp,
                                     Long prevLoginTime,
-                                    Long lastLoginIp,
+                                    String lastLoginIp,
                                     Long lastLoginTime){
         AdminDto adminDto = new AdminDto();
         adminDto.setId(admin.getId());
@@ -129,11 +129,11 @@ public class AdminDto {
         this.groupName = groupName;
     }
 
-    public Long getPrevLoginIp() {
+    public String getPrevLoginIp() {
         return prevLoginIp;
     }
 
-    public void setPrevLoginIp(Long prevLoginIp) {
+    public void setPrevLoginIp(String prevLoginIp) {
         this.prevLoginIp = prevLoginIp;
     }
 
@@ -145,11 +145,11 @@ public class AdminDto {
         this.prevLoginTime = prevLoginTime;
     }
 
-    public Long getLastLoginIp() {
+    public String getLastLoginIp() {
         return lastLoginIp;
     }
 
-    public void setLastLoginIp(Long lastLoginIp) {
+    public void setLastLoginIp(String lastLoginIp) {
         this.lastLoginIp = lastLoginIp;
     }
 
