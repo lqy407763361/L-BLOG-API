@@ -6,7 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.util.List;
+import java.util.Map;
 
 @RestController
 public class DateRangeApi {
@@ -16,8 +16,8 @@ public class DateRangeApi {
 
     //获取最近一周的列表
     @GetMapping("/getLastWeekList")
-    public JsonResponseUtil<List<String>> getLastWeekList(){
-        List<String> lastWeekList = dateRangeService.getLastWeekList();
+    public JsonResponseUtil<Map<String, Object>> getLastWeekList(){
+        Map<String, Object> lastWeekList = dateRangeService.getLastWeekList();
 
         return JsonResponseUtil.success(lastWeekList);
     }
