@@ -7,11 +7,11 @@ import com.lblog.common.util.PageResultUtil;
 import com.lblog.common.util.RSAUtil;
 import com.lblog.common.validation.FormValidation;
 import com.lblog.dao.UserDao;
-import com.lblog.dao.UserLoginRecordDao;
+import com.lblog.dao.UserVisitRecordDao;
 import com.lblog.dao.UserRsaKeyDao;
 import com.lblog.dao.UserRefreshTokenDao;
 import com.lblog.domain.User;
-import com.lblog.domain.UserLoginRecord;
+import com.lblog.domain.UserVisitRecord;
 import com.lblog.domain.UserRefreshToken;
 import com.lblog.domain.UserRsaKey;
 import org.apache.commons.lang3.StringUtils;
@@ -33,7 +33,7 @@ public class UserService {
     private UserDao userDao;
 
     @Autowired
-    private UserLoginRecordDao userLoginRecordDao;
+    private UserVisitRecordDao userVisitRecordDao;
 
     @Autowired
     private UserRsaKeyDao userRsaKeyDao;
@@ -73,11 +73,11 @@ public class UserService {
 
         //插入登录记录表
         Long addTime = Instant.now().toEpochMilli();
-        UserLoginRecord userLoginRecord = new UserLoginRecord();
-        userLoginRecord.setUserId(userId);
-        userLoginRecord.setLoginIp(userIp);
-        userLoginRecord.setLoginTime(addTime);
-        userLoginRecordDao.addUserLoginRecord(userLoginRecord);
+        UserVisitRecord userVisitRecord = new UserVisitRecord();
+        userVisitRecord.setUserId(userId);
+        userVisitRecord.setVisitIp(userIp);
+        userVisitRecord.setVisitTime(addTime);
+        userVisitRecordDao.addUserVisitRecord(userVisitRecord);
 
         //保存refreshToken，返回accessToken/refreshToken/rsaKeyId
         Long rsaKeyId = userRsaKeyDao.getUserRsaKeyByUserId(userId).getId();
@@ -89,6 +89,7 @@ public class UserService {
         userRefreshToken.setUserId(userId);
         userRefreshToken.setRefreshToken(refreshToken);
         userRefreshToken.setIsRevoked(0);
+        userRefreshToken.setAddIp(userIp);
         userRefreshToken.setAddTime(addTime);
         userRefreshTokenDao.addUserRefreshToken(userRefreshToken);
 
@@ -138,11 +139,11 @@ public class UserService {
         Long userId = user.getId();
 
         //插入登录记录表
-        UserLoginRecord userLoginRecord = new UserLoginRecord();
-        userLoginRecord.setUserId(userId);
-        userLoginRecord.setLoginIp(userIp);
-        userLoginRecord.setLoginTime(addTime);
-        userLoginRecordDao.addUserLoginRecord(userLoginRecord);
+        UserVisitRecord userVisitRecord = new UserVisitRecord();
+        userVisitRecord.setUserId(userId);
+        userVisitRecord.setVisitIp(userIp);
+        userVisitRecord.setVisitTime(addTime);
+        userVisitRecordDao.addUserVisitRecord(userVisitRecord);
 
         //插入RsaKey表
         Map<String, String> rsaKeyPair = RSAUtil.getKeyPair();
@@ -164,6 +165,7 @@ public class UserService {
         userRefreshToken.setUserId(userId);
         userRefreshToken.setRefreshToken(refreshToken);
         userRefreshToken.setIsRevoked(0);
+        userRefreshToken.setAddIp(userIp);
         userRefreshToken.setAddTime(addTime);
         userRefreshTokenDao.addUserRefreshToken(userRefreshToken);
 

@@ -7,11 +7,13 @@
                 user_id,
                 refresh_token,
                 is_revoked,
+                add_ip,
                 add_time
             ) VALUES (
                 #{userId},
                 #{refreshToken},
                 #{isRevoked},
+                #{addIp},
                 #{addTime}
             )
     </insert>

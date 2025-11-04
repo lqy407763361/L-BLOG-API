@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD MAPPER 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.lblog.dao.UserVisitRecordDao">
+    <insert id="addUserVisitRecord" parameterType="com.lblog.domain.User" useGeneratedKeys="true" keyProperty="id">
+        INSERT INTO
+            l_user_visit_record (
+                user_id,
+                visit_module,
+                visit_ip,
+                visit_time
+            ) VALUES (
+                #{userId},
+                #{visitModule},
+                #{visitIp},
+                #{visitTime}
+            )
+    </insert>
+</mapper>
