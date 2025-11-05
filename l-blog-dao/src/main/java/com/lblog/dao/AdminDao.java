@@ -19,9 +19,9 @@ public interface AdminDao {
     Integer deleteAdmin(@Param("id") Long adminId);
 
     List<AdminDto> getAdminList(@Param("startNum") Integer startNum,
-                             @Param("size") Integer size,
-                             @Param("admin") Admin admin,
-                             @Param("adminGroup") AdminGroup adminGroup);
+                                @Param("size") Integer size,
+                                @Param("admin") Admin admin,
+                                @Param("adminGroup") AdminGroup adminGroup);
 
     Admin getAdminDetail(@Param("id") Long adminId);
 

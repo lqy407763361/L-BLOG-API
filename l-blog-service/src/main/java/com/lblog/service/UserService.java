@@ -14,6 +14,7 @@ import com.lblog.domain.User;
 import com.lblog.domain.UserVisitRecord;
 import com.lblog.domain.UserRefreshToken;
 import com.lblog.domain.UserRsaKey;
+import com.lblog.dto.UserVisitRecordDto;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -300,5 +301,22 @@ public class UserService {
     //获取用户数量
     public Integer getUserTotal(User user){
         return userDao.getUserTotal(user);
+    }
+
+    //获取用户访问记录列表
+    public PageResultUtil<UserVisitRecordDto> getUserVisitRecordList(Integer startPage, Integer size, Long startTime, Long endTime){
+        //起始位置
+        Integer startNum = (startPage-1) * size;
+        //获取总数
+        Integer total = userVisitRecordDao.getUserVisitRecordTotal(startTime, endTime);
+        //查询列表
+        List<UserVisitRecordDto> userVisitRecordList = userVisitRecordDao.getUserVisitRecordList(startNum, size, startTime, endTime);
+
+        return new PageResultUtil<>(startPage, size, total, userVisitRecordList);
+    }
+
+    //获取用户访问记录数量
+    public Integer getUserVisitRecordTotal(Long startTime, Long endTime){
+        return userVisitRecordDao.getUserVisitRecordTotal(startTime, endTime);
     }
 }

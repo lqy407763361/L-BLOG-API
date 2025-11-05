@@ -15,4 +15,59 @@
                 #{visitTime}
             )
     </insert>
+
+    <select id="getUserVisitRecordList" resultType="com.lblog.dto.UserVisitRecordDto">
+        SELECT
+            luvr.*,
+            lu.name AS userName
+        FROM
+            l_user_visit_record luvr
+        LEFT JOIN
+            l_user lu ON luvr.user_id = lu.id
+        <where>
+            <if test="startTime != null and startTime > 0">
+                AND visit_time &gt;= #{startTime}
+            </if>
+            <if test="endTime != null and endTime > 0">
+                AND visit_time &lt;= #{endTime}
+            </if>
+        </where>
+        ORDER BY
+            id DESC
+        LIMIT
+            #{startNum}, #{size}
+    </select>
+
+    <select id="getUserVisitRecordTotal" resultType="java.lang.Integer">
+        SELECT
+            COUNT(id)
+        FROM
+            l_user_visit_record
+        <where>
+            <if test="startTime != null and startTime > 0">
+                AND visit_time &gt;= #{startTime}
+            </if>
+            <if test="endTime != null and endTime > 0">
+                AND visit_time &lt;= #{endTime}
+            </if>
+        </where>
+    </select>
+
+    <select id="getDailyUserVisits" resultType="java.util.Map">
+        SELECT
+            DATE(FROM_UNIXTIME(visit_time)) AS visit_time,
+            COUNT(DISTINCT CONCAT(user_id, '-', visit_ip)) AS visits
+        FROM
+            l_user_visit_record
+        <where>
+            <if test="startTime != null and startTime > 0">
+                AND visit_time &gt;= #{startTime}
+            </if>
+            <if test="endTime != null and endTime > 0">
+                AND visit_time &lt;= #{endTime}
+            </if>
+        </where>
+        GROUP BY
+            DATE(FROM_UNIXTIME(visit_time))
+    </select>
 </mapper>

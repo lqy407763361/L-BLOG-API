@@ -5,6 +5,7 @@ import com.lblog.common.util.GetClientIpUtil;
 import com.lblog.common.util.JsonResponseUtil;
 import com.lblog.common.util.PageResultUtil;
 import com.lblog.domain.User;
+import com.lblog.dto.UserVisitRecordDto;
 import com.lblog.service.UserService;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -115,5 +116,25 @@ public class UserApi {
         String userName = userService.getUserDetail(userId).getName();
 
         return JsonResponseUtil.success(userName);
+    }
+
+    //获取用户访问记录列表
+    @GetMapping("/getUserVisitRecordList")
+    public JsonResponseUtil<PageResultUtil<UserVisitRecordDto>> getUserVisitRecordList(@RequestParam(defaultValue = "1") Integer startPage,
+                                                                                       @RequestParam(defaultValue = "10") Integer size,
+                                                                                       Long startTime,
+                                                                                       Long endTime){
+        PageResultUtil<UserVisitRecordDto> userVisitRecordList = userService.getUserVisitRecordList(startPage, size, startTime, endTime);
+
+        return JsonResponseUtil.success(userVisitRecordList);
+    }
+
+    //获取用户访问记录数量
+    @GetMapping("/getUserVisitRecordTotal")
+    public JsonResponseUtil<Integer> getUserVisitRecordTotal(Long startTime,
+                                                             Long endTime){
+        Integer total = userService.getUserVisitRecordTotal(startTime, endTime);
+
+        return JsonResponseUtil.success(total);
     }
 }

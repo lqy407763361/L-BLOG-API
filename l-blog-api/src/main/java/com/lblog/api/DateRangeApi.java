@@ -21,4 +21,12 @@ public class DateRangeApi {
 
         return JsonResponseUtil.success(lastWeekList);
     }
+
+    //获取最近一周的访问人次列表
+    @GetMapping("/getLastWeekVisitsList")
+    public JsonResponseUtil<Map<String, Object>> getLastWeekVisitsList(){
+        Map<String, Object> lastWeekVisitsList = dateRangeService.getLastWeekVisitsList();
+
+        return JsonResponseUtil.success(lastWeekVisitsList);
+    }
 }

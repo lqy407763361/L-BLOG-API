@@ -13,7 +13,7 @@ public class UserVisitRecord {
     private Long userId;
 
     @Column(name = "visit_module")
-    private Long visitModule;
+    private String visitModule;
 
     @Column(name = "visit_ip")
     private String visitIp;
@@ -37,11 +37,11 @@ public class UserVisitRecord {
         this.userId = userId;
     }
 
-    public Long getVisitModule() {
+    public String getVisitModule() {
         return visitModule;
     }
 
-    public void setVisitModule(Long visitModule) {
+    public void setVisitModule(String visitModule) {
         this.visitModule = visitModule;
     }
 
