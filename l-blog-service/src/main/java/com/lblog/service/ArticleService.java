@@ -4,6 +4,7 @@ import com.lblog.common.exception.ReturnException;
 import com.lblog.common.util.PageResultUtil;
 import com.lblog.dao.ArticleDao;
 import com.lblog.domain.Article;
+import com.lblog.dto.ArticleDto;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -82,18 +83,21 @@ public class ArticleService {
     }
 
     //获取文章列表
-    public PageResultUtil<Article> getArticleList(Integer startPage, Integer size, Article article){
+    public PageResultUtil<ArticleDto> getArticleList(Integer startPage, Integer size, Article article){
         //起始位置
         Integer startNum = (startPage-1) * size;
         //获取总数
         Integer total = articleDao.getArticleTotal(article);
         //查询列表
-        List<Article> articleList = articleDao.getArticleList(startNum, size, article);
+        List<ArticleDto> articleList = articleDao.getArticleList(startNum, size, article);
 
         return new PageResultUtil<>(startPage, size, total, articleList);
     }
 
-    //获取文章详情
+    /**
+     * 获取文章详情
+     * 用于内部查询，编辑
+     * */
     @Transactional
     public Article getArticleDetail(Long articleId){
         //判断文章ID
@@ -102,6 +106,20 @@ public class ArticleService {
         }
 
         return articleDao.getArticleDetail(articleId);
+    }
+
+    /**
+     * 获取文章详情
+     * 重新组装展示字段
+     * */
+    @Transactional
+    public ArticleDto getArticleDetailDto(Long articleId){
+        //判断文章ID
+        if((articleId == null) || (articleId == 0)){
+            throw new ReturnException("文章ID不能为空！");
+        }
+
+        return articleDao.getArticleDetailDto(articleId);
     }
 
     //获取文章数量

@@ -68,21 +68,24 @@
             id = #{id}
     </delete>
 
-    <select id="getArticleList" resultType="com.lblog.domain.Article">
+    <select id="getArticleList" resultType="com.lblog.dto.ArticleDto">
         SELECT
-            *
+            la.*,
+            lac.name AS categoryName
         FROM
-            l_article
+            l_article la
+        LEFT JOIN
+            l_article_category lac ON la.category_id = lac.id
         <where>
             <if test="article.title != null and article.title != ''">
-                AND title LIKE CONCAT('%', #{article.title}, '%')
+                AND la.title LIKE CONCAT('%', #{article.title}, '%')
             </if>
             <if test="article.status != null and article.status != 0">
-                AND status = #{article.status}
+                AND la.status = #{article.status}
             </if>
         </where>
         ORDER BY
-            sort_order DESC, id DESC
+            la.sort_order DESC, la.id DESC
         LIMIT
             #{startNum}, #{size}
     </select>
@@ -94,6 +97,18 @@
             l_article
         WHERE
             id = #{id}
+    </select>
+
+    <select id="getArticleDetailDto" parameterType="java.lang.Long" resultType="com.lblog.dto.ArticleDto">
+        SELECT
+            la.*
+            lac.categoryName
+        FROM
+            l_article la
+        LEFT JOIN
+            l_article_category lac ON la.category_id = lac.id
+        WHERE
+            la.id = #{id}
     </select>
 
     <select id="getArticleTotal" parameterType="com.lblog.domain.Article" resultType="java.lang.Integer">

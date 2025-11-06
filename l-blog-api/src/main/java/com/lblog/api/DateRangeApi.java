@@ -14,7 +14,7 @@ public class DateRangeApi {
     @Autowired
     private DateRangeService dateRangeService;
 
-    //获取最近一周的列表
+    //获取最近一周的时间列表
     @GetMapping("/getLastWeekList")
     public JsonResponseUtil<Map<String, Object>> getLastWeekList(){
         Map<String, Object> lastWeekList = dateRangeService.getLastWeekList();

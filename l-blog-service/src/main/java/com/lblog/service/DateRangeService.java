@@ -16,7 +16,7 @@ public class DateRangeService {
     @Autowired
     private UserVisitRecordDao userVisitRecordDao;
 
-    //获取最近一周的列表
+    //获取最近一周的时间列表
     public Map<String, Object> getLastWeekList(){
         return DateRangeUtil.getDateRange(7);
     }

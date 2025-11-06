@@ -3,6 +3,7 @@ package com.lblog.api;
 import com.lblog.common.util.JsonResponseUtil;
 import com.lblog.common.util.PageResultUtil;
 import com.lblog.domain.Article;
+import com.lblog.dto.ArticleDto;
 import com.lblog.service.ArticleService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -39,18 +40,18 @@ public class ArticleApi {
 
     //获取文章列表
     @GetMapping("/getArticleList")
-    public JsonResponseUtil<PageResultUtil<Article>> getArticleList(@RequestParam(defaultValue = "1") Integer startPage,
-                                                                    @RequestParam(defaultValue = "10") Integer size,
-                                                                    Article article){
-        PageResultUtil<Article> articleList = articleService.getArticleList(startPage, size, article);
+    public JsonResponseUtil<PageResultUtil<ArticleDto>> getArticleList(@RequestParam(defaultValue = "1") Integer startPage,
+                                                                       @RequestParam(defaultValue = "10") Integer size,
+                                                                       Article article){
+        PageResultUtil<ArticleDto> articleList = articleService.getArticleList(startPage, size, article);
 
         return JsonResponseUtil.success(articleList);
     }
 
     //获取文章详情
     @GetMapping("/getArticleDetail")
-    public JsonResponseUtil<Article> getArticleDetail(Long articleId){
-        Article articleDetail = articleService.getArticleDetail(articleId);
+    public JsonResponseUtil<ArticleDto> getArticleDetailDto(Long articleId){
+        ArticleDto articleDetail = articleService.getArticleDetailDto(articleId);
 
         return JsonResponseUtil.success(articleDetail);
     }

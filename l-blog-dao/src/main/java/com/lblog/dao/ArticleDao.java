@@ -1,6 +1,7 @@
 package com.lblog.dao;
 
 import com.lblog.domain.Article;
+import com.lblog.dto.ArticleDto;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 
@@ -16,11 +17,13 @@ public interface ArticleDao {
 
     Integer deleteArticle(@Param("id") Long articleId);
 
-    List<Article> getArticleList(@Param("startNum") Integer startNum,
-                                 @Param("size") Integer size,
-                                 @Param("article") Article article);
+    List<ArticleDto> getArticleList(@Param("startNum") Integer startNum,
+                                    @Param("size") Integer size,
+                                    @Param("article") Article article);
 
     Article getArticleDetail(@Param("id") Long articleId);
+
+    ArticleDto getArticleDetailDto(@Param("id") Long articleId);
 
     Integer getArticleTotal(Article article);
 
