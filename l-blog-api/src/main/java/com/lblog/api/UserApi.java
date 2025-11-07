@@ -84,10 +84,10 @@ public class UserApi {
 
     //获取用户列表
     @GetMapping("getUserList")
-    public JsonResponseUtil<PageResultUtil<User>> getUserList(@RequestParam(defaultValue = "1") Integer startPage,
+    public JsonResponseUtil<PageResultUtil<User>> getUserList(@RequestParam(defaultValue = "1") Integer page,
                                                               @RequestParam(defaultValue = "10") Integer size,
                                                               User user){
-        PageResultUtil<User> userList = userService.getUserList(startPage, size, user);
+        PageResultUtil<User> userList = userService.getUserList(page, size, user);
 
         return JsonResponseUtil.success(userList);
     }

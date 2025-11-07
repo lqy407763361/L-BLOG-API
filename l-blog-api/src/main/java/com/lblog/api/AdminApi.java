@@ -89,11 +89,11 @@ public class AdminApi {
 
     //获取管理员列表
     @GetMapping("getAdminList")
-    public JsonResponseUtil<PageResultUtil<AdminDto>> getAdminList(@RequestParam(defaultValue = "1") Integer startPage,
+    public JsonResponseUtil<PageResultUtil<AdminDto>> getAdminList(@RequestParam(defaultValue = "1") Integer page,
                                                                    @RequestParam(defaultValue = "10") Integer size,
                                                                    Admin admin,
                                                                    AdminGroup adminGroup){
-        PageResultUtil<AdminDto> adminList = adminService.getAdminList(startPage, size, admin, adminGroup);
+        PageResultUtil<AdminDto> adminList = adminService.getAdminList(page, size, admin, adminGroup);
 
         return JsonResponseUtil.success(adminList);
     }

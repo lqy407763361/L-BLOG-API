@@ -276,15 +276,15 @@ public class UserService {
     }
 
     //获取用户列表
-    public PageResultUtil<User> getUserList(Integer startPage, Integer size, User user){
+    public PageResultUtil<User> getUserList(Integer page, Integer size, User user){
         //起始位置
-        Integer startNum = (startPage-1) * size;
+        Integer startNum = (page-1) * size;
         //获取总数
         Integer total = userDao.getUserTotal(user);
         //查询列表
         List<User> userList = userDao.getUserList(startNum, size, user);
 
-        return new PageResultUtil<>(startPage, size, total, userList);
+        return new PageResultUtil<>(page, size, total, userList);
     }
 
     //获取用户详情

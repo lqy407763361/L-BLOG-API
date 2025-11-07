@@ -40,10 +40,10 @@ public class ArticleApi {
 
     //获取文章列表
     @GetMapping("/getArticleList")
-    public JsonResponseUtil<PageResultUtil<ArticleDto>> getArticleList(@RequestParam(defaultValue = "1") Integer startPage,
+    public JsonResponseUtil<PageResultUtil<ArticleDto>> getArticleList(@RequestParam(defaultValue = "1") Integer page,
                                                                        @RequestParam(defaultValue = "10") Integer size,
                                                                        Article article){
-        PageResultUtil<ArticleDto> articleList = articleService.getArticleList(startPage, size, article);
+        PageResultUtil<ArticleDto> articleList = articleService.getArticleList(page, size, article);
 
         return JsonResponseUtil.success(articleList);
     }

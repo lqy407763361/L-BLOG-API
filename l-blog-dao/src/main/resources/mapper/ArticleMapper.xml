@@ -83,6 +83,9 @@
             <if test="article.status != null and article.status != 0">
                 AND la.status = #{article.status}
             </if>
+            <if test="article.categoryId != null and article.categoryId != 0">
+                AND lac.category_id = #{article.categoryId}
+            </if>
         </where>
         ORDER BY
             la.sort_order DESC, la.id DESC

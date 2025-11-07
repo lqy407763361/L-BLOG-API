@@ -91,15 +91,15 @@ public class ArticleCategoryService {
     }
 
     //获取文章分类列表
-    public PageResultUtil<ArticleCategory> getArticleCategoryList(Integer startPage, Integer size, ArticleCategory articleCategory){
+    public PageResultUtil<ArticleCategory> getArticleCategoryList(Integer page, Integer size, ArticleCategory articleCategory){
         //起始位置
-        Integer startNum = (startPage-1) * size;
+        Integer startNum = (page-1) * size;
         //获取总数
         Integer total = articleCategoryDao.getArticleCategoryTotal(articleCategory);
         //查询列表
         List<ArticleCategory> articleCategoryList = articleCategoryDao.getArticleCategoryList(startNum, size, articleCategory);
 
-        return new PageResultUtil<>(startPage, size, total, articleCategoryList);
+        return new PageResultUtil<>(page, size, total, articleCategoryList);
     }
 
     //获取文章分类详情

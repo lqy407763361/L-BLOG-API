@@ -287,15 +287,15 @@ public class AdminService {
     }
 
     //获取管理员列表
-    public PageResultUtil<AdminDto> getAdminList(Integer startPage, Integer size, Admin admin, AdminGroup adminGroup){
+    public PageResultUtil<AdminDto> getAdminList(Integer page, Integer size, Admin admin, AdminGroup adminGroup){
         //起始位置
-        Integer startNum = (startPage-1) * size;
+        Integer startNum = (page-1) * size;
         //获取总数
         Integer total = adminDao.getAdminTotal(admin);
         //查询列表
         List<AdminDto> adminList = adminDao.getAdminList(startNum, size, admin, adminGroup);
 
-        return new PageResultUtil<>(startPage, size, total, adminList);
+        return new PageResultUtil<>(page, size, total, adminList);
     }
 
     /**

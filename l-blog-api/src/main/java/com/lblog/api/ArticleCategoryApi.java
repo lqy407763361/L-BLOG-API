@@ -39,10 +39,10 @@ public class ArticleCategoryApi {
 
     //获取文章分类列表
     @GetMapping("/getArticleCategoryList")
-    public JsonResponseUtil<PageResultUtil<ArticleCategory>> getArticleCategoryList(@RequestParam(defaultValue = "1") Integer startPage,
+    public JsonResponseUtil<PageResultUtil<ArticleCategory>> getArticleCategoryList(@RequestParam(defaultValue = "1") Integer page,
                                                                                     @RequestParam(defaultValue = "10") Integer size,
                                                                                     ArticleCategory articleCategory){
-        PageResultUtil<ArticleCategory> articleCategoryList = articleCategoryService.getArticleCategoryList(startPage, size, articleCategory);
+        PageResultUtil<ArticleCategory> articleCategoryList = articleCategoryService.getArticleCategoryList(page, size, articleCategory);
 
         return JsonResponseUtil.success(articleCategoryList);
     }

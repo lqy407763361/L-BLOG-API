@@ -99,15 +99,15 @@ public class AdminGroupService {
     }
 
     //获取管理员群组列表
-    public PageResultUtil<AdminGroup> getAdminGroupList(Integer startPage, Integer size, AdminGroup adminGroup){
+    public PageResultUtil<AdminGroup> getAdminGroupList(Integer page, Integer size, AdminGroup adminGroup){
         //起始位置
-        Integer startNum = (startPage-1) * size;
+        Integer startNum = (page-1) * size;
         //获取总数
         Integer total = adminGroupDao.getAdminGroupTotal(adminGroup);
         //查询列表
         List<AdminGroup> adminGroupList = adminGroupDao.getAdminGroupList(startNum, size, adminGroup);
 
-        return new PageResultUtil<>(startPage, size, total, adminGroupList);
+        return new PageResultUtil<>(page, size, total, adminGroupList);
     }
 
     //获取管理员群组详情

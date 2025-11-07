@@ -44,11 +44,11 @@ public class MessageApi {
 
     //获取消息列表
     @GetMapping("/getMessageList")
-    public JsonResponseUtil<PageResultUtil<Message>> getMessageList(@RequestParam(defaultValue = "1") Integer startPage,
+    public JsonResponseUtil<PageResultUtil<Message>> getMessageList(@RequestParam(defaultValue = "1") Integer page,
                                                                     @RequestParam(defaultValue = "10") Integer size,
                                                                     Message message,
                                                                     String userName){
-        PageResultUtil<Message> messageList = messageService.getMessageList(startPage, size, message, userName);
+        PageResultUtil<Message> messageList = messageService.getMessageList(page, size, message, userName);
 
         return JsonResponseUtil.success(messageList);
     }
