@@ -84,7 +84,7 @@
                 AND la.status = #{article.status}
             </if>
             <if test="article.categoryId != null and article.categoryId != 0">
-                AND lac.category_id = #{article.categoryId}
+                AND la.category_id = #{article.categoryId}
             </if>
         </where>
         ORDER BY
@@ -125,6 +125,9 @@
             </if>
             <if test="status != null and status != 0">
                 AND status = #{status}
+            </if>
+            <if test="categoryId != null and categoryId != 0">
+                AND category_id = #{categoryId}
             </if>
         </where>
     </select>
