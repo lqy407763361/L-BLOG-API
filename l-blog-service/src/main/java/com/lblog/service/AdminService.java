@@ -70,7 +70,7 @@ public class AdminService {
         }
 
         //插入登录记录表
-        Long addTime = Instant.now().toEpochMilli();
+        Long addTime = Instant.now().getEpochSecond();
         AdminLoginRecord adminLoginRecord = new AdminLoginRecord();
         adminLoginRecord.setAdminId(adminId);
         adminLoginRecord.setLoginIp(adminIp);
@@ -126,7 +126,7 @@ public class AdminService {
 
         //添加操作
         String name = admin.getName().trim();
-        Long addTime = Instant.now().toEpochMilli();
+        Long addTime = Instant.now().getEpochSecond();
         String salt = addTime + MD5Util.RandomString(8);
         password = MD5Util.getEncrypt(password, salt);
         String description = admin.getDescription().trim();
@@ -233,7 +233,7 @@ public class AdminService {
 
         //更改管理员账号信息
         String name = admin.getName().trim();
-        Long editTime = Instant.now().toEpochMilli();
+        Long editTime = Instant.now().getEpochSecond();
         String salt = editTime + MD5Util.RandomString(8);
         password = MD5Util.getEncrypt(password, salt);
         String description = admin.getDescription().trim();

@@ -61,11 +61,14 @@
             id = #{id}
     </update>
 
-    <delete id="deleteArticle" parameterType="java.lang.Long">
+    <delete id="deleteArticle">
         DELETE FROM
             l_article
         WHERE
-            id = #{id}
+            id IN
+        <foreach collection="id" item="item" open="(" close=")" separator=",">
+            #{item}
+        </foreach>
     </delete>
 
     <select id="getArticleList" resultType="com.lblog.dto.ArticleDto">

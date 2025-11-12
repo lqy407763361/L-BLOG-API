@@ -21,7 +21,7 @@ public class AboutService {
         //更改单页信息
         String content = about.getContent().trim();
         Integer status = about.getStatus();
-        Long editTime = Instant.now().toEpochMilli();
+        Long editTime = Instant.now().getEpochSecond();
         about.setId(ABOUT_ID);
         about.setContent(content);
         about.setStatus(status);

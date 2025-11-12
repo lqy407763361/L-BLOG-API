@@ -49,7 +49,7 @@ public class SiteConfigService {
             throw new ReturnException("会话有效期不能为0！");
         }
 
-        Long editTime = Instant.now().toEpochMilli();
+        Long editTime = Instant.now().getEpochSecond();
         siteConfig.setId(SITE_CONFIG_ID);
         siteConfig.setMetaTitle(metaTitle);
         siteConfig.setMetaDescription(metaDescription);

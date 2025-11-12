@@ -73,7 +73,7 @@ public class UserService {
         }
 
         //插入登录记录表
-        Long addTime = Instant.now().toEpochMilli();
+        Long addTime = Instant.now().getEpochSecond();
         UserVisitRecord userVisitRecord = new UserVisitRecord();
         userVisitRecord.setUserId(userId);
         userVisitRecord.setVisitIp(userIp);
@@ -123,7 +123,7 @@ public class UserService {
 
         //添加操作
         Integer registerType = user.getRegisterType();
-        Long addTime = Instant.now().toEpochMilli();
+        Long addTime = Instant.now().getEpochSecond();
         String salt = addTime + MD5Util.RandomString(8);
         password = MD5Util.getEncrypt(password, salt);
         user.setName(name);
@@ -242,7 +242,7 @@ public class UserService {
 
         //更改用户账号状态
         Integer status = user.getStatus();
-        Long editTime = Instant.now().toEpochMilli();
+        Long editTime = Instant.now().getEpochSecond();
         user.setStatus(status);
         user.setEditTime(editTime);
         Integer returnRow = userDao.editUser(user);

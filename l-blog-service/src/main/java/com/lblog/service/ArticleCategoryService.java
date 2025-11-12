@@ -39,7 +39,7 @@ public class ArticleCategoryService {
         String description = articleCategory.getDescription().trim();
         Integer status = 1;
         Integer sortOrder = 0;
-        Long addTime = Instant.now().toEpochMilli();
+        Long addTime = Instant.now().getEpochSecond();
         articleCategory.setName(name);
         articleCategory.setDescription(description);
         articleCategory.setStatus(status);
@@ -62,7 +62,7 @@ public class ArticleCategoryService {
         String description = articleCategory.getDescription().trim();
         Integer status = articleCategory.getStatus();
         Integer sortOrder = articleCategory.getSortOrder();
-        Long editTime = Instant.now().toEpochMilli();
+        Long editTime = Instant.now().getEpochSecond();
         articleCategory.setName(name);
         articleCategory.setDescription(description);
         articleCategory.setStatus(status);

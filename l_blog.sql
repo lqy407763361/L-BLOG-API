@@ -11,7 +11,7 @@
  Target Server Version : 80043 (8.0.43)
  File Encoding         : 65001
 
- Date: 11/11/2025 17:07:08
+ Date: 12/11/2025 17:22:13
 */
 
 SET NAMES utf8mb4;
@@ -116,7 +116,7 @@ CREATE TABLE `l_article`  (
   `status` int NOT NULL DEFAULT 1 COMMENT '状态，1=启用，2=禁用',
   `sort_order` int NULL DEFAULT NULL COMMENT '排序',
   `add_time` int NULL DEFAULT NULL COMMENT '添加时间',
-  `edit_name` int NULL DEFAULT NULL COMMENT '编辑时间',
+  `edit_time` int NULL DEFAULT NULL COMMENT '编辑时间',
   PRIMARY KEY (`id`) USING BTREE
 ) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci ROW_FORMAT = DYNAMIC;
 

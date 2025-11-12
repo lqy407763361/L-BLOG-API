@@ -41,7 +41,7 @@ public class AdminGroupService {
         Integer sortOrder = 0;
         String viewPower = adminGroup.getViewPower().trim();
         String editPower = adminGroup.getEditPower().trim();
-        Long addTime = Instant.now().toEpochMilli();
+        Long addTime = Instant.now().getEpochSecond();
         adminGroup.setName(name);
         adminGroup.setDescription(description);
         adminGroup.setStatus(status);
@@ -68,7 +68,7 @@ public class AdminGroupService {
         Integer sortOrder = adminGroup.getSortOrder();
         String viewPower = adminGroup.getViewPower().trim();
         String editPower = adminGroup.getEditPower().trim();
-        Long editTime = Instant.now().toEpochMilli();
+        Long editTime = Instant.now().getEpochSecond();
         adminGroup.setName(name);
         adminGroup.setDescription(description);
         adminGroup.setStatus(status);

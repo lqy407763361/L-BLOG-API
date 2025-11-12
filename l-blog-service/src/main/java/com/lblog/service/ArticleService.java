@@ -12,6 +12,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.time.Instant;
 import java.util.List;
+import java.util.Map;
 
 @Service
 public class ArticleService {
@@ -23,10 +24,10 @@ public class ArticleService {
     @Transactional
     public void addArticle(Article article){
         //判断名称是否合法和是否已存在
-        String title = article.getTitle().trim();
-        if(StringUtils.isBlank(title)){
+        if(StringUtils.isBlank(article.getTitle())){
             throw new ReturnException("文章名称不能为空！");
         }
+        String title = article.getTitle().trim();
         Long existArticleId = articleDao.getArticleId(title);
         if((existArticleId != null) && (existArticleId > 0)){
             throw new ReturnException("文章名称已存在！");
@@ -34,9 +35,9 @@ public class ArticleService {
 
         Long articleCategoryId = article.getCategoryId();
         String content = article.getContent().trim();
-        Integer status = 1;
-        Integer sortOrder = 0;
-        Long addTime = Instant.now().toEpochMilli();
+        Integer status = article.getStatus();
+        Integer sortOrder = article.getSortOrder();
+        Long addTime = Instant.now().getEpochSecond();
         article.setCategoryId(articleCategoryId);
         article.setTitle(title);
         article.setContent(content);
@@ -59,9 +60,9 @@ public class ArticleService {
         Long articleCategoryId = article.getCategoryId();
         String title = article.getTitle().trim();
         String content = article.getContent().trim();
-        Integer status = 1;
-        Integer sortOrder = 0;
-        Long editTime = Instant.now().toEpochMilli();
+        Integer status = article.getStatus();
+        Integer sortOrder = article.getSortOrder();
+        Long editTime = Instant.now().getEpochSecond();
         article.setCategoryId(articleCategoryId);
         article.setTitle(title);
         article.setContent(content);
@@ -73,13 +74,14 @@ public class ArticleService {
 
     //删除文章
     @Transactional
-    public void deleteArticle(Long articleId){
+    public void deleteArticle(Map<String, List<Long>> articleId){
         //判断文章ID
-        if((articleId == null) || (articleId == 0)){
+        if((articleId == null) || articleId.isEmpty()){
             throw new ReturnException("文章ID不能为空！");
         }
 
-        articleDao.deleteArticle(articleId);
+        List<Long> articleIdList = articleId.get("id");
+        articleDao.deleteArticle(articleIdList);
     }
 
     //获取文章列表

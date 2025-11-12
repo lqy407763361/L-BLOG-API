@@ -15,7 +15,7 @@ public interface ArticleDao {
 
     Integer editArticle(Article article);
 
-    Integer deleteArticle(@Param("id") Long articleId);
+    Integer deleteArticle(@Param("id") List<Long> articleIdList);
 
     List<ArticleDto> getArticleList(@Param("startNum") Integer startNum,
                                     @Param("size") Integer size,

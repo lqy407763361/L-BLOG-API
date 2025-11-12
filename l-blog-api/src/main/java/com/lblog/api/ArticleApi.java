@@ -8,6 +8,9 @@ import com.lblog.service.ArticleService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+import java.util.Map;
+
 @RestController
 public class ArticleApi {
 
@@ -16,7 +19,7 @@ public class ArticleApi {
 
     //添加文章
     @PostMapping("/addArticle")
-    public JsonResponseUtil<String> addArticle(Article article){
+    public JsonResponseUtil<String> addArticle(@RequestBody Article article){
         articleService.addArticle(article);
 
         return JsonResponseUtil.success();
@@ -24,7 +27,7 @@ public class ArticleApi {
 
     //编辑文章
     @PostMapping("/editArticle")
-    public JsonResponseUtil<String> editArticle(Article article){
+    public JsonResponseUtil<String> editArticle(@RequestBody Article article){
         articleService.editArticle(article);
 
         return JsonResponseUtil.success();
@@ -32,7 +35,7 @@ public class ArticleApi {
 
     //删除文章
     @DeleteMapping("/deleteArticle")
-    public JsonResponseUtil<String> deleteArticle(Long articleId){
+    public JsonResponseUtil<String> deleteArticle(@RequestBody Map<String, List<Long>> articleId){
         articleService.deleteArticle(articleId);
 
         return JsonResponseUtil.success();

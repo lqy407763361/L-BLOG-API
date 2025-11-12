@@ -34,7 +34,7 @@ public class MessageService {
         }
 
         Integer isRead = 0;
-        Long addTime = Instant.now().toEpochMilli();
+        Long addTime = Instant.now().getEpochSecond();
         message.setUserId(userId);
         message.setTitle(title);
         message.setContent(content);
@@ -54,7 +54,7 @@ public class MessageService {
         }
 
         Integer isRead = 1;
-        Long editTime = Instant.now().toEpochMilli();
+        Long editTime = Instant.now().getEpochSecond();
         message.setId(messageId);
         message.setIsRead(isRead);
         message.setEditTime(editTime);

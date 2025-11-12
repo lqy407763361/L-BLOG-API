@@ -30,7 +30,7 @@ public class MD5Util {
     * */
     public static String getEncrypt(String str, String salt){
         if(StringUtils.isBlank(salt)){
-            salt = String.valueOf(Instant.now().toEpochMilli()) + RandomString(8);
+            salt = String.valueOf(Instant.now().getEpochSecond()) + RandomString(8);
         }
         String md5Str = DigestUtils.md5Hex(str+salt);
         StringUtils.substring(md5Str, 0, md5Str.length()-1);
