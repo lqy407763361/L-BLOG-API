@@ -80,7 +80,7 @@ public class ArticleService {
             throw new ReturnException("文章ID不能为空！");
         }
 
-        List<Long> articleIdList = articleId.get("id");
+        List<Long> articleIdList = articleId.get("articleId");
         articleDao.deleteArticle(articleIdList);
     }
 

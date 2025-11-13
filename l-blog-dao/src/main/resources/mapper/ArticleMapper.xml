@@ -107,8 +107,8 @@
 
     <select id="getArticleDetailDto" parameterType="java.lang.Long" resultType="com.lblog.dto.ArticleDto">
         SELECT
-            la.*
-            lac.categoryName
+            la.*,
+            lac.name AS categoryName
         FROM
             l_article la
         LEFT JOIN
