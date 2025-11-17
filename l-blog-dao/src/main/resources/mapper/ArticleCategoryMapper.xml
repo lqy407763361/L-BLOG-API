@@ -55,7 +55,10 @@
         DELETE FROM
             l_article_category
         WHERE
-            id = #{id}
+            id IN
+        <foreach collection="id" item="item" open="(" close=")" separator=",">
+            #{item}
+        </foreach>
     </delete>
 
     <select id="getArticleCategoryList" resultType="com.lblog.domain.ArticleCategory">

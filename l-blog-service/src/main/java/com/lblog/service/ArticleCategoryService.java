@@ -13,6 +13,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.time.Instant;
 import java.util.List;
+import java.util.Map;
 
 @Service
 public class ArticleCategoryService {
@@ -27,16 +28,21 @@ public class ArticleCategoryService {
     @Transactional
     public void addArticleCategory(ArticleCategory articleCategory){
         //判断分类名称是否合法和是否已存在
-        String name = articleCategory.getName().trim();
-        if(StringUtils.isBlank(name)){
+        if(StringUtils.isBlank(articleCategory.getName())){
             throw new ReturnException("文章分类名称不能为空！");
         }
+        String name = articleCategory.getName().trim();
         Long existArticleCategoryId = articleCategoryDao.getArticleCategoryId(name);
         if((existArticleCategoryId != null) && (existArticleCategoryId > 0)){
             throw new ReturnException("文章分类名称已存在！");
         }
 
-        String description = articleCategory.getDescription().trim();
+        //内容过滤
+        String description = "";
+        if(!StringUtils.isBlank(articleCategory.getDescription())){
+            description = articleCategory.getDescription().trim();
+        }
+
         Integer status = 1;
         Integer sortOrder = 0;
         Long addTime = Instant.now().getEpochSecond();
@@ -58,8 +64,18 @@ public class ArticleCategoryService {
             throw new ReturnException("文章分类不存在！");
         }
 
+        //判断分类名称是否合法和是否已存在
+        if(StringUtils.isBlank(articleCategory.getName())){
+            throw new ReturnException("文章分类名称不能为空！");
+        }
         String name = articleCategory.getName().trim();
-        String description = articleCategory.getDescription().trim();
+
+        //内容过滤
+        String description = "";
+        if(!StringUtils.isBlank(articleCategory.getDescription())){
+            description = articleCategory.getDescription().trim();
+        }
+
         Integer status = articleCategory.getStatus();
         Integer sortOrder = articleCategory.getSortOrder();
         Long editTime = Instant.now().getEpochSecond();
@@ -73,21 +89,25 @@ public class ArticleCategoryService {
 
     //删除文章分类
     @Transactional
-    public void deleteArticleCategory(Long articleCategoryId){
+    public void deleteArticleCategory(Map<String, List<Long>> articleCategoryId){
         //判断文章分类ID
-        if((articleCategoryId == null) || (articleCategoryId == 0)){
+        if((articleCategoryId == null) || articleCategoryId.isEmpty()){
             throw new ReturnException("文章分类ID不能为空！");
         }
 
         //判断该分类下属是否存在文章
-        Article article = new Article();
-        article.setCategoryId(articleCategoryId);
-        Integer articleTotal = articleDao.getArticleTotal(article);
-        if((articleTotal != null) && (articleTotal > 0)){
-            throw new ReturnException("该分类下存在文章！");
+        List<Long> categoryIdList = articleCategoryId.get("articleCategoryId");
+        for(Long categoryId : categoryIdList){
+            Article article = new Article();
+            article.setCategoryId(categoryId);
+            Integer articleTotal = articleDao.getArticleTotal(article);
+            if((articleTotal != null) && (articleTotal > 0)){
+                throw new ReturnException("该分类下存在文章！");
+            }
         }
 
-        articleCategoryDao.deleteArticleCategory(articleCategoryId);
+        List<Long> articleCategoryIdList = articleCategoryId.get("articleCategoryId");
+        articleCategoryDao.deleteArticleCategory(articleCategoryIdList);
     }
 
     //获取文章分类列表

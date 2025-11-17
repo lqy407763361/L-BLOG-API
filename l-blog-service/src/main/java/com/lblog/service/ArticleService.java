@@ -33,8 +33,13 @@ public class ArticleService {
             throw new ReturnException("文章名称已存在！");
         }
 
+        //内容过滤
+        String content = "";
+        if(!StringUtils.isBlank(article.getContent())){
+            content = article.getContent().trim();
+        }
+
         Long articleCategoryId = article.getCategoryId();
-        String content = article.getContent().trim();
         Integer status = article.getStatus();
         Integer sortOrder = article.getSortOrder();
         Long addTime = Instant.now().getEpochSecond();
@@ -57,9 +62,19 @@ public class ArticleService {
             throw new ReturnException("文章不存在！");
         }
 
-        Long articleCategoryId = article.getCategoryId();
+        //标题过滤
+        if(StringUtils.isBlank(article.getTitle())){
+            throw new ReturnException("文章名称不能为空！");
+        }
         String title = article.getTitle().trim();
-        String content = article.getContent().trim();
+
+        //内容过滤
+        String content = "";
+        if(!StringUtils.isBlank(article.getContent())){
+            content = article.getContent().trim();
+        }
+
+        Long articleCategoryId = article.getCategoryId();
         Integer status = article.getStatus();
         Integer sortOrder = article.getSortOrder();
         Long editTime = Instant.now().getEpochSecond();

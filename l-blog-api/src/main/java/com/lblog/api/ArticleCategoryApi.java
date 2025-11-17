@@ -7,6 +7,9 @@ import com.lblog.service.ArticleCategoryService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+import java.util.Map;
+
 @RestController
 public class ArticleCategoryApi {
 
@@ -15,7 +18,7 @@ public class ArticleCategoryApi {
 
     //添加文章分类
     @PostMapping("/addArticleCategory")
-    public JsonResponseUtil<String> addArticleCategory(ArticleCategory articleCategory){
+    public JsonResponseUtil<String> addArticleCategory(@RequestBody ArticleCategory articleCategory){
         articleCategoryService.addArticleCategory(articleCategory);
 
         return JsonResponseUtil.success();
@@ -23,7 +26,7 @@ public class ArticleCategoryApi {
 
     //编辑文章分类
     @PostMapping("/editArticleCategory")
-    public JsonResponseUtil<String> editArticleCategory(ArticleCategory articleCategory){
+    public JsonResponseUtil<String> editArticleCategory(@RequestBody ArticleCategory articleCategory){
         articleCategoryService.editArticleCategory(articleCategory);
 
         return JsonResponseUtil.success();
@@ -31,7 +34,7 @@ public class ArticleCategoryApi {
 
     //删除文章分类
     @DeleteMapping("/deleteArticleCategory")
-    public JsonResponseUtil<String> deleteArticleCategory(Long articleCategoryId){
+    public JsonResponseUtil<String> deleteArticleCategory(@RequestBody Map<String, List<Long>> articleCategoryId){
         articleCategoryService.deleteArticleCategory(articleCategoryId);
 
         return JsonResponseUtil.success();
