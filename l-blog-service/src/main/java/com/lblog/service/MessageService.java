@@ -11,6 +11,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.time.Instant;
 import java.util.List;
+import java.util.Map;
 
 @Service
 public class MessageService {
@@ -63,13 +64,14 @@ public class MessageService {
 
     //删除消息
     @Transactional
-    public void deleteMessage(Long messageId){
+    public void deleteMessage(Map<String, List<Long>> messageId){
         //判断消息ID
-        if((messageId == null) || (messageId == 0)){
+        if((messageId == null) || messageId.isEmpty()){
             throw new ReturnException("消息ID不能为空！");
         }
 
-        messageDao.deleteMessage(messageId);
+        List<Long> messageIdList = messageId.get("id");
+        messageDao.deleteMessage(messageIdList);
     }
 
     //获取消息列表

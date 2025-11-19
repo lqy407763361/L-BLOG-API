@@ -37,13 +37,16 @@
         DELETE FROM
             l_message
         WHERE
-            id = #{id}
+            id IN
+        <foreach collection="id" item="item" open="(" close=")" separator=",">
+            #{item}
+        </foreach>
     </delete>
 
-    <select id="getMessageList" resultType="com.lblog.domain.Message">
+    <select id="getMessageList" resultType="com.lblog.dto.MessageDto">
         SELECT
             lm.*,
-            lu.name
+            lu.name AS userName
         FROM
             l_message lm
         LEFT JOIN

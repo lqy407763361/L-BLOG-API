@@ -6,6 +6,7 @@ import com.lblog.service.AboutService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
@@ -15,8 +16,8 @@ public class AboutApi {
     private AboutService aboutService;
 
     //编辑
-    @PostMapping("editAbout")
-    public JsonResponseUtil<String> editAbout(About about){
+    @PostMapping("/editAbout")
+    public JsonResponseUtil<String> editAbout(@RequestBody About about){
         aboutService.editAbout(about);
 
         return JsonResponseUtil.success();

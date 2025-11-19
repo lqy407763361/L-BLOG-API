@@ -28,7 +28,7 @@ public class ArticleDto {
     }
 
     public static ArticleDto articleDto(Article article,
-                             String categoryName){
+                                        String categoryName){
         ArticleDto articleDto = new ArticleDto();
         articleDto.setId(article.getId());
         articleDto.setCategoryId(article.getCategoryId());

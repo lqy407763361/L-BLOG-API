@@ -96,7 +96,7 @@ public class ArticleCategoryService {
         }
 
         //判断该分类下属是否存在文章
-        List<Long> categoryIdList = articleCategoryId.get("articleCategoryId");
+        List<Long> categoryIdList = articleCategoryId.get("id");
         for(Long categoryId : categoryIdList){
             Article article = new Article();
             article.setCategoryId(categoryId);
@@ -106,7 +106,7 @@ public class ArticleCategoryService {
             }
         }
 
-        List<Long> articleCategoryIdList = articleCategoryId.get("articleCategoryId");
+        List<Long> articleCategoryIdList = articleCategoryId.get("id");
         articleCategoryDao.deleteArticleCategory(articleCategoryIdList);
     }
 

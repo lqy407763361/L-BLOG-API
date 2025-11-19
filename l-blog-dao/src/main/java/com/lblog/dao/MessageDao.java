@@ -12,7 +12,7 @@ public interface MessageDao {
 
     Integer editMessage(Message Message);
 
-    Integer deleteMessage(@Param("id") Long messageId);
+    Integer deleteMessage(@Param("id") List<Long> messageId);
 
     List<Message> getMessageList(@Param("startNum") Integer startNum,
                                  @Param("size") Integer size,

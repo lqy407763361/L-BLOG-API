@@ -3,6 +3,7 @@ package com.lblog.service;
 import com.lblog.common.exception.ReturnException;
 import com.lblog.dao.AboutDao;
 import com.lblog.domain.About;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -18,8 +19,13 @@ public class AboutService {
 
     @Transactional
     public void editAbout(About about){
+        //内容过滤
+        String content = "";
+        if(!StringUtils.isBlank(about.getContent())){
+            content = about.getContent().trim();
+        }
+
         //更改单页信息
-        String content = about.getContent().trim();
         Integer status = about.getStatus();
         Long editTime = Instant.now().getEpochSecond();
         about.setId(ABOUT_ID);

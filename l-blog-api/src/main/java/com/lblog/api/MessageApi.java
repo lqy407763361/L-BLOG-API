@@ -8,6 +8,9 @@ import com.lblog.service.MessageService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+import java.util.Map;
+
 @RestController
 public class MessageApi {
 
@@ -36,7 +39,7 @@ public class MessageApi {
 
     //删除消息
     @DeleteMapping("/deleteMessage")
-    public JsonResponseUtil<String> deleteMessage(Long messageId){
+    public JsonResponseUtil<String> deleteMessage(@RequestBody Map<String, List<Long>> messageId){
         messageService.deleteMessage(messageId);
 
         return JsonResponseUtil.success();
