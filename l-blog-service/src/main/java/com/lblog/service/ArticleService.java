@@ -57,7 +57,7 @@ public class ArticleService {
     public void editArticle(Article article){
         //判断文章是否存在
         Long articleId = article.getId();
-        Article articleDetail = articleDao.getArticleDetail(articleId);
+        Article articleDetail = this.getArticleDetail(articleId);
         if(articleDetail == null){
             throw new ReturnException("文章不存在！");
         }

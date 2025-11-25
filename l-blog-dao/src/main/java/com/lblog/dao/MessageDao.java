@@ -1,6 +1,7 @@
 package com.lblog.dao;
 
 import com.lblog.domain.Message;
+import com.lblog.dto.MessageDto;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 
@@ -14,12 +15,14 @@ public interface MessageDao {
 
     Integer deleteMessage(@Param("id") List<Long> messageId);
 
-    List<Message> getMessageList(@Param("startNum") Integer startNum,
-                                 @Param("size") Integer size,
-                                 @Param("message") Message message,
-                                 @Param("userName") String userName);
+    List<MessageDto> getMessageList(@Param("startNum") Integer startNum,
+                                    @Param("size") Integer size,
+                                    @Param("message") Message message,
+                                    @Param("userName") String userName);
 
     Message getMessageDetail(@Param("id") Long messageId);
+
+    MessageDto getMessageDetailDto(@Param("id") Long messageId);
 
     Integer getMessageTotal(@Param("message") Message message,
                             @Param("userName") String userName);

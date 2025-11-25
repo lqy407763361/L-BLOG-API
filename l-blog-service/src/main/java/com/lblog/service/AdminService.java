@@ -214,7 +214,7 @@ public class AdminService {
     public void editAdmin(Admin admin){
         //判断管理员是否存在
         Long adminId = admin.getId();
-        Admin adminDetail = adminDao.getAdminDetail(adminId);
+        Admin adminDetail = this.getAdminDetail(adminId);
         if(adminDetail == null){
             throw new ReturnException("管理员不存在！");
         }

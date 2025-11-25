@@ -74,7 +74,19 @@
         FROM
             l_message
         WHERE
-            id = #{id} AND is_read = 0
+            id = #{id}
+    </select>
+
+    <select id="getMessageDetailDto" parameterType="java.lang.Long" resultType="com.lblog.dto.MessageDto">
+        SELECT
+            lm.*,
+            lu.name AS userName
+        FROM
+            l_message lm
+        LEFT JOIN
+            l_user lu ON lm.user_id = lu.id
+        WHERE
+            lm.id = #{id}
     </select>
 
     <select id="getMessageTotal" resultType="java.lang.Integer">
