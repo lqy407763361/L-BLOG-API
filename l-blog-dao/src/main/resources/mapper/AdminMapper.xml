@@ -107,22 +107,22 @@
         SELECT
             la.*,
             lagroup.name groupName,
-            latest.login_ip as lastLoginIp,
-            latest.login_time as lastLoginTime,
-            second_last.login_ip as prevLoginIp,
-            second_last.login_time as prevLoginTime
+            latest.login_ip AS lastLoginIp,
+            latest.login_time AS lastLoginTime,
+            second_last.login_ip AS prevLoginIp,
+            second_last.login_time AS prevLoginTime
         FROM
             l_admin la
         LEFT JOIN
             l_admin_group lagroup ON la.group_id = lagroup.id
         LEFT JOIN
             ( SELECT
-                admin_id, login_ip, login_time, ROW_NUMBER() OVER (PARTITION BY admin_id ORDER BY login_time DESC) as rn
+                admin_id, login_ip, login_time, ROW_NUMBER() OVER (PARTITION BY admin_id ORDER BY login_time DESC) AS rn
             FROM
                 l_admin_login_record ) latest ON la.id = latest.admin_id AND latest.rn = 1
         LEFT JOIN
             ( SELECT
-                admin_id, login_ip, login_time, ROW_NUMBER() OVER (PARTITION BY admin_id ORDER BY login_time DESC) as rn
+                admin_id, login_ip, login_time, ROW_NUMBER() OVER (PARTITION BY admin_id ORDER BY login_time DESC) AS rn
             FROM
                 l_admin_login_record ) second_last ON la.id = second_last.admin_id AND second_last.rn = 2
         WHERE

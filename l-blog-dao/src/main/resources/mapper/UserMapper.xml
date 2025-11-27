@@ -44,21 +44,38 @@
             id = #{id}
     </update>
 
-    <select id="getUserList" resultType="com.lblog.domain.User">
-        SELECT
-            *
-        FROM
+    <delete id="deleteUser">
+        DELETE FROM
             l_user
+        WHERE
+            id IN
+        <foreach collection="id" item="item" open="(" close=")" separator=",">
+            #{item}
+        </foreach>
+    </delete>
+
+    <select id="getUserList" resultType="com.lblog.dto.UserDto">
+        SELECT
+            lu.*,
+            visit_ip AS visitIp,
+            visit_time AS visitTime
+        FROM
+            l_user lu
+        LEFT JOIN
+            ( SELECT
+                user_id, visit_ip, visit_time, ROW_NUMBER() OVER (PARTITION BY user_id ORDER BY visit_time DESC) AS rn
+            FROM
+                l_user_visit_record) luvr ON lu.id = luvr.user_id AND luvr.rn = 1
         <where>
             <if test="user.name != null and user.name != ''">
-                AND name LIKE CONCAT('%', #{user.name}, '%')
+                AND lu.name LIKE CONCAT('%', #{user.name}, '%')
             </if>
             <if test="user.status != null and user.status != 0">
-                AND status = #{user.status}
+                AND lu.status = #{user.status}
             </if>
         </where>
         ORDER BY
-            id DESC
+            lu.id DESC
         LIMIT
             #{startNum}, #{size}
     </select>
@@ -70,6 +87,22 @@
             l_user
         WHERE
             id = #{id}
+    </select>
+
+    <select id="getUserDetailDto" parameterType="java.lang.Long" resultType="com.lblog.dto.UserDto">
+        SELECT
+            lu.*,
+            visit_ip AS visitIp,
+            visit_time AS visitTime
+        FROM
+            l_user lu
+        LEFT JOIN
+            ( SELECT
+                user_id, visit_ip, visit_time, ROW_NUMBER() OVER (PARTITION BY user_id ORDER BY visit_time DESC) AS rn
+            FROM
+                l_user_visit_record) luvr ON lu.id = luvr.user_id AND luvr.rn = 1
+        WHERE
+            lu.id = #{id}
     </select>
     
     <select id="getUserTotal" parameterType="com.lblog.domain.User" resultType="java.lang.Integer">

@@ -5,15 +5,14 @@ import com.lblog.common.util.GetClientIpUtil;
 import com.lblog.common.util.JsonResponseUtil;
 import com.lblog.common.util.PageResultUtil;
 import com.lblog.domain.User;
+import com.lblog.dto.UserDto;
 import com.lblog.dto.UserVisitRecordDto;
 import com.lblog.service.UserService;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
 import java.util.Map;
 
 @RestController
@@ -73,6 +72,14 @@ public class UserApi {
         return JsonResponseUtil.success();
     }
 
+    //删除用户
+    @DeleteMapping("/deleteUser")
+    public JsonResponseUtil<String> deleteUser(@RequestBody Map<String, List<Long>> userId){
+        userService.deleteUser(userId);
+
+        return JsonResponseUtil.success();
+    }
+
     //获取RSA公钥
     @GetMapping("/getUserRsaPublicKey")
     public JsonResponseUtil<String> getUserRsaPublicKey(){
@@ -94,9 +101,17 @@ public class UserApi {
 
     //获取用户详情
     @GetMapping("/getUserDetail")
-    public JsonResponseUtil<User> getUserDetail(){
+    public JsonResponseUtil<UserDto> getUserDetailDto(){
         Long userId = userIdentityAuth.getCurrentUserId();
-        User userDetail = userService.getUserDetail(userId);
+        UserDto userDetail = userService.getUserDetailDto(userId);
+
+        return JsonResponseUtil.success(userDetail);
+    }
+
+    //获取用户详情（管理员后台）
+    @GetMapping("/getUserDetailByAdmin")
+    public JsonResponseUtil<UserDto> getUserDetailDtoByAdmin(Long userId){
+        UserDto userDetail = userService.getUserDetailDto(userId);
 
         return JsonResponseUtil.success(userDetail);
     }

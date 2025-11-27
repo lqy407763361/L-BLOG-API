@@ -14,6 +14,7 @@ import com.lblog.domain.User;
 import com.lblog.domain.UserVisitRecord;
 import com.lblog.domain.UserRefreshToken;
 import com.lblog.domain.UserRsaKey;
+import com.lblog.dto.UserDto;
 import com.lblog.dto.UserVisitRecordDto;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -251,6 +252,18 @@ public class UserService {
         }
     }
 
+    //删除用户
+    @Transactional
+    public void deleteUser(Map<String, List<Long>> userId){
+        //判断用户ID
+        if((userId == null) || userId.isEmpty()){
+            throw new ReturnException("用户ID不能为空！");
+        }
+
+        List<Long> userIdList = userId.get("id");
+        userDao.deleteUser(userIdList);
+    }
+
     //根据Id查询用户公钥和私钥
     public Map<String, String> getUserRsaKeyById(Long id){
         String publicKeyBase64 = userRsaKeyDao.getUserRsaKeyById(id).getPublicKeyBase64();
@@ -287,7 +300,10 @@ public class UserService {
         return new PageResultUtil<>(page, size, total, userList);
     }
 
-    //获取用户详情
+    /**
+     * 获取用户详情
+     * 用于内部查询，编辑
+     * */
     @Transactional
     public User getUserDetail(Long userId){
         //判断用户ID
@@ -296,6 +312,20 @@ public class UserService {
         }
 
         return userDao.getUserDetail(userId);
+    }
+
+    /**
+     * 获取用户详情
+     * 重新组装展示字段
+     * */
+    @Transactional
+    public UserDto getUserDetailDto(Long userId){
+        //判断用户ID
+        if((userId == null) || (userId == 0)){
+            throw new ReturnException("用户ID不能为空！");
+        }
+
+        return userDao.getUserDetailDto(userId);
     }
 
     //获取用户数量
