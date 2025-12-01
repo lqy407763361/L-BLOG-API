@@ -26,8 +26,8 @@ public class UserDto {
     }
 
     public static UserDto userDto(User user,
-                                        String visitIp,
-                                        Long visitTime){
+                                  String visitIp,
+                                  Long visitTime){
         UserDto userDto = new UserDto();
         userDto.setId(user.getId());
         userDto.setName(user.getName());
