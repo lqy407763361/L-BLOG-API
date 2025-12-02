@@ -40,6 +40,9 @@
             <if test="groupId != null and groupId != 0">
                 group_id = #{groupId},
             </if>
+            <if test="account != null">
+                account = #{account},
+            </if>
             <if test="name != null">
                 name = #{name},
             </if>
@@ -61,11 +64,14 @@
             id = #{id}
     </update>
 
-    <delete id="deleteAdmin" parameterType="java.lang.Long">
+    <delete id="deleteAdmin">
         DELETE FROM
             l_admin
         WHERE
-            id = #{id}
+            id IN
+        <foreach collection="id" item="item" open="(" close=")" separator=",">
+            #{item}
+        </foreach>
     </delete>
 
     <select id="getAdminList" resultType="com.lblog.dto.AdminDto">

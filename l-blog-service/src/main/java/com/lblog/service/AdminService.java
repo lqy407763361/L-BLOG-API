@@ -227,7 +227,7 @@ public class AdminService {
 
         //判断密码格式是否合法
         String password = admin.getPassword().trim();
-        if(!FormValidation.passwordValidation(password)){
+        if(!StringUtils.isBlank(password) && !FormValidation.passwordValidation(password)){
             throw new ReturnException("密码格式错误！");
         }
 
@@ -253,13 +253,14 @@ public class AdminService {
 
     //删除管理员
     @Transactional
-    public void deleteAdmin(Long adminId){
+    public void deleteAdmin(Map<String, List<Long>> adminId){
         //判断管理员ID
-        if((adminId == null) || (adminId == 0)){
+        if((adminId == null) || adminId.isEmpty()){
             throw new ReturnException("管理员ID不能为空！");
         }
 
-        adminDao.deleteAdmin(adminId);
+        List<Long> adminIdList = adminId.get("id");
+        adminDao.deleteAdmin(adminIdList);
     }
 
     //根据Id查询用户公钥和私钥

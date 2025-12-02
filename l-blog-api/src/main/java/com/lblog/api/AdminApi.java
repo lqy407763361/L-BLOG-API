@@ -12,6 +12,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
 import java.util.Map;
 
 @RestController
@@ -62,7 +63,7 @@ public class AdminApi {
 
     //编辑
     @PostMapping("/editAdmin")
-    public JsonResponseUtil<String> editAdmin(Admin admin){
+    public JsonResponseUtil<String> editAdmin(@RequestBody Admin admin){
         Long adminId = adminIdentityAuth.getCurrentAdminId();
         admin.setId(adminId);
         adminService.editAdmin(admin);
@@ -70,9 +71,17 @@ public class AdminApi {
         return JsonResponseUtil.success();
     }
 
+    //编辑（管理员后台）
+    @PostMapping("/editAdminByAdmin")
+    public JsonResponseUtil<String> editAdminByAdmin(@RequestBody Admin admin){
+        adminService.editAdmin(admin);
+
+        return JsonResponseUtil.success();
+    }
+
     //删除管理员
     @DeleteMapping("/deleteAdmin")
-    public JsonResponseUtil<String> deleteAdmin(Long adminId){
+    public JsonResponseUtil<String> deleteAdmin(@RequestBody Map<String, List<Long>> adminId){
         adminService.deleteAdmin(adminId);
 
         return JsonResponseUtil.success();
@@ -88,7 +97,7 @@ public class AdminApi {
     }
 
     //获取管理员列表
-    @GetMapping("getAdminList")
+    @GetMapping("/getAdminList")
     public JsonResponseUtil<PageResultUtil<AdminDto>> getAdminList(@RequestParam(defaultValue = "1") Integer page,
                                                                    @RequestParam(defaultValue = "10") Integer size,
                                                                    Admin admin,
@@ -102,6 +111,14 @@ public class AdminApi {
     @GetMapping("/getAdminDetail")
     public JsonResponseUtil<AdminDto> getAdminDetailDto(){
         Long adminId = adminIdentityAuth.getCurrentAdminId();
+        AdminDto adminDetail = adminService.getAdminDetailDto(adminId);
+
+        return JsonResponseUtil.success(adminDetail);
+    }
+
+    //获取管理员详情（管理员后台）
+    @GetMapping("/getAdminDetailByAdmin")
+    public JsonResponseUtil<AdminDto> getAdminDetailDtoByAdmin(Long adminId){
         AdminDto adminDetail = adminService.getAdminDetailDto(adminId);
 
         return JsonResponseUtil.success(adminDetail);

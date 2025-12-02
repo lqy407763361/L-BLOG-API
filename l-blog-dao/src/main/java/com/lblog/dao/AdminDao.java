@@ -16,7 +16,7 @@ public interface AdminDao {
 
     Integer editAdmin(Admin admin);
 
-    Integer deleteAdmin(@Param("id") Long adminId);
+    Integer deleteAdmin(@Param("id") List<Long> adminId);
 
     List<AdminDto> getAdminList(@Param("startNum") Integer startNum,
                                 @Param("size") Integer size,
