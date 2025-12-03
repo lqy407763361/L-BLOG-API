@@ -7,6 +7,9 @@ import com.lblog.service.AdminGroupService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+import java.util.Map;
+
 @RestController
 public class AdminGroupApi {
 
@@ -15,7 +18,7 @@ public class AdminGroupApi {
 
     //添加管理员群组
     @PostMapping("/addAdminGroup")
-    public JsonResponseUtil<String> addAdminGroup(AdminGroup adminGroup){
+    public JsonResponseUtil<String> addAdminGroup(@RequestBody AdminGroup adminGroup){
         adminGroupService.addAdminGroup(adminGroup);
 
         return JsonResponseUtil.success();
@@ -23,7 +26,7 @@ public class AdminGroupApi {
 
     //编辑管理员群组
     @PostMapping("/editAdminGroup")
-    public JsonResponseUtil<String> editAdminGroup(AdminGroup adminGroup){
+    public JsonResponseUtil<String> editAdminGroup(@RequestBody AdminGroup adminGroup){
         adminGroupService.editAdminGroup(adminGroup);
 
         return JsonResponseUtil.success();
@@ -31,7 +34,7 @@ public class AdminGroupApi {
 
     //删除管理员群组
     @DeleteMapping("/deleteAdminGroup")
-    public JsonResponseUtil<String> deleteAdminGroup(Long adminGroupId){
+    public JsonResponseUtil<String> deleteAdminGroup(@RequestBody Map<String, List<Long>> adminGroupId){
         adminGroupService.deleteAdminGroup(adminGroupId);
 
         return JsonResponseUtil.success();

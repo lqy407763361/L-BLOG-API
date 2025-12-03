@@ -13,6 +13,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.time.Instant;
 import java.util.List;
+import java.util.Map;
 
 @Service
 public class AdminGroupService {
@@ -27,20 +28,33 @@ public class AdminGroupService {
     @Transactional
     public void addAdminGroup(AdminGroup adminGroup){
         //判断群组名称是否合法和是否已存在
-        String name = adminGroup.getName().trim();
-        if(StringUtils.isBlank(name)){
+        if(StringUtils.isBlank(adminGroup.getName())){
             throw new ReturnException("管理员群组名称不能为空！");
         }
+        String name = adminGroup.getName().trim();
         Long existAdminGroupId = adminGroupDao.getAdminGroupId(name);
         if((existAdminGroupId != null) && (existAdminGroupId > 0)){
             throw new ReturnException("管理员群组名称已存在！");
         }
 
-        String description = adminGroup.getDescription().trim();
+        //内容过滤
+        String description = "";
+        if(!StringUtils.isBlank(adminGroup.getDescription())){
+            description = adminGroup.getDescription().trim();
+        }
+
+        String viewPower = "";
+        if(!StringUtils.isBlank(adminGroup.getViewPower())){
+            viewPower = adminGroup.getViewPower().trim();
+        }
+
+        String editPower = "";
+        if(!StringUtils.isBlank(adminGroup.getEditPower())){
+            editPower = adminGroup.getEditPower().trim();
+        }
+
         Integer status = 1;
         Integer sortOrder = 0;
-        String viewPower = adminGroup.getViewPower().trim();
-        String editPower = adminGroup.getEditPower().trim();
         Long addTime = Instant.now().getEpochSecond();
         adminGroup.setName(name);
         adminGroup.setDescription(description);
@@ -62,12 +76,30 @@ public class AdminGroupService {
             throw new ReturnException("管理员群组不存在！");
         }
 
+        //判断群组名称是否合法
+        if(StringUtils.isBlank(adminGroup.getName())){
+            throw new ReturnException("管理员群组名称不能为空！");
+        }
         String name = adminGroup.getName().trim();
-        String description = adminGroup.getDescription().trim();
+
+        //内容过滤
+        String description = "";
+        if(!StringUtils.isBlank(adminGroup.getDescription())){
+            description = adminGroup.getDescription().trim();
+        }
+
+        String viewPower = "";
+        if(!StringUtils.isBlank(adminGroup.getViewPower())){
+            viewPower = adminGroup.getViewPower().trim();
+        }
+
+        String editPower = "";
+        if(!StringUtils.isBlank(adminGroup.getEditPower())){
+            editPower = adminGroup.getEditPower().trim();
+        }
+
         Integer status = adminGroup.getStatus();
         Integer sortOrder = adminGroup.getSortOrder();
-        String viewPower = adminGroup.getViewPower().trim();
-        String editPower = adminGroup.getEditPower().trim();
         Long editTime = Instant.now().getEpochSecond();
         adminGroup.setName(name);
         adminGroup.setDescription(description);
@@ -81,21 +113,21 @@ public class AdminGroupService {
 
     //删除管理员群组
     @Transactional
-    public void deleteAdminGroup(Long adminGroupId){
+    public void deleteAdminGroup(Map<String, List<Long>> adminGroupId){
         //判断管理员群组ID
-        if((adminGroupId == null) || (adminGroupId == 0)){
+        if((adminGroupId == null) || adminGroupId.isEmpty()){
             throw new ReturnException("管理员群组ID不能为空！");
         }
 
+        List<Long> adminGroupIdList = adminGroupId.get("id");
+
         //判断该群组下属是否存在管理员
-        Admin admin = new Admin();
-        admin.setGroupId(adminGroupId);
-        Integer adminTotal = adminDao.getAdminTotal(admin);
+        Integer adminTotal = adminDao.getAdminTotalByGroupId(adminGroupIdList);
         if((adminTotal != null) && (adminTotal > 0)){
             throw new ReturnException("该群组下存在管理员！");
         }
 
-        adminGroupDao.deleteAdminGroup(adminGroupId);
+        adminGroupDao.deleteAdminGroup(adminGroupIdList);
     }
 
     //获取管理员群组列表

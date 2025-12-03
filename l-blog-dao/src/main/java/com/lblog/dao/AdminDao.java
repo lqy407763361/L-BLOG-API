@@ -28,4 +28,6 @@ public interface AdminDao {
     AdminDto getAdminDetailDto(@Param("id") Long adminId);
 
     Integer getAdminTotal(Admin admin);
+
+    Integer getAdminTotalByGroupId(@Param("groupId") List<Long> adminGroupId);
 }

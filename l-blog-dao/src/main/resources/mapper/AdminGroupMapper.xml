@@ -61,11 +61,14 @@
             id = #{id}
     </update>
 
-    <delete id="deleteAdminGroup" parameterType="java.lang.Long">
+    <delete id="deleteAdminGroup">
         DELETE FROM
             l_admin_group
         WHERE
-            id = #{id}
+            id IN
+        <foreach collection="id" item="item" open="(" close=")" separator=",">
+            #{item}
+        </foreach>
     </delete>
 
     <select id="getAdminGroupList" resultType="com.lblog.domain.AdminGroup">

@@ -103,10 +103,10 @@ public class AdminService {
     @Transactional
     public void addAdmin(Admin admin){
         //判断账号格式是否合法和是否已存在
-        String account = admin.getAccount().trim();
-        if(StringUtils.isBlank(account)){
+        if(StringUtils.isBlank(admin.getAccount())){
             throw new ReturnException("账号不能为空！");
         }
+        String account = admin.getAccount().trim();
         Long existAdminId = adminDao.getAdminId(account);
         if((existAdminId != null) && (existAdminId > 0)){
             throw new ReturnException("管理员已存在！");
@@ -119,23 +119,32 @@ public class AdminService {
         }
 
         //判断密码格式是否合法
-        String password = admin.getPassword().trim();
-        if(!FormValidation.passwordValidation(password)){
+        if(!FormValidation.passwordValidation(admin.getPassword())){
             throw new ReturnException("密码格式错误！");
         }
+        String password = admin.getPassword().trim();
 
-        //添加操作
+        //判断名称格式是否合法
+        if(StringUtils.isBlank(admin.getName())){
+            throw new ReturnException("账号不能为空！");
+        }
         String name = admin.getName().trim();
+
+        //内容过滤
+        String description = "";
+        if(!StringUtils.isBlank(admin.getDescription())){
+            description = admin.getDescription().trim();
+        }
+
         Long addTime = Instant.now().getEpochSecond();
         String salt = addTime + MD5Util.RandomString(8);
         password = MD5Util.getEncrypt(password, salt);
-        String description = admin.getDescription().trim();
         admin.setGroupId(adminGroupId);
         admin.setAccount(account);
         admin.setName(name);
         admin.setPassword(password);
         admin.setSalt(salt);
-        admin.setSalt(description);
+        admin.setDescription(description);
         admin.setStatus(1);
         admin.setAddTime(addTime);
         Integer returnRow = adminDao.addAdmin(admin);
@@ -226,17 +235,26 @@ public class AdminService {
         }
 
         //判断密码格式是否合法
-        String password = admin.getPassword().trim();
-        if(!StringUtils.isBlank(password) && !FormValidation.passwordValidation(password)){
+        if(!FormValidation.passwordValidation(admin.getPassword())){
             throw new ReturnException("密码格式错误！");
         }
+        String password = admin.getPassword().trim();
 
-        //更改管理员账号信息
+        //判断名称格式是否合法
+        if(StringUtils.isBlank(admin.getName())){
+            throw new ReturnException("账号不能为空！");
+        }
         String name = admin.getName().trim();
+
+        //内容过滤
+        String description = "";
+        if(!StringUtils.isBlank(admin.getDescription())){
+            description = admin.getDescription().trim();
+        }
+
         Long editTime = Instant.now().getEpochSecond();
         String salt = editTime + MD5Util.RandomString(8);
         password = MD5Util.getEncrypt(password, salt);
-        String description = admin.getDescription().trim();
         Integer status = admin.getStatus();
         admin.setGroupId(adminGroupId);
         admin.setName(name);
@@ -261,6 +279,7 @@ public class AdminService {
 
         List<Long> adminIdList = adminId.get("id");
         adminDao.deleteAdmin(adminIdList);
+        adminRsaKeyDao.deleteAdminRsaKey(adminIdList);
     }
 
     //根据Id查询用户公钥和私钥

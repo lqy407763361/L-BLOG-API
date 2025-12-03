@@ -152,4 +152,16 @@
             </if>
         </where>
     </select>
+
+    <select id="getAdminTotalByGroupId" resultType="java.lang.Integer">
+        SELECT
+            COUNT(id)
+        FROM
+            l_admin
+        WHERE
+            group_id IN
+        <foreach collection="groupId" item="item" open="(" close=")" separator=",">
+            #{item}
+        </foreach>
+    </select>
 </mapper>

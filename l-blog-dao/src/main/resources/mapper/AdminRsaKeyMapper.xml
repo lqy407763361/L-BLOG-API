@@ -18,4 +18,29 @@
         WHERE
             admin_id = #{adminId}
     </select>
+
+    <insert id="addAdminRsaKey" parameterType="com.lblog.domain.AdminRsaKey" useGeneratedKeys="true" keyProperty="id">
+        INSERT INTO
+            l_admin_rsa_key (
+                admin_id,
+                public_key_base64,
+                private_key_base64,
+                add_time
+            ) VALUES (
+                #{adminId},
+                #{publicKeyBase64},
+                #{privateKeyBase64},
+                #{addTime}
+            )
+    </insert>
+
+    <delete id="deleteAdminRsaKey">
+        DELETE FROM
+            l_admin_rsa_key
+        WHERE
+            admin_id IN
+        <foreach collection="adminId" item="item" open="(" close=")" separator=",">
+            #{item}
+        </foreach>
+    </delete>
 </mapper>

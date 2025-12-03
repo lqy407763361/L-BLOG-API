@@ -35,7 +35,7 @@ public class AdminApi {
 
     //添加
     @PostMapping("/addAdmin")
-    public JsonResponseUtil<String> addAdmin(Admin admin, HttpServletRequest request){
+    public JsonResponseUtil<String> addAdmin(@RequestBody Admin admin){
         adminService.addAdmin(admin);
 
         return JsonResponseUtil.success();

@@ -14,7 +14,7 @@ public interface AdminGroupDao {
 
     Integer editAdminGroup(AdminGroup adminGroup);
 
-    Integer deleteAdminGroup(@Param("id") Long adminGroupId);
+    Integer deleteAdminGroup(@Param("id") List<Long> adminGroupId);
 
     List<AdminGroup> getAdminGroupList(@Param("startNum") Integer startNum,
                                        @Param("size") Integer size,
