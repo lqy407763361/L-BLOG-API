@@ -4,7 +4,6 @@ import com.lblog.common.exception.ReturnException;
 import com.lblog.common.util.PageResultUtil;
 import com.lblog.dao.AdminDao;
 import com.lblog.dao.AdminGroupDao;
-import com.lblog.domain.Admin;
 import com.lblog.domain.AdminGroup;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
