@@ -6,6 +6,7 @@ import com.lblog.service.SiteConfigService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
@@ -15,8 +16,8 @@ public class SiteConfigApi {
     private SiteConfigService siteConfigService;
 
     //编辑
-    @PostMapping("editSiteConfig")
-    public JsonResponseUtil<String> editSiteConfig(SiteConfig siteConfig){
+    @PostMapping("/editSiteConfig")
+    public JsonResponseUtil<String> editSiteConfig(@RequestBody SiteConfig siteConfig){
         siteConfigService.editSiteConfig(siteConfig);
 
         return JsonResponseUtil.success();

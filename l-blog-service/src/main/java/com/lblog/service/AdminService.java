@@ -43,7 +43,7 @@ public class AdminService {
     @Transactional
     public Map<String, Object> login(Admin admin, String adminIp){
         //判断管理员是否存在
-        String account = admin.getAccount().trim();
+        String account = admin.getAccount();
         Long adminId = adminDao.getAdminId(account);
         if((adminId == null) || (adminId == 0)){
             throw new ReturnException("管理员不存在！");
@@ -51,7 +51,7 @@ public class AdminService {
 
         //判断密码是否正确
         String rawPassword = "";
-        String password = admin.getPassword().trim();
+        String password = admin.getPassword();
         try {
             String privateKeyBase64 = adminRsaKeyDao.getAdminRsaKeyByAdminId(adminId).getPrivateKeyBase64();
             rawPassword = RSAUtil.decrypt(password, privateKeyBase64);
@@ -103,10 +103,11 @@ public class AdminService {
     @Transactional
     public void addAdmin(Admin admin){
         //判断账号格式是否合法和是否已存在
+        String account = "";
         if(StringUtils.isBlank(admin.getAccount())){
             throw new ReturnException("账号不能为空！");
         }
-        String account = admin.getAccount().trim();
+        account = admin.getAccount().trim();
         Long existAdminId = adminDao.getAdminId(account);
         if((existAdminId != null) && (existAdminId > 0)){
             throw new ReturnException("管理员已存在！");

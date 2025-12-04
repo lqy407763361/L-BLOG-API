@@ -47,7 +47,7 @@ public class UserService {
     @Transactional
     public Map<String, Object> login(User user, String userIp){
         //判断用户是否存在
-        String name = user.getName().trim();
+        String name = user.getName();
         Long userId = userDao.getUserId(name);
         if((userId == null) || (userId == 0)){
             throw new ReturnException("用户不存在！");
@@ -55,7 +55,7 @@ public class UserService {
 
         //判断密码是否正确
         String rawPassword = "";
-        String password = user.getPassword().trim();
+        String password = user.getPassword();
         try {
             String privateKeyBase64 = userRsaKeyDao.getUserRsaKeyByUserId(userId).getPrivateKeyBase64();
             rawPassword = RSAUtil.decrypt(password, privateKeyBase64);
@@ -107,20 +107,22 @@ public class UserService {
     @Transactional
     public Map<String, Object> register(User user, String userIp){
         //判断账号格式是否合法和是否已存在
-        String name = user.getName().trim();
-        if(!FormValidation.userNameValidation(name)){
+        String name = "";
+        if(!FormValidation.userNameValidation(user.getName())){
             throw new ReturnException("账号格式错误！");
         }
+        name = user.getName().trim();
         Long existUserId = userDao.getUserId(name);
         if((existUserId != null) && (existUserId > 0)){
             throw new ReturnException("用户已存在！");
         }
 
         //判断密码格式是否合法
-        String password = user.getPassword().trim();
+        String password = "";
         if(!FormValidation.passwordValidation(password)){
             throw new ReturnException("密码格式错误！");
         }
+        password = user.getPassword().trim();
 
         //添加操作
         Integer registerType = user.getRegisterType();

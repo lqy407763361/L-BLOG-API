@@ -20,10 +20,36 @@ public class SiteConfigService {
     @Transactional
     public void editSiteConfig(SiteConfig siteConfig){
         //更改配置信息
-        String metaTitle = siteConfig.getMetaTitle().trim();
-        String metaDescription = siteConfig.getMetaDescription().trim();
-        String metaKeywords = siteConfig.getMetaKeywords().trim();
-        String siteTitle = siteConfig.getSiteTitle().trim();
+        String metaTitle = "";
+        if(!StringUtils.isBlank(siteConfig.getMetaTitle())){
+            metaTitle = siteConfig.getMetaTitle().trim();
+        }
+
+        String metaDescription = "";
+        if(!StringUtils.isBlank(siteConfig.getMetaDescription())){
+            metaDescription = siteConfig.getMetaDescription().trim();
+        }
+
+        String metaKeywords = "";
+        if(!StringUtils.isBlank(siteConfig.getMetaKeywords())){
+            metaKeywords = siteConfig.getMetaKeywords().trim();
+        }
+
+        String siteTitle = "";
+        if(!StringUtils.isBlank(siteConfig.getSiteTitle())){
+            siteTitle = siteConfig.getSiteTitle().trim();
+        }
+
+        String logoImageUrl = "";
+        if(!StringUtils.isBlank(siteConfig.getLogoImageUrl())){
+            logoImageUrl = siteConfig.getLogoImageUrl().trim();
+        }
+
+        String siteConfigStr = "";
+        if(!StringUtils.isBlank(siteConfig.getSiteConfig())){
+            siteConfigStr = siteConfig.getSiteConfig().trim();
+        }
+
         if(StringUtils.isBlank(metaTitle) || StringUtils.isBlank(metaDescription) || StringUtils.isBlank(metaKeywords) || StringUtils.isBlank(siteTitle)){
             throw new ReturnException("基础信息不能为空！");
         }
@@ -34,8 +60,6 @@ public class SiteConfigService {
             throw new ReturnException("分页数量不能为0！");
         }
 
-        String logoImageUrl = siteConfig.getLogoImageUrl().trim();
-        String siteConfigStr = siteConfig.getSiteConfig().trim();
         Integer systemMaintenance = siteConfig.getSystemMaintenance();
         Integer siteLoginMaxNumber = siteConfig.getSiteLoginMaxNumber();
         Integer adminLoginMaxNumber = siteConfig.getAdminLoginMaxNumber();

@@ -50,7 +50,7 @@
             id = #{id}
     </update>
 
-    <select id="getSiteConfig" parameterType="java.lang.Long" resultType="com.lblog.domain.SiteConfig">
+    <select id="getSiteConfigDetail" parameterType="java.lang.Long" resultType="com.lblog.domain.SiteConfig">
         SELECT
             *
         FROM
