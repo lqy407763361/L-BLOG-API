@@ -1,6 +1,7 @@
 package com.lblog.common.util;
 
 import javax.crypto.Cipher;
+import javax.crypto.KeyGenerator;
 import javax.crypto.SecretKey;
 import javax.crypto.spec.GCMParameterSpec;
 import javax.crypto.spec.SecretKeySpec;
@@ -61,5 +62,16 @@ public class AESUtil {
         byte[] plaintext = cipher.doFinal(ciphertext);
 
         return new String(plaintext, StandardCharsets.UTF_8);
+    }
+
+    /**
+     * 生成密钥
+     * @return 返回密钥字符串
+     */
+    public static String generateKey() throws Exception{
+        KeyGenerator keyGenerator = KeyGenerator.getInstance(ALGORITHM);
+        keyGenerator.init(KEY_SIZE, random);
+
+        return Base64.getEncoder().encodeToString(keyGenerator.generateKey().getEncoded());
     }
 }
