@@ -6,7 +6,7 @@ import org.apache.commons.lang3.StringUtils;
 
 import java.time.Instant;
 
-public class MD5Util {
+public class SHA256Util {
     /**
      * 生成随机数，随机数池可自定义
      * @param randomLen 自定义需要返回随机字符串的长度
@@ -23,7 +23,7 @@ public class MD5Util {
     }
 
     /**
-     * 加盐后MD5加密
+     * 加盐后SHA256加密
      * @param str 需要加密的字符串
      * @param salt 盐值
      * @return 返回加密后的字符串
@@ -32,9 +32,8 @@ public class MD5Util {
         if(StringUtils.isBlank(salt)){
             salt = String.valueOf(Instant.now().getEpochSecond()) + RandomString(8);
         }
-        String md5Str = DigestUtils.md5Hex(str+salt);
-        StringUtils.substring(md5Str, 0, md5Str.length()-1);
+        String sha256Str = DigestUtils.sha256Hex(str + salt);
 
-        return md5Str;
+        return sha256Str;
     }
 }

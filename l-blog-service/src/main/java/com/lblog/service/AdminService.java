@@ -2,7 +2,7 @@ package com.lblog.service;
 
 import com.lblog.common.exception.ReturnException;
 import com.lblog.common.util.JwtTokenUtil;
-import com.lblog.common.util.MD5Util;
+import com.lblog.common.util.SHA256Util;
 import com.lblog.common.util.PageResultUtil;
 import com.lblog.common.util.RSAUtil;
 import com.lblog.common.validation.FormValidation;
@@ -59,7 +59,7 @@ public class AdminService {
             throw new ReturnException("密码解密失败！");
         }
         String salt = admin.getSalt();
-        if(!MD5Util.getEncrypt(rawPassword, salt).equals(this.getAdminDetail(adminId).getPassword())){
+        if(!SHA256Util.getEncrypt(rawPassword, salt).equals(this.getAdminDetail(adminId).getPassword())){
             throw new ReturnException("密码错误！");
         }
 
@@ -138,8 +138,8 @@ public class AdminService {
         }
 
         Long addTime = Instant.now().getEpochSecond();
-        String salt = addTime + MD5Util.RandomString(8);
-        password = MD5Util.getEncrypt(password, salt);
+        String salt = addTime + SHA256Util.RandomString(8);
+        password = SHA256Util.getEncrypt(password, salt);
         admin.setGroupId(adminGroupId);
         admin.setAccount(account);
         admin.setName(name);
@@ -254,8 +254,8 @@ public class AdminService {
         }
 
         Long editTime = Instant.now().getEpochSecond();
-        String salt = editTime + MD5Util.RandomString(8);
-        password = MD5Util.getEncrypt(password, salt);
+        String salt = editTime + SHA256Util.RandomString(8);
+        password = SHA256Util.getEncrypt(password, salt);
         Integer status = admin.getStatus();
         admin.setGroupId(adminGroupId);
         admin.setName(name);

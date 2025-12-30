@@ -2,7 +2,7 @@ package com.lblog.service;
 
 import com.lblog.common.exception.ReturnException;
 import com.lblog.common.util.JwtTokenUtil;
-import com.lblog.common.util.MD5Util;
+import com.lblog.common.util.SHA256Util;
 import com.lblog.common.util.PageResultUtil;
 import com.lblog.common.util.RSAUtil;
 import com.lblog.common.validation.FormValidation;
@@ -63,7 +63,7 @@ public class UserService {
             throw new ReturnException("密码解密失败！");
         }
         String salt = user.getSalt();
-        if(!MD5Util.getEncrypt(rawPassword, salt).equals(this.getUserDetail(userId).getPassword())){
+        if(!SHA256Util.getEncrypt(rawPassword, salt).equals(this.getUserDetail(userId).getPassword())){
             throw new ReturnException("密码错误！");
         }
 
@@ -127,8 +127,8 @@ public class UserService {
         //添加操作
         Integer registerType = user.getRegisterType();
         Long addTime = Instant.now().getEpochSecond();
-        String salt = addTime + MD5Util.RandomString(8);
-        password = MD5Util.getEncrypt(password, salt);
+        String salt = addTime + SHA256Util.RandomString(8);
+        password = SHA256Util.getEncrypt(password, salt);
         user.setName(name);
         user.setPassword(password);
         user.setSalt(salt);
