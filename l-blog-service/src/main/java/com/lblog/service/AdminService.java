@@ -9,7 +9,6 @@ import com.lblog.common.validation.FormValidation;
 import com.lblog.dao.AdminDao;
 import com.lblog.dao.AdminLoginRecordDao;
 import com.lblog.dao.AdminRefreshTokenDao;
-import com.lblog.dao.AdminRsaKeyDao;
 import com.lblog.domain.*;
 import com.lblog.dto.AdminDto;
 import org.apache.commons.lang3.StringUtils;
@@ -34,9 +33,6 @@ public class AdminService {
     private AdminLoginRecordDao adminLoginRecordDao;
 
     @Autowired
-    private AdminRsaKeyDao adminRsaKeyDao;
-
-    @Autowired
     private AdminRefreshTokenDao adminRefreshTokenDao;
 
     //登录
@@ -53,8 +49,7 @@ public class AdminService {
         String rawPassword = "";
         String password = admin.getPassword();
         try {
-            String privateKeyBase64 = adminRsaKeyDao.getAdminRsaKeyByAdminId(adminId).getPrivateKeyBase64();
-            rawPassword = RSAUtil.decrypt(password, privateKeyBase64);
+            rawPassword = RSAUtil.decrypt(password);
         } catch (Exception e) {
             throw new ReturnException("密码解密失败！");
         }
@@ -77,10 +72,8 @@ public class AdminService {
         adminLoginRecord.setLoginTime(addTime);
         adminLoginRecordDao.addAdminLoginRecord(adminLoginRecord);
 
-        //保存refreshToken，返回accessToken/refreshToken/rsaKeyId
-        Long rsaKeyId = adminRsaKeyDao.getAdminRsaKeyByAdminId(adminId).getId();
-        String privateKeyBase64 = adminRsaKeyDao.getAdminRsaKeyByAdminId(adminId).getPrivateKeyBase64();
-        PrivateKey privateKey = RSAUtil.getPrivateKey(privateKeyBase64);
+        //保存refreshToken，返回accessToken/refreshToken
+        PrivateKey privateKey = RSAUtil.getPrivateKey();
         String accessToken = JwtTokenUtil.generateAccessToken(adminId, privateKey);
         String refreshToken = JwtTokenUtil.generateRefreshToken(adminId, privateKey);
         AdminRefreshToken adminRefreshToken = new AdminRefreshToken();
@@ -93,7 +86,6 @@ public class AdminService {
         String name = this.getAdminDetail(adminId).getName();
         Map<String, Object> result = new HashMap<>();
         result.put("name", name);
-        result.put("rsaKeyId", rsaKeyId);
         result.put("accessToken", accessToken);
         result.put("refreshToken", refreshToken);
         return result;
@@ -152,18 +144,6 @@ public class AdminService {
         if((returnRow == null) || (returnRow == 0)){
             throw new ReturnException("添加失败！");
         }
-        Long adminId = admin.getId();
-
-        //插入RsaKey表
-        Map<String, String> rsaKeyPair = RSAUtil.getKeyPair();
-        String publicKeyBase64 = rsaKeyPair.get("publicKeyBase64");
-        String privateKeyBase64 = rsaKeyPair.get("privateKeyBase64");
-        AdminRsaKey adminRsaKey = new AdminRsaKey();
-        adminRsaKey.setAdminId(adminId);
-        adminRsaKey.setPublicKeyBase64(publicKeyBase64);
-        adminRsaKey.setPrivateKeyBase64(privateKeyBase64);
-        adminRsaKey.setAddTime(addTime);
-        adminRsaKeyDao.addAdminRsaKey(adminRsaKey);
     }
 
     //退出登录
@@ -209,11 +189,9 @@ public class AdminService {
         }
 
         //验证refreshToken合法性
-        String publicKeyBase64 = this.getAdminRsaKeyByAdminId(adminId).get("publicKeyBase64");
-        PublicKey publicKey = RSAUtil.getPublicKey(publicKeyBase64);
+        PublicKey publicKey = RSAUtil.getPublicKey();
         JwtTokenUtil.validateToken(refreshToken, publicKey);
-        String privateKeyBase64 = adminRsaKeyDao.getAdminRsaKeyByAdminId(adminId).getPrivateKeyBase64();
-        PrivateKey privateKey = RSAUtil.getPrivateKey(privateKeyBase64);
+        PrivateKey privateKey = RSAUtil.getPrivateKey();
         String accessToken = JwtTokenUtil.generateAccessToken(adminId, privateKey);
 
         return accessToken;
@@ -280,31 +258,6 @@ public class AdminService {
 
         List<Long> adminIdList = adminId.get("id");
         adminDao.deleteAdmin(adminIdList);
-        adminRsaKeyDao.deleteAdminRsaKey(adminIdList);
-    }
-
-    //根据Id查询用户公钥和私钥
-    public Map<String, String> getAdminRsaKeyById(Long id){
-        String publicKeyBase64 = adminRsaKeyDao.getAdminRsaKeyById(id).getPublicKeyBase64();
-        String privateKeyBase64 = adminRsaKeyDao.getAdminRsaKeyById(id).getPrivateKeyBase64();
-
-        Map<String, String> result = new HashMap<>();
-        result.put("rsaKeyId", publicKeyBase64);
-        result.put("accessToken", privateKeyBase64);
-
-        return result;
-    }
-
-    //根据adminId查询用户公钥和私钥
-    public Map<String, String> getAdminRsaKeyByAdminId(Long id){
-        String publicKeyBase64 = adminRsaKeyDao.getAdminRsaKeyByAdminId(id).getPublicKeyBase64();
-        String privateKeyBase64 = adminRsaKeyDao.getAdminRsaKeyByAdminId(id).getPrivateKeyBase64();
-
-        Map<String, String> result = new HashMap<>();
-        result.put("rsaKeyId", publicKeyBase64);
-        result.put("accessToken", privateKeyBase64);
-
-        return result;
     }
 
     //获取管理员列表

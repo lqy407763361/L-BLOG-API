@@ -4,6 +4,7 @@ import com.lblog.api.auth.AdminIdentityAuth;
 import com.lblog.common.util.GetClientIpUtil;
 import com.lblog.common.util.JsonResponseUtil;
 import com.lblog.common.util.PageResultUtil;
+import com.lblog.common.util.RSAUtil;
 import com.lblog.domain.Admin;
 import com.lblog.domain.AdminGroup;
 import com.lblog.dto.AdminDto;
@@ -90,8 +91,7 @@ public class AdminApi {
     //获取RSA公钥
     @GetMapping("/getAdminRsaPublicKey")
     public JsonResponseUtil<String> getRsaPublicKey(){
-        Long adminId = adminIdentityAuth.getCurrentAdminId();
-        String publicKeyBase64 = adminService.getAdminRsaKeyByAdminId(adminId).get("publicKeyBase64");
+        String publicKeyBase64 = RSAUtil.getPublicKeyBase64();
 
         return JsonResponseUtil.success(publicKeyBase64);
     }

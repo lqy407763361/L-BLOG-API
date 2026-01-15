@@ -11,7 +11,7 @@
  Target Server Version : 80043 (8.0.43)
  File Encoding         : 65001
 
- Date: 19/11/2025 17:22:55
+ Date: 15/01/2026 15:29:03
 */
 
 SET NAMES utf8mb4;
@@ -87,19 +87,6 @@ CREATE TABLE `l_admin_refresh_token`  (
   `is_revoked` int NOT NULL DEFAULT 0 COMMENT '是否废弃，0=默认，1=废弃',
   `add_time` int NULL DEFAULT NULL COMMENT '添加时间',
   `edit_time` int NULL DEFAULT NULL COMMENT '编辑时间',
-  PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci ROW_FORMAT = DYNAMIC;
-
--- ----------------------------
--- Table structure for l_admin_rsa_key
--- ----------------------------
-DROP TABLE IF EXISTS `l_admin_rsa_key`;
-CREATE TABLE `l_admin_rsa_key`  (
-  `id` int NOT NULL AUTO_INCREMENT,
-  `admin_id` int NOT NULL COMMENT '管理员表ID',
-  `public_key_base64` text CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL COMMENT '公钥Base64编码',
-  `private_key_base64` text CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL COMMENT '私钥Base64编码',
-  `add_time` int NULL DEFAULT NULL COMMENT '添加时间',
   PRIMARY KEY (`id`) USING BTREE
 ) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci ROW_FORMAT = DYNAMIC;
 
@@ -201,19 +188,6 @@ CREATE TABLE `l_user_refresh_token`  (
   `add_ip` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL COMMENT '添加时的IP（登录IP）',
   `add_time` int NULL DEFAULT NULL COMMENT '添加时间',
   `edit_time` int NULL DEFAULT NULL COMMENT '编辑时间',
-  PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci ROW_FORMAT = DYNAMIC;
-
--- ----------------------------
--- Table structure for l_user_rsa_key
--- ----------------------------
-DROP TABLE IF EXISTS `l_user_rsa_key`;
-CREATE TABLE `l_user_rsa_key`  (
-  `id` int NOT NULL AUTO_INCREMENT,
-  `user_id` int NOT NULL COMMENT '用户表ID',
-  `public_key_base64` text CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL COMMENT '公钥Base64编码',
-  `private_key_base64` text CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL COMMENT '私钥Base64编码',
-  `add_time` int NULL DEFAULT NULL COMMENT '添加时间',
   PRIMARY KEY (`id`) USING BTREE
 ) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci ROW_FORMAT = DYNAMIC;
 

@@ -28,14 +28,8 @@ public class UserIdentityAuth {
             throw new RuntimeException("accessToken不能为空！");
         }
 
-        Long rsaKeyId = Long.valueOf(httpServletRequest.getHeader("rsaKeyId"));
-        if(rsaKeyId == 0){
-            throw new ReturnException("rsaKeyId不能为空！");
-        }
-
-        //根据accessToken获取userId和公钥字符串
-        String publicKeyBase64 = userService.getUserRsaKeyById(rsaKeyId).get("publicKeyBase64");
-        PublicKey publicKey = RSAUtil.getPublicKey(publicKeyBase64);
+        //根据accessToken和RSA公钥获取userId
+        PublicKey publicKey = RSAUtil.getPublicKey();
         Long userId = JwtTokenUtil.validateToken(accessToken, publicKey);
         if(userId < 1){
             throw new ReturnException("非法用户！");

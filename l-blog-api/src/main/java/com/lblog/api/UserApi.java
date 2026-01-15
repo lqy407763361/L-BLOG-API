@@ -4,6 +4,7 @@ import com.lblog.api.auth.UserIdentityAuth;
 import com.lblog.common.util.GetClientIpUtil;
 import com.lblog.common.util.JsonResponseUtil;
 import com.lblog.common.util.PageResultUtil;
+import com.lblog.common.util.RSAUtil;
 import com.lblog.domain.User;
 import com.lblog.dto.UserDto;
 import com.lblog.dto.UserVisitRecordDto;
@@ -91,8 +92,7 @@ public class UserApi {
     //获取RSA公钥
     @GetMapping("/getUserRsaPublicKey")
     public JsonResponseUtil<String> getUserRsaPublicKey(){
-        Long userId = userIdentityAuth.getCurrentUserId();
-        String publicKeyBase64 = userService.getUserRsaKeyByUserId(userId).get("publicKeyBase64");
+        String publicKeyBase64 = RSAUtil.getPublicKeyBase64();
 
         return JsonResponseUtil.success(publicKeyBase64);
     }

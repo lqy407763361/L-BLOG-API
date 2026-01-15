@@ -28,14 +28,8 @@ public class AdminIdentityAuth {
             throw new RuntimeException("accessToken不能为空！");
         }
 
-        Long rsaKeyId = Long.valueOf(httpServletRequest.getHeader("rsaKeyId"));
-        if(rsaKeyId == 0){
-            throw new ReturnException("rsaKeyId不能为空！");
-        }
-
-        //根据accessToken获取userId和公钥字符串
-        String publicKeyBase64 = adminService.getAdminRsaKeyById(rsaKeyId).get("publicKeyBase64");
-        PublicKey publicKey = RSAUtil.getPublicKey(publicKeyBase64);
+        //根据accessToken和RSA公钥获取adminId
+        PublicKey publicKey = RSAUtil.getPublicKey();
         Long adminId = JwtTokenUtil.validateToken(accessToken, publicKey);
         if(adminId < 1){
             throw new ReturnException("非法用户！");

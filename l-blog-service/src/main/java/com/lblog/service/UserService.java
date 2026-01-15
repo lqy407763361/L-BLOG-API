@@ -8,12 +8,10 @@ import com.lblog.common.util.RSAUtil;
 import com.lblog.common.validation.FormValidation;
 import com.lblog.dao.UserDao;
 import com.lblog.dao.UserVisitRecordDao;
-import com.lblog.dao.UserRsaKeyDao;
 import com.lblog.dao.UserRefreshTokenDao;
 import com.lblog.domain.User;
 import com.lblog.domain.UserVisitRecord;
 import com.lblog.domain.UserRefreshToken;
-import com.lblog.domain.UserRsaKey;
 import com.lblog.dto.UserDto;
 import com.lblog.dto.UserVisitRecordDto;
 import org.apache.commons.lang3.StringUtils;
@@ -38,9 +36,6 @@ public class UserService {
     private UserVisitRecordDao userVisitRecordDao;
 
     @Autowired
-    private UserRsaKeyDao userRsaKeyDao;
-
-    @Autowired
     private UserRefreshTokenDao userRefreshTokenDao;
 
     //登录
@@ -57,8 +52,7 @@ public class UserService {
         String rawPassword = "";
         String password = user.getPassword();
         try {
-            String privateKeyBase64 = userRsaKeyDao.getUserRsaKeyByUserId(userId).getPrivateKeyBase64();
-            rawPassword = RSAUtil.decrypt(password, privateKeyBase64);
+            rawPassword = RSAUtil.decrypt(password);
         } catch (Exception e) {
             throw new ReturnException("密码解密失败！");
         }
@@ -81,10 +75,8 @@ public class UserService {
         userVisitRecord.setVisitTime(addTime);
         userVisitRecordDao.addUserVisitRecord(userVisitRecord);
 
-        //保存refreshToken，返回accessToken/refreshToken/rsaKeyId
-        Long rsaKeyId = userRsaKeyDao.getUserRsaKeyByUserId(userId).getId();
-        String privateKeyBase64 = userRsaKeyDao.getUserRsaKeyByUserId(userId).getPrivateKeyBase64();
-        PrivateKey privateKey = RSAUtil.getPrivateKey(privateKeyBase64);
+        //保存refreshToken，返回accessToken/refreshToken
+        PrivateKey privateKey = RSAUtil.getPrivateKey();
         String accessToken = JwtTokenUtil.generateAccessToken(userId, privateKey);
         String refreshToken = JwtTokenUtil.generateRefreshToken(userId, privateKey);
         UserRefreshToken userRefreshToken = new UserRefreshToken();
@@ -97,7 +89,6 @@ public class UserService {
 
         Map<String, Object> result = new HashMap<>();
         result.put("name", name);
-        result.put("rsaKeyId", rsaKeyId);
         result.put("accessToken", accessToken);
         result.put("refreshToken", refreshToken);
         return result;
@@ -149,20 +140,8 @@ public class UserService {
         userVisitRecord.setVisitTime(addTime);
         userVisitRecordDao.addUserVisitRecord(userVisitRecord);
 
-        //插入RsaKey表
-        Map<String, String> rsaKeyPair = RSAUtil.getKeyPair();
-        String publicKeyBase64 = rsaKeyPair.get("publicKeyBase64");
-        String privateKeyBase64 = rsaKeyPair.get("privateKeyBase64");
-        UserRsaKey userRsaKey = new UserRsaKey();
-        userRsaKey.setUserId(userId);
-        userRsaKey.setPublicKeyBase64(publicKeyBase64);
-        userRsaKey.setPrivateKeyBase64(privateKeyBase64);
-        userRsaKey.setAddTime(addTime);
-        userRsaKeyDao.addUserRsaKey(userRsaKey);
-        Long rsaKeyId = userRsaKey.getId();
-
-        //保存refreshToken，返回accessToken/refreshToken/rsaKeyId
-        PrivateKey privateKey = RSAUtil.getPrivateKey(privateKeyBase64);
+        //保存refreshToken，返回accessToken/refreshToken
+        PrivateKey privateKey = RSAUtil.getPrivateKey();
         String accessToken = JwtTokenUtil.generateAccessToken(userId, privateKey);
         String refreshToken = JwtTokenUtil.generateRefreshToken(userId, privateKey);
         UserRefreshToken userRefreshToken = new UserRefreshToken();
@@ -174,7 +153,6 @@ public class UserService {
         userRefreshTokenDao.addUserRefreshToken(userRefreshToken);
 
         Map<String, Object> result = new HashMap<>();
-        result.put("rsaKeyId", rsaKeyId);
         result.put("accessToken", accessToken);
         result.put("refreshToken", refreshToken);
         return result;
@@ -223,11 +201,9 @@ public class UserService {
         }
 
         //验证refreshToken合法性
-        String publicKeyBase64 = this.getUserRsaKeyByUserId(userId).get("publicKeyBase64");
-        PublicKey publicKey = RSAUtil.getPublicKey(publicKeyBase64);
+        PublicKey publicKey = RSAUtil.getPublicKey();
         JwtTokenUtil.validateToken(refreshToken, publicKey);
-        String privateKeyBase64 = this.getUserRsaKeyByUserId(userId).get("privateKeyBase64");
-        PrivateKey privateKey = RSAUtil.getPrivateKey(privateKeyBase64);
+        PrivateKey privateKey = RSAUtil.getPrivateKey();
         String accessToken = JwtTokenUtil.generateAccessToken(userId, privateKey);
 
         return accessToken;
@@ -264,30 +240,6 @@ public class UserService {
 
         List<Long> userIdList = userId.get("id");
         userDao.deleteUser(userIdList);
-    }
-
-    //根据Id查询用户公钥和私钥
-    public Map<String, String> getUserRsaKeyById(Long id){
-        String publicKeyBase64 = userRsaKeyDao.getUserRsaKeyById(id).getPublicKeyBase64();
-        String privateKeyBase64 = userRsaKeyDao.getUserRsaKeyById(id).getPrivateKeyBase64();
-
-        Map<String, String> result = new HashMap<>();
-        result.put("rsaKeyId", publicKeyBase64);
-        result.put("accessToken", privateKeyBase64);
-
-        return result;
-    }
-
-    //根据userId查询用户公钥和私钥
-    public Map<String, String> getUserRsaKeyByUserId(Long userId){
-        String publicKeyBase64 = userRsaKeyDao.getUserRsaKeyByUserId(userId).getPublicKeyBase64();
-        String privateKeyBase64 = userRsaKeyDao.getUserRsaKeyByUserId(userId).getPrivateKeyBase64();
-
-        Map<String, String> result = new HashMap<>();
-        result.put("rsaKeyId", publicKeyBase64);
-        result.put("accessToken", privateKeyBase64);
-
-        return result;
     }
 
     //获取用户列表
