@@ -158,7 +158,7 @@ public class AdminService {
         if(StringUtils.isBlank(refreshToken)){
             throw new ReturnException("refreshToken不能为空！");
         }
-
+ 
         //判断refreshToken
         AdminRefreshToken adminRefreshToken = new AdminRefreshToken();
         adminRefreshToken.setAdminId(adminId);

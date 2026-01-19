@@ -117,6 +117,9 @@
             <if test="status != null and status != 0">
                 AND status = #{status}
             </if>
+            <if test="addTime != null and addTime != 0">
+                AND add_time >= #{addTime}
+            </if>
         </where>
     </select>
 </mapper>
