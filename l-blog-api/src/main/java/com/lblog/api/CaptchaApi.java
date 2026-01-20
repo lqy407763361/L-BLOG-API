@@ -24,8 +24,8 @@ public class CaptchaApi {
 
     //验证
     @PostMapping("/validateCaptcha")
-    public JsonResponseUtil<Boolean> validateCaptcha(HttpSession session, String code){
-        Boolean isValid = captchaService.validateCaptcha(session, code);
+    public JsonResponseUtil<Boolean> validateCaptcha(HttpSession session, String captchaCode){
+        Boolean isValid = captchaService.validateCaptcha(session, captchaCode);
 
         return JsonResponseUtil.success(isValid);
     }

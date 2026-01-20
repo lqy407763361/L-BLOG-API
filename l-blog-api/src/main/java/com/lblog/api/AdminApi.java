@@ -10,6 +10,7 @@ import com.lblog.domain.AdminGroup;
 import com.lblog.dto.AdminDto;
 import com.lblog.service.AdminService;
 import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -27,9 +28,9 @@ public class AdminApi {
 
     //登录
     @PostMapping("/adminLogin")
-    public JsonResponseUtil<Map<String, Object>> adminLogin(Admin admin, HttpServletRequest request){
+    public JsonResponseUtil<Map<String, Object>> adminLogin(@RequestBody Admin admin, HttpServletRequest request, HttpSession session, String captchaCode){
         String adminIp = GetClientIpUtil.getClientIp(request);
-        Map<String, Object> tokenMap = adminService.login(admin, adminIp);
+        Map<String, Object> tokenMap = adminService.login(admin, adminIp, session, captchaCode);
 
         return JsonResponseUtil.success(tokenMap);
     }

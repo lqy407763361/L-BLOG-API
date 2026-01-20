@@ -11,6 +11,7 @@ import com.lblog.dao.AdminLoginRecordDao;
 import com.lblog.dao.AdminRefreshTokenDao;
 import com.lblog.domain.*;
 import com.lblog.dto.AdminDto;
+import jakarta.servlet.http.HttpSession;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -35,9 +36,12 @@ public class AdminService {
     @Autowired
     private AdminRefreshTokenDao adminRefreshTokenDao;
 
+    @Autowired
+    private CaptchaService captchaService;
+
     //登录
     @Transactional
-    public Map<String, Object> login(Admin admin, String adminIp){
+    public Map<String, Object> login(Admin admin, String adminIp, HttpSession session, String captchaCode){
         //判断管理员是否存在
         String account = admin.getAccount();
         Long adminId = adminDao.getAdminId(account);
@@ -62,6 +66,11 @@ public class AdminService {
         Integer status = admin.getStatus();
         if(status == 2){
             throw new ReturnException("管理员已被禁用！");
+        }
+
+        //判断验证码
+        if(!captchaService.validateCaptcha(session, captchaCode)){
+            throw new ReturnException("验证码错误！");
         }
 
         //插入登录记录表

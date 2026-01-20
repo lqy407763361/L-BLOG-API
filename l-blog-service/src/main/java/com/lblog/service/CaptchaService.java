@@ -33,8 +33,8 @@ public class CaptchaService {
 
     //验证
     @Transactional
-    public Boolean validateCaptcha(HttpSession session, String inputCode){
-        if(StringUtils.isBlank(inputCode)){
+    public Boolean validateCaptcha(HttpSession session, String captchaCode){
+        if(StringUtils.isBlank(captchaCode)){
             throw new ReturnException("验证码不能为空！");
         }
 
@@ -44,6 +44,6 @@ public class CaptchaService {
             throw new ReturnException("SESSION不存在验证码！");
         }
 
-        return CaptchaUtil.validateCode(inputCode, sessionCode);
+        return CaptchaUtil.validateCode(captchaCode, sessionCode);
     }
 }
