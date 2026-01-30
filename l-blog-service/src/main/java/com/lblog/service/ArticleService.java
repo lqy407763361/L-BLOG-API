@@ -100,6 +100,7 @@ public class ArticleService {
     }
 
     //获取文章列表
+    @Transactional(readOnly = true)
     public PageResultUtil<ArticleDto> getArticleList(Integer page, Integer size, Article article){
         //起始位置
         Integer startNum = (page-1) * size;
@@ -115,7 +116,7 @@ public class ArticleService {
      * 获取文章详情
      * 用于内部查询，编辑
      * */
-    @Transactional
+    @Transactional(readOnly = true)
     public Article getArticleDetail(Long articleId){
         //判断文章ID
         if((articleId == null) || (articleId == 0)){
@@ -129,7 +130,7 @@ public class ArticleService {
      * 获取文章详情
      * 重新组装展示字段
      * */
-    @Transactional
+    @Transactional(readOnly = true)
     public ArticleDto getArticleDetailDto(Long articleId){
         //判断文章ID
         if((articleId == null) || (articleId == 0)){
@@ -140,11 +141,13 @@ public class ArticleService {
     }
 
     //获取文章数量
+    @Transactional(readOnly = true)
     public Integer getArticleTotal(Article article){
         return articleDao.getArticleTotal(article);
     }
 
     //编辑文章阅读量
+    @Transactional
     public void editArticleReadCount(Long articleId, Integer readCount){
         articleDao.editArticleReadCount(articleId, readCount);
     }

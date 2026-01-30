@@ -6,7 +6,7 @@
             l_admin_refresh_token (
             admin_id,
             refresh_token,
-            is_revoked
+            is_revoked,
             add_time
         ) VALUES (
             #{adminId},

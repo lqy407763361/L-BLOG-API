@@ -56,13 +56,13 @@ public class UserService {
         } catch (Exception e) {
             throw new ReturnException("密码解密失败！");
         }
-        String salt = user.getSalt();
+        String salt = this.getUserDetail(userId).getSalt();
         if(!SHA256Util.getEncrypt(rawPassword, salt).equals(this.getUserDetail(userId).getPassword())){
             throw new ReturnException("密码错误！");
         }
 
         //判断用户账号状态
-        Integer status = user.getStatus();
+        Integer status = this.getUserDetail(userId).getStatus();
         if(status == 2){
             throw new ReturnException("用户已被禁用！");
         }
@@ -88,7 +88,6 @@ public class UserService {
         userRefreshTokenDao.addUserRefreshToken(userRefreshToken);
 
         Map<String, Object> result = new HashMap<>();
-        result.put("name", name);
         result.put("accessToken", accessToken);
         result.put("refreshToken", refreshToken);
         return result;
@@ -184,7 +183,7 @@ public class UserService {
     }
 
     //刷新token
-    @Transactional
+    @Transactional(readOnly = true)
     public String refreshAccessToken(Long userId, String refreshToken){
         //判断用户ID
         if((userId == null) || (userId == 0)){
@@ -243,6 +242,7 @@ public class UserService {
     }
 
     //获取用户列表
+    @Transactional(readOnly = true)
     public PageResultUtil<User> getUserList(Integer page, Integer size, User user){
         //起始位置
         Integer startNum = (page-1) * size;
@@ -258,7 +258,7 @@ public class UserService {
      * 获取用户详情
      * 用于内部查询，编辑
      * */
-    @Transactional
+    @Transactional(readOnly = true)
     public User getUserDetail(Long userId){
         //判断用户ID
         if((userId == null) || (userId == 0)){
@@ -272,7 +272,7 @@ public class UserService {
      * 获取用户详情
      * 重新组装展示字段
      * */
-    @Transactional
+    @Transactional(readOnly = true)
     public UserDto getUserDetailDto(Long userId){
         //判断用户ID
         if((userId == null) || (userId == 0)){
@@ -283,11 +283,13 @@ public class UserService {
     }
 
     //获取用户数量
+    @Transactional(readOnly = true)
     public Integer getUserTotal(User user){
         return userDao.getUserTotal(user);
     }
 
     //获取用户访问记录列表
+    @Transactional(readOnly = true)
     public PageResultUtil<UserVisitRecordDto> getUserVisitRecordList(Integer startPage, Integer size, Long startTime, Long endTime){
         //起始位置
         Integer startNum = (startPage-1) * size;
@@ -300,6 +302,7 @@ public class UserService {
     }
 
     //获取用户访问记录数量
+    @Transactional(readOnly = true)
     public Integer getUserVisitRecordTotal(Long startTime, Long endTime){
         return userVisitRecordDao.getUserVisitRecordTotal(startTime, endTime);
     }

@@ -10,7 +10,7 @@
             ) VALUES (
                 #{adminId},
                 #{loginIp},
-                #{addTime}
+                #{loginTime}
             )
     </insert>
 </mapper>

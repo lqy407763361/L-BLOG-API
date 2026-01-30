@@ -49,9 +49,9 @@ public class MessageApi {
     //获取消息列表
     @GetMapping("/getMessageList")
     public JsonResponseUtil<PageResultUtil<MessageDto>> getMessageList(@RequestParam(defaultValue = "1") Integer page,
-                                                                    @RequestParam(defaultValue = "10") Integer size,
-                                                                    Message message,
-                                                                    String userName){
+                                                                       @RequestParam(defaultValue = "10") Integer size,
+                                                                       Message message,
+                                                                       String userName){
         PageResultUtil<MessageDto> messageList = messageService.getMessageList(page, size, message, userName);
 
         return JsonResponseUtil.success(messageList);

@@ -41,7 +41,7 @@ public class AdminService {
 
     //登录
     @Transactional
-    public Map<String, Object> login(Admin admin, String adminIp, HttpSession session, String captchaCode){
+    public Map<String, Object> login(Admin admin, String captchaCode, String adminIp, HttpSession session){
         //判断管理员是否存在
         String account = admin.getAccount();
         Long adminId = adminDao.getAdminId(account);
@@ -57,13 +57,13 @@ public class AdminService {
         } catch (Exception e) {
             throw new ReturnException("密码解密失败！");
         }
-        String salt = admin.getSalt();
+        String salt = this.getAdminDetail(adminId).getSalt();
         if(!SHA256Util.getEncrypt(rawPassword, salt).equals(this.getAdminDetail(adminId).getPassword())){
             throw new ReturnException("密码错误！");
         }
 
         //判断管理员账号状态
-        Integer status = admin.getStatus();
+        Integer status = this.getAdminDetail(adminId).getStatus();
         if(status == 2){
             throw new ReturnException("管理员已被禁用！");
         }
@@ -92,9 +92,7 @@ public class AdminService {
         adminRefreshToken.setAddTime(addTime);
         adminRefreshTokenDao.addAdminRefreshToken(adminRefreshToken);
 
-        String name = this.getAdminDetail(adminId).getName();
         Map<String, Object> result = new HashMap<>();
-        result.put("name", name);
         result.put("accessToken", accessToken);
         result.put("refreshToken", refreshToken);
         return result;
@@ -124,7 +122,7 @@ public class AdminService {
         if(!FormValidation.passwordValidation(admin.getPassword())){
             throw new ReturnException("密码格式错误！");
         }
-        String password = admin.getPassword().trim();
+        String rawPassword = admin.getPassword().trim();
 
         //判断名称格式是否合法
         if(StringUtils.isBlank(admin.getName())){
@@ -140,7 +138,7 @@ public class AdminService {
 
         Long addTime = Instant.now().getEpochSecond();
         String salt = addTime + SHA256Util.RandomString(8);
-        password = SHA256Util.getEncrypt(password, salt);
+        String password = SHA256Util.getEncrypt(rawPassword, salt);
         admin.setGroupId(adminGroupId);
         admin.setAccount(account);
         admin.setName(name);
@@ -181,7 +179,7 @@ public class AdminService {
     }
 
     //刷新token
-    @Transactional
+    @Transactional(readOnly = true)
     public String refreshAccessToken(Long adminId, String refreshToken){
         //判断用户ID
         if((adminId == null) || (adminId == 0)){
@@ -270,6 +268,7 @@ public class AdminService {
     }
 
     //获取管理员列表
+    @Transactional(readOnly = true)
     public PageResultUtil<AdminDto> getAdminList(Integer page, Integer size, Admin admin, AdminGroup adminGroup){
         //起始位置
         Integer startNum = (page-1) * size;
@@ -285,7 +284,7 @@ public class AdminService {
      * 获取管理员详情
      * 用于内部查询，编辑
      * */
-    @Transactional
+    @Transactional(readOnly = true)
     public Admin getAdminDetail(Long adminId){
         //判断用户ID
         if((adminId == null) || (adminId == 0)){
@@ -299,7 +298,7 @@ public class AdminService {
      * 获取管理员详情
      * 重新组装展示字段，脱敏处理
      * */
-    @Transactional
+    @Transactional(readOnly = true)
     public AdminDto getAdminDetailDto(Long adminId){
         //判断用户ID
         if((adminId == null) || (adminId == 0)){
@@ -310,6 +309,7 @@ public class AdminService {
     }
 
     //获取管理员数量
+    @Transactional(readOnly = true)
     public Integer getAdminTotal(Admin admin){
         return adminDao.getAdminTotal(admin);
     }

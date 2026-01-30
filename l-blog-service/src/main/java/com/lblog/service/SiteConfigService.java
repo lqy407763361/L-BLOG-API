@@ -17,6 +17,7 @@ public class SiteConfigService {
     @Autowired
     private SiteConfigDao siteConfigDao;
 
+    //编辑网站配置
     @Transactional
     public void editSiteConfig(SiteConfig siteConfig){
         //更改配置信息
@@ -96,8 +97,8 @@ public class SiteConfigService {
     }
 
     //获取配置详情
+    @Transactional(readOnly = true)
     public SiteConfig getSiteConfigDetail(){
-
         return siteConfigDao.getSiteConfigDetail(SITE_CONFIG_ID);
     }
 }

@@ -130,6 +130,7 @@ public class AdminGroupService {
     }
 
     //获取管理员群组列表
+    @Transactional(readOnly = true)
     public PageResultUtil<AdminGroup> getAdminGroupList(Integer page, Integer size, AdminGroup adminGroup){
         //起始位置
         Integer startNum = (page-1) * size;
@@ -142,7 +143,7 @@ public class AdminGroupService {
     }
 
     //获取管理员群组详情
-    @Transactional
+    @Transactional(readOnly = true)
     public AdminGroup getAdminGroupDetail(Long adminGroupId){
         //判断分类ID
         if((adminGroupId == null) || (adminGroupId == 0)){
@@ -153,6 +154,7 @@ public class AdminGroupService {
     }
 
     //获取管理员群组数量
+    @Transactional(readOnly = true)
     public Integer getAdminGroupTotal(AdminGroup adminGroup){
         return adminGroupDao.getAdminGroupTotal(adminGroup);
     }

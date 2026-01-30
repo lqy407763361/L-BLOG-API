@@ -28,9 +28,18 @@ public class AdminApi {
 
     //登录
     @PostMapping("/adminLogin")
-    public JsonResponseUtil<Map<String, Object>> adminLogin(@RequestBody Admin admin, HttpServletRequest request, HttpSession session, String captchaCode){
+    public JsonResponseUtil<Map<String, Object>> adminLogin(@RequestBody Map<String, String> params, HttpServletRequest request){
         String adminIp = GetClientIpUtil.getClientIp(request);
-        Map<String, Object> tokenMap = adminService.login(admin, adminIp, session, captchaCode);
+        HttpSession session = request.getSession();
+        String account = params.get("account");
+        String password = params.get("password");
+        String captchaCode = params.get("captchaCode");
+
+        Admin admin = new Admin();
+        admin.setAccount(account);
+        admin.setPassword(password);
+
+        Map<String, Object> tokenMap = adminService.login(admin, captchaCode, adminIp, session);
 
         return JsonResponseUtil.success(tokenMap);
     }
@@ -117,7 +126,7 @@ public class AdminApi {
         return JsonResponseUtil.success(adminDetail);
     }
 
-    //获取管理员详情（管理员后台）
+    //获取管理员详情（管理员后台管理员列表和详情使用）
     @GetMapping("/getAdminDetailByAdmin")
     public JsonResponseUtil<AdminDto> getAdminDetailDtoByAdmin(Long adminId){
         AdminDto adminDetail = adminService.getAdminDetailDto(adminId);

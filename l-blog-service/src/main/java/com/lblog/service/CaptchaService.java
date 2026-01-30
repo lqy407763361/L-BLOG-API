@@ -5,7 +5,6 @@ import com.lblog.common.util.CaptchaUtil;
 import jakarta.servlet.http.HttpSession;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.awt.image.BufferedImage;
 import java.io.IOException;
@@ -15,7 +14,6 @@ public class CaptchaService {
     private static final String CAPTCHA_SESSION_KEY = "captcha";
 
     //生成验证码图片，并将code保存到session
-    @Transactional
     public String generateCaptcha(HttpSession session){
         String code = CaptchaUtil.generateCode();
         BufferedImage captchaImage = CaptchaUtil.generateImage(code);
@@ -32,7 +30,6 @@ public class CaptchaService {
     }
 
     //验证
-    @Transactional
     public Boolean validateCaptcha(HttpSession session, String captchaCode){
         if(StringUtils.isBlank(captchaCode)){
             throw new ReturnException("验证码不能为空！");

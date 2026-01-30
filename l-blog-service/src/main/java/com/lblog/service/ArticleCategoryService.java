@@ -111,6 +111,7 @@ public class ArticleCategoryService {
     }
 
     //获取文章分类列表
+    @Transactional(readOnly = true)
     public PageResultUtil<ArticleCategory> getArticleCategoryList(Integer page, Integer size, ArticleCategory articleCategory){
         //起始位置
         Integer startNum = (page-1) * size;
@@ -123,7 +124,7 @@ public class ArticleCategoryService {
     }
 
     //获取文章分类详情
-    @Transactional
+    @Transactional(readOnly = true)
     public ArticleCategory getArticleCategoryDetail(Long articleCategoryId){
         //判断分类ID
         if((articleCategoryId == null) || (articleCategoryId == 0)){
@@ -134,6 +135,7 @@ public class ArticleCategoryService {
     }
 
     //获取文章分类数量
+    @Transactional(readOnly = true)
     public Integer getArticleCategoryTotal(ArticleCategory articleCategory){
         return articleCategoryDao.getArticleCategoryTotal(articleCategory);
     }

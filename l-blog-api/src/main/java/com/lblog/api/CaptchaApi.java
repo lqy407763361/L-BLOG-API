@@ -2,6 +2,7 @@ package com.lblog.api;
 
 import com.lblog.common.util.JsonResponseUtil;
 import com.lblog.service.CaptchaService;
+import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -16,7 +17,8 @@ public class CaptchaApi {
 
     //获取验证码
     @GetMapping("/generateCaptcha")
-    public JsonResponseUtil<String> generateCaptcha(HttpSession session){
+    public JsonResponseUtil<String> generateCaptcha(HttpServletRequest request){
+        HttpSession session = request.getSession();
         String imageBase64 = captchaService.generateCaptcha(session);
 
         return JsonResponseUtil.success(imageBase64);
@@ -24,7 +26,8 @@ public class CaptchaApi {
 
     //验证
     @PostMapping("/validateCaptcha")
-    public JsonResponseUtil<Boolean> validateCaptcha(HttpSession session, String captchaCode){
+    public JsonResponseUtil<Boolean> validateCaptcha(HttpServletRequest request, String captchaCode){
+        HttpSession session = request.getSession();
         Boolean isValid = captchaService.validateCaptcha(session, captchaCode);
 
         return JsonResponseUtil.success(isValid);

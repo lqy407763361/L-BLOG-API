@@ -116,7 +116,7 @@ public class UserApi {
         return JsonResponseUtil.success(userDetail);
     }
 
-    //获取用户详情（管理员后台）
+    //获取用户详情（管理员后台用户列表和详情使用）
     @GetMapping("/getUserDetailByAdmin")
     public JsonResponseUtil<UserDto> getUserDetailDtoByAdmin(Long userId){
         UserDto userDetail = userService.getUserDetailDto(userId);

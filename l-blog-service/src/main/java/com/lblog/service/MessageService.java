@@ -76,6 +76,7 @@ public class MessageService {
     }
 
     //获取消息列表
+    @Transactional(readOnly = true)
     public PageResultUtil<MessageDto> getMessageList(Integer page, Integer size, Message message, String userName){
         //起始位置
         Integer startNum = (page-1) * size;
@@ -91,7 +92,7 @@ public class MessageService {
      * 获取消息详情
      * 用于内部查询，编辑
      * */
-    @Transactional
+    @Transactional(readOnly = true)
     public Message getMessageDetail(Long messageId){
         //判断消息ID
         if((messageId == null) || (messageId == 0)){
@@ -105,7 +106,7 @@ public class MessageService {
      * 获取消息详情
      * 重新组装展示字段
      * */
-    @Transactional
+    @Transactional(readOnly = true)
     public MessageDto getMessageDetailDto(Long messageId){
         //判断消息ID
         if((messageId == null) || (messageId == 0)){
@@ -116,6 +117,7 @@ public class MessageService {
     }
 
     //获取消息数量
+    @Transactional(readOnly = true)
     public Integer getMessageTotal(Message message, String userName){
         return messageDao.getMessageTotal(message, userName);
     }

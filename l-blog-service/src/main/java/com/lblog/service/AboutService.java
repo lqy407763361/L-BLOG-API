@@ -39,8 +39,8 @@ public class AboutService {
     }
 
     //获取单页详情
+    @Transactional(readOnly = true)
     public About getAboutDetail(){
-
         return aboutDao.getAboutDetail(ABOUT_ID);
     }
 }
