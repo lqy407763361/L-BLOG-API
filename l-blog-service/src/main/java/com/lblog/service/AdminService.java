@@ -165,11 +165,12 @@ public class AdminService {
         if(StringUtils.isBlank(refreshToken)){
             throw new ReturnException("refreshToken不能为空！");
         }
- 
+
         //判断refreshToken
         AdminRefreshToken adminRefreshToken = new AdminRefreshToken();
         adminRefreshToken.setAdminId(adminId);
         adminRefreshToken.setRefreshToken(refreshToken);
+        adminRefreshToken.setIsRevoked(0);
         Long refreshTokenId = adminRefreshTokenDao.getAdminRefreshTokenId(adminRefreshToken);
         if((refreshTokenId == null) || (refreshTokenId == 0)){
             throw new ReturnException("refreshToken不存在！");
@@ -190,6 +191,7 @@ public class AdminService {
         AdminRefreshToken adminRefreshToken = new AdminRefreshToken();
         adminRefreshToken.setAdminId(adminId);
         adminRefreshToken.setRefreshToken(refreshToken);
+        adminRefreshToken.setIsRevoked(0);
         Long refreshTokenId = adminRefreshTokenDao.getAdminRefreshTokenId(adminRefreshToken);
         if((refreshTokenId == null) || (refreshTokenId == 0)){
             throw new ReturnException("refreshToken不存在！");

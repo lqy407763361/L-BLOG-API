@@ -33,6 +33,9 @@
         FROM
             l_admin_refresh_token
         WHERE
-            admin_id = #{adminId} AND refresh_token = #{refreshToken} AND is_revoked = 0
+            admin_id = #{adminId} AND refresh_token = #{refreshToken}
+            <if test="isRevoked != null">
+                AND is_revoked = #{isRevoked}
+            </if>
     </select>
 </mapper>
