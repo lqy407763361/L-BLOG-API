@@ -11,20 +11,32 @@
         ) VALUES (
             #{adminId},
             #{refreshToken},
-            #{isRevoked},
+            0,
             #{addTime}
         )
     </insert>
+
+    <update id="editAdminRefreshToken" parameterType="com.lblog.domain.AdminRefreshToken">
+        UPDATE
+            l_admin_refresh_token
+        <set>
+            refresh_token = #{refreshToken},
+            is_revoked = 0,
+            edit_time = #{editTime}
+        </set>
+        WHERE
+            admin_id = #{adminId}
+    </update>
 
     <update id="deleteAdminRefreshToken" parameterType="com.lblog.domain.AdminRefreshToken">
         UPDATE
             l_admin_refresh_token
         <set>
-            is_revoked = 1
+            is_revoked = 1,
             edit_time = #{editTime}
         </set>
         WHERE
-            admin_id = #{adminId} AND refresh_token = #{refreshToken}
+            admin_id = #{adminId}
     </update>
 
     <select id="getAdminRefreshTokenId" parameterType="com.lblog.domain.AdminRefreshToken" resultType="java.lang.Long">
@@ -33,7 +45,7 @@
         FROM
             l_admin_refresh_token
         WHERE
-            admin_id = #{adminId} AND refresh_token = #{refreshToken}
+            admin_id = #{adminId}
             <if test="isRevoked != null">
                 AND is_revoked = #{isRevoked}
             </if>

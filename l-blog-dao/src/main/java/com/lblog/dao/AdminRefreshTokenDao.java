@@ -7,6 +7,8 @@ import org.apache.ibatis.annotations.Mapper;
 public interface AdminRefreshTokenDao {
     Integer addAdminRefreshToken(AdminRefreshToken adminRefreshToken);
 
+    Integer editAdminRefreshToken(AdminRefreshToken adminRefreshToken);
+
     Integer deleteAdminRefreshToken(AdminRefreshToken adminRefreshToken);
 
     Long getAdminRefreshTokenId(AdminRefreshToken adminRefreshToken);

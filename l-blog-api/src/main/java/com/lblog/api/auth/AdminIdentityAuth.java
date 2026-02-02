@@ -23,7 +23,7 @@ public class AdminIdentityAuth {
         ServletRequestAttributes servletRequestAttributes = (ServletRequestAttributes) RequestContextHolder.getRequestAttributes();
         HttpServletRequest httpServletRequest = servletRequestAttributes.getRequest();
 
-        String accessToken = httpServletRequest.getHeader("accessToken");
+        String accessToken = httpServletRequest.getHeader("adminAccessToken");
         if(StringUtils.isBlank(accessToken)){
             throw new RuntimeException("accessToken不能为空！");
         }

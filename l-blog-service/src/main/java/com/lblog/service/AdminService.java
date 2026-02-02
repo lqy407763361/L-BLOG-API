@@ -87,10 +87,16 @@ public class AdminService {
         String refreshToken = JwtTokenUtil.generateRefreshToken(adminId, privateKey);
         AdminRefreshToken adminRefreshToken = new AdminRefreshToken();
         adminRefreshToken.setAdminId(adminId);
+        //判断refreshToken
+        Long refreshTokenId = adminRefreshTokenDao.getAdminRefreshTokenId(adminRefreshToken);
         adminRefreshToken.setRefreshToken(refreshToken);
-        adminRefreshToken.setIsRevoked(0);
-        adminRefreshToken.setAddTime(addTime);
-        adminRefreshTokenDao.addAdminRefreshToken(adminRefreshToken);
+        if(refreshTokenId > 0){
+            adminRefreshToken.setEditTime(addTime);
+            adminRefreshTokenDao.editAdminRefreshToken(adminRefreshToken);
+        }else{
+            adminRefreshToken.setAddTime(addTime);
+            adminRefreshTokenDao.addAdminRefreshToken(adminRefreshToken);
+        }
 
         Map<String, Object> result = new HashMap<>();
         result.put("accessToken", accessToken);
@@ -169,13 +175,13 @@ public class AdminService {
         //判断refreshToken
         AdminRefreshToken adminRefreshToken = new AdminRefreshToken();
         adminRefreshToken.setAdminId(adminId);
-        adminRefreshToken.setRefreshToken(refreshToken);
-        adminRefreshToken.setIsRevoked(0);
         Long refreshTokenId = adminRefreshTokenDao.getAdminRefreshTokenId(adminRefreshToken);
         if((refreshTokenId == null) || (refreshTokenId == 0)){
             throw new ReturnException("refreshToken不存在！");
         }
 
+        Long editTime = Instant.now().getEpochSecond();
+        adminRefreshToken.setEditTime(editTime);
         adminRefreshTokenDao.deleteAdminRefreshToken(adminRefreshToken);
     }
 
@@ -190,7 +196,6 @@ public class AdminService {
         //判断refreshToken
         AdminRefreshToken adminRefreshToken = new AdminRefreshToken();
         adminRefreshToken.setAdminId(adminId);
-        adminRefreshToken.setRefreshToken(refreshToken);
         adminRefreshToken.setIsRevoked(0);
         Long refreshTokenId = adminRefreshTokenDao.getAdminRefreshTokenId(adminRefreshToken);
         if((refreshTokenId == null) || (refreshTokenId == 0)){
