@@ -38,6 +38,9 @@ public class UserService {
     @Autowired
     private UserRefreshTokenDao userRefreshTokenDao;
 
+    @Autowired
+    private SiteConfigService siteConfigService;
+
     //登录
     @Transactional
     public Map<String, Object> login(User user, String userIp){
@@ -243,7 +246,14 @@ public class UserService {
 
     //获取用户列表
     @Transactional(readOnly = true)
-    public PageResultUtil<User> getUserList(Integer page, Integer size, User user){
+    public PageResultUtil<User> getUserList(Integer page, User user, String moudle){
+        //获取网站配置的列表展示条数
+        Integer size = 10;
+        if(moudle == "admin"){
+            size = siteConfigService.getSiteConfigDetail().getAdminListLimit();
+        }else{
+            size = siteConfigService.getSiteConfigDetail().getSiteListLimit();
+        }
         //起始位置
         Integer startNum = (page-1) * size;
         //获取总数

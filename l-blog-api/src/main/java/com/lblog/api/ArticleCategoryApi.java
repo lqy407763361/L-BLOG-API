@@ -43,9 +43,9 @@ public class ArticleCategoryApi {
     //获取文章分类列表
     @GetMapping("/getArticleCategoryList")
     public JsonResponseUtil<PageResultUtil<ArticleCategory>> getArticleCategoryList(@RequestParam(defaultValue = "1") Integer page,
-                                                                                    @RequestParam(defaultValue = "10") Integer size,
-                                                                                    ArticleCategory articleCategory){
-        PageResultUtil<ArticleCategory> articleCategoryList = articleCategoryService.getArticleCategoryList(page, size, articleCategory);
+                                                                                    ArticleCategory articleCategory,
+                                                                                    String moudle){
+        PageResultUtil<ArticleCategory> articleCategoryList = articleCategoryService.getArticleCategoryList(page, articleCategory, moudle);
 
         return JsonResponseUtil.success(articleCategoryList);
     }

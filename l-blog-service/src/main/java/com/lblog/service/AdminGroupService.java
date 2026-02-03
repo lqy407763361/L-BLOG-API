@@ -23,6 +23,9 @@ public class AdminGroupService {
     @Autowired
     private AdminDao adminDao;
 
+    @Autowired
+    private SiteConfigService siteConfigService;
+
     //添加管理员群组
     @Transactional
     public void addAdminGroup(AdminGroup adminGroup){
@@ -131,7 +134,9 @@ public class AdminGroupService {
 
     //获取管理员群组列表
     @Transactional(readOnly = true)
-    public PageResultUtil<AdminGroup> getAdminGroupList(Integer page, Integer size, AdminGroup adminGroup){
+    public PageResultUtil<AdminGroup> getAdminGroupList(Integer page, AdminGroup adminGroup){
+        Integer size = 10;
+        size = siteConfigService.getSiteConfigDetail().getAdminListLimit();
         //起始位置
         Integer startNum = (page-1) * size;
         //获取总数

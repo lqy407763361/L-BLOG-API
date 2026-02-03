@@ -39,6 +39,9 @@ public class AdminService {
     @Autowired
     private CaptchaService captchaService;
 
+    @Autowired
+    private SiteConfigService siteConfigService;
+
     //登录
     @Transactional
     public Map<String, Object> login(Admin admin, String captchaCode, String adminIp, HttpSession session){
@@ -197,6 +200,7 @@ public class AdminService {
         AdminRefreshToken adminRefreshToken = new AdminRefreshToken();
         adminRefreshToken.setAdminId(adminId);
         adminRefreshToken.setIsRevoked(0);
+        adminRefreshToken.setRefreshToken(refreshToken);
         Long refreshTokenId = adminRefreshTokenDao.getAdminRefreshTokenId(adminRefreshToken);
         if((refreshTokenId == null) || (refreshTokenId == 0)){
             throw new ReturnException("refreshToken不存在！");
@@ -276,7 +280,10 @@ public class AdminService {
 
     //获取管理员列表
     @Transactional(readOnly = true)
-    public PageResultUtil<AdminDto> getAdminList(Integer page, Integer size, Admin admin, AdminGroup adminGroup){
+    public PageResultUtil<AdminDto> getAdminList(Integer page, Admin admin, AdminGroup adminGroup){
+        //获取网站配置的列表展示条数
+        Integer size = 10;
+        size = siteConfigService.getSiteConfigDetail().getAdminListLimit();
         //起始位置
         Integer startNum = (page-1) * size;
         //获取总数

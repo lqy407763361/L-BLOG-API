@@ -20,6 +20,9 @@ public class ArticleService {
     @Autowired
     private ArticleDao articleDao;
 
+    @Autowired
+    private SiteConfigService siteConfigService;
+
     //添加文章
     @Transactional
     public void addArticle(Article article){
@@ -101,7 +104,14 @@ public class ArticleService {
 
     //获取文章列表
     @Transactional(readOnly = true)
-    public PageResultUtil<ArticleDto> getArticleList(Integer page, Integer size, Article article){
+    public PageResultUtil<ArticleDto> getArticleList(Integer page, Article article, String moudle){
+        //获取网站配置的列表展示条数
+        Integer size = 10;
+        if(moudle == "admin"){
+            size = siteConfigService.getSiteConfigDetail().getAdminListLimit();
+        }else{
+            size = siteConfigService.getSiteConfigDetail().getSiteListLimit();
+        }
         //起始位置
         Integer startNum = (page-1) * size;
         //获取总数

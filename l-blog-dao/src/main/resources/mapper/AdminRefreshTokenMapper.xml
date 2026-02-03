@@ -46,6 +46,9 @@
             l_admin_refresh_token
         WHERE
             admin_id = #{adminId}
+            <if test="refreshToken != null">
+                AND refresh_token = #{refreshToken}
+            </if>
             <if test="isRevoked != null">
                 AND is_revoked = #{isRevoked}
             </if>

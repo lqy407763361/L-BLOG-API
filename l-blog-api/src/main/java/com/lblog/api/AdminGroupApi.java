@@ -42,10 +42,8 @@ public class AdminGroupApi {
 
     //获取管理员群组列表
     @GetMapping("/getAdminGroupList")
-    public JsonResponseUtil<PageResultUtil<AdminGroup>> getAdminGroupList(@RequestParam(defaultValue = "1") Integer page,
-                                                                          @RequestParam(defaultValue = "10") Integer size,
-                                                                          AdminGroup adminGroup){
-        PageResultUtil<AdminGroup> adminGroupList = adminGroupService.getAdminGroupList(page, size, adminGroup);
+    public JsonResponseUtil<PageResultUtil<AdminGroup>> getAdminGroupList(@RequestParam(defaultValue = "1") Integer page, AdminGroup adminGroup){
+        PageResultUtil<AdminGroup> adminGroupList = adminGroupService.getAdminGroupList(page, adminGroup);
 
         return JsonResponseUtil.success(adminGroupList);
     }

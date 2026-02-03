@@ -24,6 +24,9 @@ public class ArticleCategoryService {
     @Autowired
     private ArticleDao articleDao;
 
+    @Autowired
+    private SiteConfigService siteConfigService;
+
     //添加文章分类
     @Transactional
     public void addArticleCategory(ArticleCategory articleCategory){
@@ -112,7 +115,14 @@ public class ArticleCategoryService {
 
     //获取文章分类列表
     @Transactional(readOnly = true)
-    public PageResultUtil<ArticleCategory> getArticleCategoryList(Integer page, Integer size, ArticleCategory articleCategory){
+    public PageResultUtil<ArticleCategory> getArticleCategoryList(Integer page, ArticleCategory articleCategory, String moudle){
+        //获取网站配置的列表展示条数
+        Integer size = 10;
+        if(moudle == "admin"){
+            size = siteConfigService.getSiteConfigDetail().getAdminListLimit();
+        }else{
+            size = siteConfigService.getSiteConfigDetail().getSiteListLimit();
+        }
         //起始位置
         Integer startNum = (page-1) * size;
         //获取总数

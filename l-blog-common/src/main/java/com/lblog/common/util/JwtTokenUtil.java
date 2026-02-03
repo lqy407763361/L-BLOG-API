@@ -68,9 +68,9 @@ public class JwtTokenUtil {
 
             return userId;
         } catch (ExpiredJwtException e) {
-            throw new ReturnException("token过期！", e);
+            throw new ReturnException(401, "token过期！", e);
         } catch (Exception e) {
-            throw new ReturnException("校验失败！", e);
+            throw new ReturnException(500, "校验失败！", e);
         }
     }
 }
