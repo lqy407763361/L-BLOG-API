@@ -1,14 +1,20 @@
 package com.lblog.service;
 
 import com.lblog.common.exception.ReturnException;
+import com.lblog.common.util.FileUtil;
 import com.lblog.dao.SiteConfigDao;
 import com.lblog.domain.SiteConfig;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.File;
+import java.io.IOException;
 import java.time.Instant;
+import java.util.Arrays;
+import java.util.List;
 
 @Service
 public class SiteConfigService {
@@ -39,11 +45,6 @@ public class SiteConfigService {
         String siteTitle = "";
         if(!StringUtils.isBlank(siteConfig.getSiteTitle())){
             siteTitle = siteConfig.getSiteTitle().trim();
-        }
-
-        String logoImageUrl = "";
-        if(!StringUtils.isBlank(siteConfig.getLogoImageUrl())){
-            logoImageUrl = siteConfig.getLogoImageUrl().trim();
         }
 
         String siteConfigStr = "";
@@ -82,7 +83,6 @@ public class SiteConfigService {
         siteConfig.setSiteTitle(siteTitle);
         siteConfig.setSiteListLimit(siteListLimit);
         siteConfig.setAdminListLimit(adminListLimit);
-        siteConfig.setLogoImageUrl(logoImageUrl);
         siteConfig.setSiteConfig(siteConfigStr);
         siteConfig.setSystemMaintenance(systemMaintenance);
         siteConfig.setSiteLoginMaxNumber(siteLoginMaxNumber);
@@ -90,6 +90,47 @@ public class SiteConfigService {
         siteConfig.setSiteSessionExpire(siteSessionExpire);
         siteConfig.setAdminSessionExpire(adminSessionExpire);
         siteConfig.setEditTime(editTime);
+        Integer returnRow = siteConfigDao.editSiteConfig(siteConfig);
+        if((returnRow == null) || (returnRow == 0)){
+            throw new ReturnException("编辑失败！");
+        }
+    }
+
+    //上传LOGO文件
+    @Transactional
+    public void uploadLogoImage(MultipartFile logoImage){
+        //判断文件是否为空
+        if(logoImage == null || logoImage.isEmpty()){
+            throw new ReturnException("文件不能为空！");
+        }
+
+        //校验文件格式
+        List<String> allowContentType = Arrays.asList("image/jpeg", "image/png");
+        if(!FileUtil.validateContentType(logoImage, allowContentType)){
+            throw new ReturnException("文件格式不符！");
+        }
+
+        //校验文件大小
+        Integer imageSize = 2;
+        if(!FileUtil.validateFileSize(logoImage, imageSize)){
+            throw new ReturnException("文件大小不符！");
+        }
+
+        //上传文件到服务器
+        String filePath = "";
+        String dirPath = "uploads/logo/";
+        try{
+            filePath = FileUtil.uploadFile(logoImage, dirPath);
+        } catch (IOException e) {
+            throw new ReturnException("文件上传失败！");
+        }
+
+        //更新数据库配置
+        Long updateTime = Instant.now().getEpochSecond();
+        SiteConfig siteConfig = new SiteConfig();
+        siteConfig.setId(SITE_CONFIG_ID);
+        siteConfig.setLogoImageUrl(filePath);
+        siteConfig.setEditTime(updateTime);
         Integer returnRow = siteConfigDao.editSiteConfig(siteConfig);
         if((returnRow == null) || (returnRow == 0)){
             throw new ReturnException("编辑失败！");

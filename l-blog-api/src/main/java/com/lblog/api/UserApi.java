@@ -1,10 +1,7 @@
 package com.lblog.api;
 
 import com.lblog.api.auth.UserIdentityAuth;
-import com.lblog.common.util.GetClientIpUtil;
-import com.lblog.common.util.JsonResponseUtil;
-import com.lblog.common.util.PageResultUtil;
-import com.lblog.common.util.RSAUtil;
+import com.lblog.common.util.*;
 import com.lblog.domain.User;
 import com.lblog.dto.UserDto;
 import com.lblog.dto.UserVisitRecordDto;
@@ -13,6 +10,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import java.security.PublicKey;
 import java.util.List;
 import java.util.Map;
 
@@ -56,8 +54,9 @@ public class UserApi {
     //刷新accessToken
     @PostMapping("/refreshAccessToken")
     public JsonResponseUtil<String> refreshAccessToken(HttpServletRequest request){
-        Long userId = userIdentityAuth.getCurrentUserId();
         String refreshToken = request.getHeader("refreshToken");
+        PublicKey publicKey = RSAUtil.getPublicKey();
+        Long userId = JwtTokenUtil.validateToken(refreshToken, publicKey);
         String accessToken = userService.refreshAccessToken(userId, refreshToken);
 
         return JsonResponseUtil.success(accessToken);

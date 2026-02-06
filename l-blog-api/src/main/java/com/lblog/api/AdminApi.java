@@ -1,10 +1,7 @@
 package com.lblog.api;
 
 import com.lblog.api.auth.AdminIdentityAuth;
-import com.lblog.common.util.GetClientIpUtil;
-import com.lblog.common.util.JsonResponseUtil;
-import com.lblog.common.util.PageResultUtil;
-import com.lblog.common.util.RSAUtil;
+import com.lblog.common.util.*;
 import com.lblog.domain.Admin;
 import com.lblog.domain.AdminGroup;
 import com.lblog.dto.AdminDto;
@@ -14,6 +11,7 @@ import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import java.security.PublicKey;
 import java.util.List;
 import java.util.Map;
 
@@ -65,8 +63,9 @@ public class AdminApi {
     //刷新accessToken
     @PostMapping("/adminRefreshAccessToken")
     public JsonResponseUtil<String> adminRefreshAccessToken(HttpServletRequest request){
-        Long adminId = adminIdentityAuth.getCurrentAdminId();
         String refreshToken = request.getHeader("adminRefreshToken");
+        PublicKey publicKey = RSAUtil.getPublicKey();
+        Long adminId = JwtTokenUtil.validateToken(refreshToken, publicKey);
         String accessToken = adminService.refreshAccessToken(adminId, refreshToken);
 
         return JsonResponseUtil.success(accessToken);

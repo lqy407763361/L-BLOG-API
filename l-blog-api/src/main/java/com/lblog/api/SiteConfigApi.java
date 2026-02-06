@@ -4,10 +4,8 @@ import com.lblog.common.util.JsonResponseUtil;
 import com.lblog.domain.SiteConfig;
 import com.lblog.service.SiteConfigService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 @RestController
 public class SiteConfigApi {
@@ -19,6 +17,14 @@ public class SiteConfigApi {
     @PostMapping("/editSiteConfig")
     public JsonResponseUtil<String> editSiteConfig(@RequestBody SiteConfig siteConfig){
         siteConfigService.editSiteConfig(siteConfig);
+
+        return JsonResponseUtil.success();
+    }
+
+    //上传LOGO图片
+    @PostMapping("/uploadLogoImage")
+    public JsonResponseUtil<String> uploadLogoImage(@RequestParam("logoImage") MultipartFile logoImage){
+        siteConfigService.uploadLogoImage(logoImage);
 
         return JsonResponseUtil.success();
     }

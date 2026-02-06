@@ -13,14 +13,14 @@ public class FormValidation {
     private static final Integer MAX_PASSWORD_LENGTH = 20;
 
     //校验手机号格式
-    public static boolean phoneValidation(String phone){
+    public static Boolean phoneValidation(String phone){
         Matcher matcher = PHONE_REGEX.matcher(phone);
 
         return matcher.matches();
     }
 
     //校验用户名格式
-    public static boolean userNameValidation(String userName){
+    public static Boolean userNameValidation(String userName){
         if(StringUtils.isBlank(userName)){
             return false;
         }
@@ -33,7 +33,7 @@ public class FormValidation {
     }
 
     //校验密码格式
-    public static boolean passwordValidation(String password){
+    public static Boolean passwordValidation(String password){
         if(StringUtils.isBlank(password)){
             return false;
         }
