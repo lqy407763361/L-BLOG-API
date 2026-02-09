@@ -83,22 +83,40 @@ public class FileUtil {
 
         //转绝对路径
         File isAbsoluteDir = new File(dirPath);
+        String absolutePath = "";
         if(!isAbsoluteDir.isAbsolute()){
             isAbsoluteDir = new File(isAbsoluteDir.getAbsolutePath());
         }
-        dirPath = isAbsoluteDir.getPath();
+        absolutePath = isAbsoluteDir.getPath();
 
         //创建文件夹
-        createDirectory(dirPath);
+        createDirectory(absolutePath);
 
         //生成文件名
         Long updateTime = Instant.now().getEpochSecond();
         String fileName = updateTime + extension;
 
         //上传文件
-        File fileResult = new File(dirPath, fileName);
+        File fileResult = new File(absolutePath, fileName);
         file.transferTo(fileResult);
 
-        return fileResult.getPath();
+        return dirPath + fileName;
+    }
+
+    /**
+     * 删除文件
+     * @param filePath 文件路径
+     * */
+    public static Boolean deleteFile(String filePath){
+        if(StringUtils.isBlank(filePath)){
+            return false;
+        }
+
+        File file = new File(filePath);
+        if(!file.exists() || !file.isFile()){
+            return false;
+        }
+
+        return file.delete();
     }
 }

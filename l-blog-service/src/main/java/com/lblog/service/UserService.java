@@ -1,10 +1,7 @@
 package com.lblog.service;
 
 import com.lblog.common.exception.ReturnException;
-import com.lblog.common.util.JwtTokenUtil;
-import com.lblog.common.util.SHA256Util;
-import com.lblog.common.util.PageResultUtil;
-import com.lblog.common.util.RSAUtil;
+import com.lblog.common.util.*;
 import com.lblog.common.validation.FormValidation;
 import com.lblog.dao.UserDao;
 import com.lblog.dao.UserVisitRecordDao;
@@ -59,8 +56,7 @@ public class UserService {
         } catch (Exception e) {
             throw new ReturnException("密码解密失败！");
         }
-        String salt = this.getUserDetail(userId).getSalt();
-        if(!SHA256Util.getEncrypt(rawPassword, salt).equals(this.getUserDetail(userId).getPassword())){
+        if(!BCryptUtil.validatePassword(rawPassword, this.getUserDetail(userId).getPassword())){
             throw new ReturnException("密码错误！");
         }
 
@@ -111,20 +107,17 @@ public class UserService {
         }
 
         //判断密码格式是否合法
-        String password = "";
-        if(!FormValidation.passwordValidation(password)){
+        if(!FormValidation.passwordValidation(user.getPassword())){
             throw new ReturnException("密码格式错误！");
         }
-        password = user.getPassword().trim();
+        String password = user.getPassword().trim();
 
         //添加操作
         Integer registerType = user.getRegisterType();
         Long addTime = Instant.now().getEpochSecond();
-        String salt = addTime + SHA256Util.RandomString(8);
-        password = SHA256Util.getEncrypt(password, salt);
+        password = BCryptUtil.getEncrypt(password);
         user.setName(name);
         user.setPassword(password);
-        user.setSalt(salt);
         user.setStatus(1);
         user.setRegisterType(registerType);
         user.setRegisterIp(userIp);

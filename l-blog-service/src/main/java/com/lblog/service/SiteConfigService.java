@@ -6,11 +6,11 @@ import com.lblog.dao.SiteConfigDao;
 import com.lblog.domain.SiteConfig;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.io.File;
 import java.io.IOException;
 import java.time.Instant;
 import java.util.Arrays;
@@ -19,6 +19,9 @@ import java.util.List;
 @Service
 public class SiteConfigService {
     private static final Long SITE_CONFIG_ID = 1L;
+
+    @Value("${app.base-url}")
+    private String baseUrl;
 
     @Autowired
     private SiteConfigDao siteConfigDao;
@@ -126,10 +129,12 @@ public class SiteConfigService {
         }
 
         //更新数据库配置
+        String fileFullPath = baseUrl + "/" + filePath;
         Long updateTime = Instant.now().getEpochSecond();
         SiteConfig siteConfig = new SiteConfig();
         siteConfig.setId(SITE_CONFIG_ID);
         siteConfig.setLogoImageUrl(filePath);
+        siteConfig.setLogoImageFullUrl(fileFullPath);
         siteConfig.setEditTime(updateTime);
         Integer returnRow = siteConfigDao.editSiteConfig(siteConfig);
         if((returnRow == null) || (returnRow == 0)){

@@ -11,7 +11,7 @@
  Target Server Version : 80043 (8.0.43)
  File Encoding         : 65001
 
- Date: 30/01/2026 15:42:10
+ Date: 09/02/2026 15:44:19
 */
 
 SET NAMES utf8mb4;
@@ -44,7 +44,6 @@ CREATE TABLE `l_admin`  (
   `account` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL COMMENT '账号',
   `name` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL COMMENT '账号名称',
   `password` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL COMMENT '密码',
-  `salt` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL COMMENT '盐',
   `description` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL COMMENT '简介',
   `status` int NOT NULL DEFAULT 1 COMMENT '状态，1=启用，2=禁用',
   `add_time` int NULL DEFAULT NULL COMMENT '创建时间',
@@ -183,6 +182,7 @@ CREATE TABLE `l_site_config`  (
   `site_list_limit` int NULL DEFAULT NULL COMMENT '网站列表页展示数量',
   `admin_list_limit` int NULL DEFAULT NULL COMMENT '后台列表页展示数量',
   `logo_image_url` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL COMMENT 'LOGO路径',
+  `logo_image_full_url` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL COMMENT 'LOGO绝对路径',
   `site_config` text CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL COMMENT '网站底部配置信息',
   `system_maintenance` int NULL DEFAULT NULL COMMENT '系统维护模式，0关闭，1=开启',
   `site_login_max_number` int NULL DEFAULT NULL COMMENT '网站最大登录次数',
@@ -196,7 +196,7 @@ CREATE TABLE `l_site_config`  (
 -- ----------------------------
 -- Records of l_site_config
 -- ----------------------------
-INSERT INTO `l_site_config` VALUES (1, 'L-BLOG-ADMIN', 'L-BLOG后台管理系统', 'L-BLOG后台管理系统', 'L-BLOG', 10, 10, '', '<p>L-BLOG后台管理系统</p>', 1, 5, 5, 10, 11, 1764838397);
+INSERT INTO `l_site_config` VALUES (1, 'L-BLOG-ADMIN', 'L-BLOG后台管理系统', 'L-BLOG后台管理系统', 'L-BLOG', 10, 10, '', NULL, '<p>L-BLOG后台管理系统</p>', 1, 5, 5, 10, 11, 1764838397);
 
 -- ----------------------------
 -- Table structure for l_user
@@ -206,7 +206,6 @@ CREATE TABLE `l_user`  (
   `id` int NOT NULL AUTO_INCREMENT,
   `name` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL COMMENT '用户名',
   `password` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL COMMENT '密码',
-  `salt` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL COMMENT '盐',
   `status` int NOT NULL DEFAULT 1 COMMENT '状态，1=启用，2=禁用',
   `register_type` int NULL DEFAULT 1 COMMENT '注册方式，1=网页注册',
   `register_ip` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL COMMENT '注册地IP',

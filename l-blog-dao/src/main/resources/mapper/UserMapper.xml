@@ -15,7 +15,6 @@
             l_user (
                 name,
                 password,
-                salt,
                 status,
                 register_type,
                 register_ip,
@@ -23,7 +22,6 @@
             ) VALUES (
                 #{name},
                 #{password},
-                #{salt},
                 #{status},
                 #{registerType},
                 #{registerIp},

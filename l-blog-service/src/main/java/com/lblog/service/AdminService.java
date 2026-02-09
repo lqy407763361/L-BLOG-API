@@ -1,10 +1,7 @@
 package com.lblog.service;
 
 import com.lblog.common.exception.ReturnException;
-import com.lblog.common.util.JwtTokenUtil;
-import com.lblog.common.util.SHA256Util;
-import com.lblog.common.util.PageResultUtil;
-import com.lblog.common.util.RSAUtil;
+import com.lblog.common.util.*;
 import com.lblog.common.validation.FormValidation;
 import com.lblog.dao.AdminDao;
 import com.lblog.dao.AdminLoginRecordDao;
@@ -60,8 +57,7 @@ public class AdminService {
         } catch (Exception e) {
             throw new ReturnException("密码解密失败！");
         }
-        String salt = this.getAdminDetail(adminId).getSalt();
-        if(!SHA256Util.getEncrypt(rawPassword, salt).equals(this.getAdminDetail(adminId).getPassword())){
+        if(!BCryptUtil.validatePassword(rawPassword, this.getAdminDetail(adminId).getPassword())){
             throw new ReturnException("密码错误！");
         }
 
@@ -146,13 +142,11 @@ public class AdminService {
         }
 
         Long addTime = Instant.now().getEpochSecond();
-        String salt = addTime + SHA256Util.RandomString(8);
-        String password = SHA256Util.getEncrypt(rawPassword, salt);
+        String password = BCryptUtil.getEncrypt(rawPassword);
         admin.setGroupId(adminGroupId);
         admin.setAccount(account);
         admin.setName(name);
         admin.setPassword(password);
-        admin.setSalt(salt);
         admin.setDescription(description);
         admin.setStatus(1);
         admin.setAddTime(addTime);
@@ -232,10 +226,13 @@ public class AdminService {
         }
 
         //判断密码格式是否合法
-        if(!FormValidation.passwordValidation(admin.getPassword())){
-            throw new ReturnException("密码格式错误！");
+        String password = adminDetail.getPassword();
+        if(!StringUtils.isBlank(admin.getPassword())){
+            if(!FormValidation.passwordValidation(admin.getPassword())){
+                throw new ReturnException("密码格式错误！");
+            }
+            password = BCryptUtil.getEncrypt(admin.getPassword().trim());
         }
-        String password = admin.getPassword().trim();
 
         //判断名称格式是否合法
         if(StringUtils.isBlank(admin.getName())){
@@ -250,13 +247,10 @@ public class AdminService {
         }
 
         Long editTime = Instant.now().getEpochSecond();
-        String salt = editTime + SHA256Util.RandomString(8);
-        password = SHA256Util.getEncrypt(password, salt);
         Integer status = admin.getStatus();
         admin.setGroupId(adminGroupId);
         admin.setName(name);
         admin.setPassword(password);
-        admin.setSalt(salt);
         admin.setDescription(description);
         admin.setStatus(status);
         admin.setEditTime(editTime);

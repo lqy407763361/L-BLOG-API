@@ -26,6 +26,9 @@
             <if test="logoImageUrl != null">
                 logo_image_url = #{logoImageUrl},
             </if>
+            <if test="logoImageFullUrl != null">
+                logo_image_full_url = #{logoImageFullUrl},
+            </if>
             <if test="siteConfig != null">
                 site_config = #{siteConfig},
             </if>

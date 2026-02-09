@@ -17,7 +17,6 @@
                 account,
                 name,
                 password,
-                salt,
                 description,
                 status,
                 add_time
@@ -26,7 +25,6 @@
                 #{account},
                 #{name},
                 #{password},
-                #{salt},
                 #{description},
                 #{status},
                 #{addTime}
@@ -48,9 +46,6 @@
             </if>
             <if test="password != null">
                 password = #{password},
-            </if>
-            <if test="salt != null">
-                salt = #{salt},
             </if>
             <if test="description != null">
                 description = #{description},

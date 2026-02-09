@@ -30,6 +30,9 @@ public class SiteConfig {
     @Column(name = "logo_image_url")
     private String logoImageUrl;
 
+    @Column(name = "logo_image_full_url")
+    private String logoImageFullUrl;
+
     @Column(name = "site_config")
     private String siteConfig;
 
@@ -113,6 +116,14 @@ public class SiteConfig {
 
     public void setLogoImageUrl(String logoImageUrl) {
         this.logoImageUrl = logoImageUrl;
+    }
+
+    public String getLogoImageFullUrl() {
+        return logoImageFullUrl;
+    }
+
+    public void setLogoImageFullUrl(String logoImageFullUrl) {
+        this.logoImageFullUrl = logoImageFullUrl;
     }
 
     public String getSiteConfig() {
