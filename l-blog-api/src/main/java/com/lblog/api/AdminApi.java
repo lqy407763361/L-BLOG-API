@@ -124,7 +124,7 @@ public class AdminApi {
         return JsonResponseUtil.success(adminDetail);
     }
 
-    //获取管理员详情（管理员后台管理员列表和详情使用）
+    //获取管理员详情（后台管理员列表和详情使用）
     @GetMapping("/getAdminDetailByAdmin")
     public JsonResponseUtil<AdminDto> getAdminDetailDtoByAdmin(Long adminId){
         AdminDto adminDetail = adminService.getAdminDetailDto(adminId);
