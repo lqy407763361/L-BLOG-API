@@ -21,6 +21,10 @@ public interface ArticleDao {
                                     @Param("size") Integer size,
                                     @Param("article") Article article);
 
+    List<ArticleDto> getNewArticleList(@Param("size") Integer size);
+
+    List<ArticleDto> getHotArticleList(@Param("size") Integer size);
+
     Article getArticleDetail(@Param("id") Long articleId);
 
     ArticleDto getArticleDetailDto(@Param("id") Long articleId);

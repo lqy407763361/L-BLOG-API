@@ -96,6 +96,38 @@
             #{startNum}, #{size}
     </select>
 
+    <select id="getNewArticleList" resultType="com.lblog.dto.ArticleDto">
+        SELECT
+            la.*,
+            lac.name AS categoryName
+        FROM
+            l_article la
+        LEFT JOIN
+            l_article_category lac ON la.category_id = lac.id
+        WHERE
+            la.status = 1
+        ORDER BY
+            la.id DESC
+        LIMIT
+            0, #{size}
+    </select>
+
+    <select id="getHotArticleList" resultType="com.lblog.dto.ArticleDto">
+        SELECT
+            la.*,
+            lac.name AS categoryName
+        FROM
+            l_article la
+        LEFT JOIN
+            l_article_category lac ON la.category_id = lac.id
+        WHERE
+            la.status = 1
+        ORDER BY
+            read_count DESC, la.id DESC
+        LIMIT
+            0, #{size}
+    </select>
+
     <select id="getArticleDetail" parameterType="java.lang.Long" resultType="com.lblog.domain.Article">
         SELECT
             *

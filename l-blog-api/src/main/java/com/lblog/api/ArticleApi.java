@@ -51,6 +51,22 @@ public class ArticleApi {
         return JsonResponseUtil.success(articleList);
     }
 
+    //获取最新文章列表
+    @GetMapping("/getNewArticleList")
+    public JsonResponseUtil<List<ArticleDto>> getNewArticleList(){
+        List<ArticleDto> articleList = articleService.getNewArticleList();
+
+        return JsonResponseUtil.success(articleList);
+    }
+
+    //获取热门文章列表
+    @GetMapping("/getHotArticleList")
+    public JsonResponseUtil<List<ArticleDto>> getHotArticleList(){
+        List<ArticleDto> articleList = articleService.getHotArticleList();
+
+        return JsonResponseUtil.success(articleList);
+    }
+
     //获取文章详情
     @GetMapping("/getArticleDetail")
     public JsonResponseUtil<ArticleDto> getArticleDetailDto(Long articleId){

@@ -122,6 +122,30 @@ public class ArticleService {
         return new PageResultUtil<>(page, size, total, articleList);
     }
 
+    //获取最新文章列表
+    @Transactional(readOnly = true)
+    public List<ArticleDto> getNewArticleList(){
+        //获取网站配置的列表展示条数
+        Integer size = 10;
+        size = siteConfigService.getSiteConfigDetail().getSiteListLimit();
+        //查询列表
+        List<ArticleDto> articleList = articleDao.getNewArticleList(size);
+
+        return articleList;
+    }
+
+    //获取热门文章列表
+    @Transactional(readOnly = true)
+    public List<ArticleDto> getHotArticleList(){
+        //获取网站配置的列表展示条数
+        Integer size = 10;
+        size = siteConfigService.getSiteConfigDetail().getSiteListLimit();
+        //查询列表
+        List<ArticleDto> articleList = articleDao.getHotArticleList(size);
+
+        return articleList;
+    }
+
     /**
      * 获取文章详情
      * 用于内部查询，编辑
