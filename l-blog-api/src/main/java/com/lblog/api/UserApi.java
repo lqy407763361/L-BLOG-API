@@ -25,7 +25,7 @@ public class UserApi {
 
     //登录
     @PostMapping("/login")
-    public JsonResponseUtil<Map<String, Object>> login(User user, HttpServletRequest request){
+    public JsonResponseUtil<Map<String, Object>> login(@RequestBody User user, HttpServletRequest request){
         String userIp = GetClientIpUtil.getClientIp(request);
         Map<String, Object> tokenMap = userService.login(user, userIp);
 
@@ -34,7 +34,7 @@ public class UserApi {
 
     //注册
     @PostMapping("/register")
-    public JsonResponseUtil<Map<String, Object>> register(User user, HttpServletRequest request){
+    public JsonResponseUtil<Map<String, Object>> register(@RequestBody User user, HttpServletRequest request){
         String userIp = GetClientIpUtil.getClientIp(request);
         Map<String, Object> tokenMap = userService.register(user, userIp);
 

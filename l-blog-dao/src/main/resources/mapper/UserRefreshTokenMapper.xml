@@ -7,16 +7,26 @@
                 user_id,
                 refresh_token,
                 is_revoked,
-                add_ip,
                 add_time
             ) VALUES (
                 #{userId},
                 #{refreshToken},
                 #{isRevoked},
-                #{addIp},
                 #{addTime}
             )
     </insert>
+
+    <update id="editUserRefreshToken" parameterType="com.lblog.domain.UserRefreshToken">
+        UPDATE
+            l_user_refresh_token
+        <set>
+            refresh_token = #{refreshToken},
+            is_revoked = 0,
+            edit_time = #{editTime}
+        </set>
+        WHERE
+            user_id = #{userId}
+    </update>
 
     <update id="deleteUserRefreshToken" parameterType="com.lblog.domain.UserRefreshToken">
         UPDATE
@@ -26,7 +36,7 @@
             edit_time = #{editTime}
         </set>
         WHERE
-            user_id = #{userId} AND refresh_token = #{refreshToken}
+            user_id = #{userId}
     </update>
     
     <select id="getUserRefreshTokenId" parameterType="com.lblog.domain.UserRefreshToken" resultType="java.lang.Long">
@@ -35,6 +45,12 @@
         FROM
             l_user_refresh_token
         WHERE
-            user_id = #{userId} AND refresh_token = #{refreshToken} AND is_revoked = 0
+            user_id = #{userId}
+            <if test="refreshToken != null">
+                AND refresh_token = #{refreshToken}
+            </if>
+            <if test="isRevoked != null">
+                AND is_revoked = #{isRevoked}
+            </if>
     </select>
 </mapper>

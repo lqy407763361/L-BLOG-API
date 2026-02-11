@@ -18,9 +18,6 @@ public class UserRefreshToken {
     @Column(name = "is_revoked")
     private Integer isRevoked;
 
-    @Column(name = "add_ip")
-    private String addIp;
-
     @Column(name = "add_time")
     private Long addTime;
 
@@ -57,14 +54,6 @@ public class UserRefreshToken {
 
     public void setIsRevoked(Integer isRevoked) {
         this.isRevoked = isRevoked;
-    }
-
-    public String getAddIp() {
-        return addIp;
-    }
-
-    public void setAddIp(String addIp) {
-        this.addIp = addIp;
     }
 
     public Long getAddTime() {

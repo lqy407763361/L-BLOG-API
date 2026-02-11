@@ -26,11 +26,6 @@ public class MessageService {
     //发送消息
     @Transactional
     public void sendMessage(Message message, Long userId){
-        //判断用户是否登录
-        if((userId == null) || (userId == 0)){
-            throw new ReturnException("请先登录！");
-        }
-
         //判断名称是否合法
         String title = message.getTitle().trim();
         if(StringUtils.isBlank(title)){

@@ -70,6 +70,7 @@ public class UserService {
         Long addTime = Instant.now().getEpochSecond();
         UserVisitRecord userVisitRecord = new UserVisitRecord();
         userVisitRecord.setUserId(userId);
+        userVisitRecord.setVisitModule("登录");
         userVisitRecord.setVisitIp(userIp);
         userVisitRecord.setVisitTime(addTime);
         userVisitRecordDao.addUserVisitRecord(userVisitRecord);
@@ -81,12 +82,11 @@ public class UserService {
         UserRefreshToken userRefreshToken = new UserRefreshToken();
         userRefreshToken.setUserId(userId);
         userRefreshToken.setRefreshToken(refreshToken);
-        userRefreshToken.setIsRevoked(0);
-        userRefreshToken.setAddIp(userIp);
-        userRefreshToken.setAddTime(addTime);
-        userRefreshTokenDao.addUserRefreshToken(userRefreshToken);
+        userRefreshToken.setEditTime(addTime);
+        userRefreshTokenDao.editUserRefreshToken(userRefreshToken);
 
         Map<String, Object> result = new HashMap<>();
+        result.put("name", name);
         result.put("accessToken", accessToken);
         result.put("refreshToken", refreshToken);
         return result;
@@ -107,15 +107,18 @@ public class UserService {
         }
 
         //判断密码格式是否合法
-        if(!FormValidation.passwordValidation(user.getPassword())){
+        if(StringUtils.isBlank(user.getPassword())){
+            throw new ReturnException("密码不能为空！");
+        }
+        String rawPassword = RSAUtil.decrypt(user.getPassword()).trim();
+        if(!FormValidation.passwordValidation(rawPassword)){
             throw new ReturnException("密码格式错误！");
         }
-        String password = user.getPassword().trim();
+        String password = BCryptUtil.getEncrypt(rawPassword);
 
         //添加操作
         Integer registerType = user.getRegisterType();
         Long addTime = Instant.now().getEpochSecond();
-        password = BCryptUtil.getEncrypt(password);
         user.setName(name);
         user.setPassword(password);
         user.setStatus(1);
@@ -131,6 +134,7 @@ public class UserService {
         //插入登录记录表
         UserVisitRecord userVisitRecord = new UserVisitRecord();
         userVisitRecord.setUserId(userId);
+        userVisitRecord.setVisitModule("注册");
         userVisitRecord.setVisitIp(userIp);
         userVisitRecord.setVisitTime(addTime);
         userVisitRecordDao.addUserVisitRecord(userVisitRecord);
@@ -143,11 +147,11 @@ public class UserService {
         userRefreshToken.setUserId(userId);
         userRefreshToken.setRefreshToken(refreshToken);
         userRefreshToken.setIsRevoked(0);
-        userRefreshToken.setAddIp(userIp);
         userRefreshToken.setAddTime(addTime);
         userRefreshTokenDao.addUserRefreshToken(userRefreshToken);
 
         Map<String, Object> result = new HashMap<>();
+        result.put("name", name);
         result.put("accessToken", accessToken);
         result.put("refreshToken", refreshToken);
         return result;
@@ -169,12 +173,13 @@ public class UserService {
         //判断refreshToken
         UserRefreshToken userRefreshToken = new UserRefreshToken();
         userRefreshToken.setUserId(userId);
-        userRefreshToken.setRefreshToken(refreshToken);
         Long refreshTokenId = userRefreshTokenDao.getUserRefreshTokenId(userRefreshToken);
         if((refreshTokenId == null) || (refreshTokenId == 0)){
             throw new ReturnException("refreshToken不存在！");
         }
 
+        Long editTime = Instant.now().getEpochSecond();
+        userRefreshToken.setEditTime(editTime);
         userRefreshTokenDao.deleteUserRefreshToken(userRefreshToken);
     }
 

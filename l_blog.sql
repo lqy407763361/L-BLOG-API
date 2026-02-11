@@ -11,7 +11,7 @@
  Target Server Version : 80043 (8.0.43)
  File Encoding         : 65001
 
- Date: 09/02/2026 15:44:19
+ Date: 11/02/2026 16:48:30
 */
 
 SET NAMES utf8mb4;
@@ -49,7 +49,7 @@ CREATE TABLE `l_admin`  (
   `add_time` int NULL DEFAULT NULL COMMENT '创建时间',
   `edit_time` int NULL DEFAULT NULL COMMENT '编辑时间',
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci ROW_FORMAT = DYNAMIC;
+) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
 -- Records of l_admin
@@ -70,7 +70,7 @@ CREATE TABLE `l_admin_group`  (
   `add_time` int NULL DEFAULT NULL COMMENT '添加时间',
   `edit_time` int NULL DEFAULT NULL COMMENT '编辑时间',
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci ROW_FORMAT = DYNAMIC;
+) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
 -- Records of l_admin_group
@@ -86,7 +86,7 @@ CREATE TABLE `l_admin_login_record`  (
   `login_ip` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL COMMENT '登录IP',
   `login_time` int NULL DEFAULT NULL COMMENT '登录时间',
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci ROW_FORMAT = DYNAMIC;
+) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
 -- Records of l_admin_login_record
@@ -104,7 +104,7 @@ CREATE TABLE `l_admin_refresh_token`  (
   `add_time` int NULL DEFAULT NULL COMMENT '添加时间',
   `edit_time` int NULL DEFAULT NULL COMMENT '编辑时间',
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci ROW_FORMAT = DYNAMIC;
+) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
 -- Records of l_admin_refresh_token
@@ -125,7 +125,7 @@ CREATE TABLE `l_article`  (
   `add_time` int NULL DEFAULT NULL COMMENT '添加时间',
   `edit_time` int NULL DEFAULT NULL COMMENT '编辑时间',
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci ROW_FORMAT = DYNAMIC;
+) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
 -- Records of l_article
@@ -144,7 +144,7 @@ CREATE TABLE `l_article_category`  (
   `add_time` int NULL DEFAULT NULL COMMENT '添加时间',
   `edit_time` int NULL DEFAULT NULL COMMENT '编辑时间',
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci ROW_FORMAT = DYNAMIC;
+) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
 -- Records of l_article_category
@@ -163,7 +163,7 @@ CREATE TABLE `l_message`  (
   `add_time` int NULL DEFAULT NULL COMMENT '添加时间',
   `edit_time` int NULL DEFAULT NULL COMMENT '编辑时间',
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_bin ROW_FORMAT = DYNAMIC;
+) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_bin ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
 -- Records of l_message
@@ -175,10 +175,10 @@ CREATE TABLE `l_message`  (
 DROP TABLE IF EXISTS `l_site_config`;
 CREATE TABLE `l_site_config`  (
   `id` int NOT NULL AUTO_INCREMENT,
-  `meta_title` text CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL COMMENT 'Meta标题',
+  `meta_title` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL COMMENT 'Meta标题',
   `meta_description` text CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL COMMENT 'Meta描述',
   `meta_keywords` text CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL COMMENT 'Meta关键词',
-  `site_title` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL COMMENT '网站标题',
+  `site_title` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL COMMENT '网页标题',
   `site_list_limit` int NULL DEFAULT NULL COMMENT '网站列表页展示数量',
   `admin_list_limit` int NULL DEFAULT NULL COMMENT '后台列表页展示数量',
   `logo_image_url` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL COMMENT 'LOGO路径',
@@ -196,7 +196,7 @@ CREATE TABLE `l_site_config`  (
 -- ----------------------------
 -- Records of l_site_config
 -- ----------------------------
-INSERT INTO `l_site_config` VALUES (1, 'L-BLOG-ADMIN', 'L-BLOG后台管理系统', 'L-BLOG后台管理系统', 'L-BLOG', 10, 10, '', NULL, '<p>L-BLOG后台管理系统</p>', 1, 5, 5, 10, 11, 1764838397);
+INSERT INTO `l_site_config` VALUES (1, 'L-BLOG', 'L-BLOG', 'L-BLOG', 'L-BLOG', 10, 10, '', NULL, '<p>L-BLOG后台管理系统</p>', 1, 5, 5, 10, 11, 1764838397);
 
 -- ----------------------------
 -- Table structure for l_user
@@ -212,7 +212,7 @@ CREATE TABLE `l_user`  (
   `add_time` int NULL DEFAULT NULL COMMENT '添加时间',
   `edit_time` int NULL DEFAULT NULL COMMENT '编辑时间',
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci ROW_FORMAT = DYNAMIC;
+) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
 -- Records of l_user
@@ -227,11 +227,10 @@ CREATE TABLE `l_user_refresh_token`  (
   `user_id` int NOT NULL COMMENT '用户表ID',
   `refresh_token` text CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL COMMENT '长期token',
   `is_revoked` int NOT NULL DEFAULT 0 COMMENT '是否废弃，0=默认，1=废弃',
-  `add_ip` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL COMMENT '添加时的IP（登录IP）',
   `add_time` int NULL DEFAULT NULL COMMENT '添加时间',
   `edit_time` int NULL DEFAULT NULL COMMENT '编辑时间',
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci ROW_FORMAT = DYNAMIC;
+) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
 -- Records of l_user_refresh_token
@@ -248,7 +247,7 @@ CREATE TABLE `l_user_visit_record`  (
   `visit_ip` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL COMMENT '访问IP',
   `visit_time` int NULL DEFAULT NULL COMMENT '访问时间',
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci ROW_FORMAT = DYNAMIC;
+) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
 -- Records of l_user_visit_record
